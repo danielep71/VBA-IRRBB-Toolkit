@@ -105,6 +105,8 @@ def check_workbook(root: Path, path: str) -> list[str]:
     try:
         with zipfile.ZipFile(root / path) as package:
             parts = package.namelist()
+            if len(parts) != len(set(parts)):
+                return [f"{path}: duplicate workbook member names are not allowed"]
             missing = sorted(required - set(parts))
             if missing:
                 return [f"{path}: missing required workbook parts: {', '.join(missing)}"]

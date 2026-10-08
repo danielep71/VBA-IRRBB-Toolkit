@@ -9,6 +9,7 @@ import subprocess
 import tempfile
 import textwrap
 import unittest
+import warnings
 import zipfile
 from pathlib import Path
 
@@ -66,6 +67,24 @@ class WorkbookPackageTests(unittest.TestCase):
             self.assertNotEqual(original, corrupted)
             path.write_bytes(corrupted)
             self.assertIn("corrupt", " ".join(check_workbook(root, path.name)))
+
+    def test_clean_duplicate_cannot_hide_corrupt_first_member(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / "template.xlsx"
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", UserWarning)
+                with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_STORED) as archive:
+                    archive.writestr("xl/workbook.xml", "FIRST_WORKBOOK_COPY")
+                    for name, value in CORE_PARTS.items():
+                        archive.writestr(name, value)
+            path.write_bytes(path.read_bytes().replace(b"FIRST_WORKBOOK_COPY", b"WRONG_WORKBOOK_COPY"))
+            with zipfile.ZipFile(path) as archive:
+                # Demonstrate the name-based testzip blind spot.
+                self.assertIsNone(archive.testzip())
+                with self.assertRaises(zipfile.BadZipFile):
+                    archive.read(archive.infolist()[0])
+            self.assertIn("duplicate", " ".join(check_workbook(root, path.name)))
 
 
 class LabelDefaultsTests(unittest.TestCase):
