@@ -147,6 +147,14 @@ Use only the categories needed by a release.
 - The architecture, validation plan and feature issue form refer to a
   generic downstream ALM platform instead of a named vendor product (#11).
 
+### Fixed
+
+- Label commands now default to the checked-in `.github/label-policy.json`.
+- Workbook package checks reject missing core parts and archive corruption;
+  these structural checks do not certify Excel compatibility.
+- Traffic history labels the repository count `open_issues_and_prs`, including
+  pull requests, and preserves values when migrating the old CSV column.
+
 ### Known limitations
 
 - No VBA source, workbook, regression harness or model engine exists yet.
