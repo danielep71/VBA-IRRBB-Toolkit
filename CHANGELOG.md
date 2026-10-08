@@ -117,6 +117,13 @@ Use only the categories needed by a release.
   the `Bootstrap v0.1.0 tracking` workflow trigger point to it, and release
   branches are named `release/vX.Y.Z` from now on.
 
+### Removed
+
+- The one-off `Bootstrap v0.1.0 tracking` workflow and
+  `tools/bootstrap_tracking.py`. The v0.1.0 milestone and issue metadata they
+  created remain; the workflow no longer runs with `issues: write` on every
+  push to the release branch.
+
 ### Documentation
 
 - Root documents (`CHANGELOG.md`, `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`,
