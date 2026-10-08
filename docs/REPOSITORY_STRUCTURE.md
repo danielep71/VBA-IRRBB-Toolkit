@@ -141,7 +141,8 @@ examples/    ──▶  src/modules only
   and dates and returns results or raises errors. It never reads or writes a
   workbook, sheet or range, never shows UI and never reads `Application` state
   (*enforced*: `tools/check_source.py` rejects Excel object-model and UI
-  identifiers in `src/core/` code; comments and strings are ignored).
+  identifiers and COM activation/attachment in `src/core/` code; comments and
+  strings are ignored).
 - **`src/modules` validates at the public boundary** (units, ranges, array
   shape, ordering, missing values) and delegates to the core. It holds no model
   formulas of its own.
@@ -156,6 +157,10 @@ examples/    ──▶  src/modules only
 Because VBA identifiers are case-insensitive, the reserved host names
 (`Range`, `Cells`, `Application`, `MsgBox` and the others in
 `tools/check_source.py`) cannot be used even as variable names in `src/core`.
+`CreateObject` and `GetObject` are also reserved: core must not activate or
+attach to external COM objects, including non-Excel objects or objects selected
+by variable or concatenated ProgIDs. Such automation belongs in host adapters.
+This is a static reserved-name check, not a proof of transitive independence.
 
 <a id="public-api-boundary"></a>
 

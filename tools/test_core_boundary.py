@@ -23,6 +23,39 @@ class CoreHostIndependence(unittest.TestCase):
                 "End Function\n")
         self.assertEqual(findings(body), [])
 
+    def test_com_automation_is_rejected_regardless_of_progid(self) -> None:
+        for expression, name in (
+                ('CreateObject("Excel.Application")', "CreateObject"),
+                ('GetObject(, "Excel.Application")', "GetObject"),
+                ('VBA.Interaction.cReAtEoBjEcT("excel.application")', "cReAtEoBjEcT"),
+                ('VBA.GetObject(Class:="Excel.Application")', "GetObject"),
+                ('CreateObject("Excel." & "Application")', "CreateObject"),
+                ('CreateObject(progId)', "CreateObject"),
+                ('GetObject(workbookPath)', "GetObject"),
+                ('CreateObject("Scripting.Dictionary")', "CreateObject"),
+                ('CreateObject( _\n        progId)', "CreateObject")):
+            with self.subTest(expression=expression):
+                self.assertEqual(findings(f"Sub S()\n    Set obj = {expression}\nEnd Sub\n"),
+                                 [f"src/core/CORE_Sample.bas:5: core must not use COM automation identifier {name}"])
+
+    def test_automation_names_in_comments_strings_and_longer_names_pass(self) -> None:
+        body = ("' CreateObject _\nGetObject\n"
+                "Rem GetObject\n"
+                'Sub S(): s = "CreateObject(""Excel.Application"")"\n'
+                '    Dim CreateObjectText As String, GetObjectCount As Long\n'
+                "End Sub\n")
+        self.assertEqual(findings(body), [])
+
+    def test_host_adapter_may_use_com_automation(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = "src/workbook/Adapter.bas"
+            (root / path).parent.mkdir(parents=True)
+            (root / path).write_text('Attribute VB_Name = "Adapter"\nOption Explicit\n'
+                                     'Sub S()\nSet obj = CreateObject("Excel.Application")\nEnd Sub\n',
+                                     encoding="cp1252")
+            self.assertEqual(check_component(root, path, {path}, {}), [])
+
     def test_object_model_use_is_reported_with_line(self) -> None:
         result = findings("Public Sub Load()\n    x = Range(\"A1\").Value\nEnd Sub\n")
         self.assertEqual(result, ["src/core/CORE_Sample.bas:5: core must not use Excel host identifier Range"])

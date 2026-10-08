@@ -40,6 +40,8 @@ HOST_IDENTIFIER = re.compile(
     r"Workbooks?|Worksheets?|Sheets|Range|Cells|Charts?|Shapes|ListObjects?|PivotTables?|"
     r"WorksheetFunction|Evaluate|MsgBox|InputBox|UserForms?)\b", re.I)
 REM_STATEMENT = re.compile(r"(?:^|:)[ \t]*Rem\b", re.I)
+# Core cannot activate or attach to external COM objects, even via dynamic ProgIDs.
+AUTOMATION_IDENTIFIER = re.compile(r"\b(CreateObject|GetObject)\b", re.I)
 FORBIDDEN_PART = re.compile(r"(^|/)vbaProject\.bin$|^docProps/", re.I)
 
 
@@ -109,10 +111,15 @@ def code_lines(text: str) -> list[tuple[int, str]]:
 
 def check_core_host_independence(path: str, text: str) -> list[str]:
     """Core code must not reach the Excel object model or UI; comments and strings may."""
-    return [f"{path}:{number}: core must not use Excel host identifier {match.group(1)}"
-            for number, code in code_lines(text)
-            if not code.lstrip().startswith("Attribute ")
-            for match in HOST_IDENTIFIER.finditer(code)]
+    findings = []
+    for number, code in code_lines(text):
+        if code.lstrip().startswith("Attribute "):
+            continue
+        for pattern, kind in ((HOST_IDENTIFIER, "Excel host"),
+                              (AUTOMATION_IDENTIFIER, "COM automation")):
+            findings.extend(f"{path}:{number}: core must not use {kind} identifier {match.group(1)}"
+                            for match in pattern.finditer(code))
+    return findings
 
 
 def check_component(root: Path, path: str, tracked: set[str], names: dict[str, str]) -> list[str]:
