@@ -7,7 +7,7 @@
 [![Profile](https://img.shields.io/badge/Profile-application-217346?style=flat-square)](#profile-decision)
 [![Model](https://img.shields.io/badge/Model-source--first-0969da?style=flat-square)](#repository-layout)
 [![Boundary](https://img.shields.io/badge/Boundary-facade_over_core-6f42c1?style=flat-square)](#public-api-boundary)
-[![Status](https://img.shields.io/badge/Status-Proposed_(%232)-d97706?style=flat-square)](#profile-decision)
+[![Status](https://img.shields.io/badge/Status-Accepted_(%232)-217346?style=flat-square)](#profile-decision)
 
 <br>
 
@@ -25,15 +25,17 @@ written by [`VBA_HOUSE_STYLE.md`](VBA_HOUSE_STYLE.md); model definitions by
 [`methodology/`](methodology/README.md).
 
 > [!IMPORTANT]
-> This structure is **proposed** in issue #2 and becomes the architecture decision
-> when the owner accepts it there. Until then, the rules marked *enforced* below
-> are already checked by `python tools/check.py`; the rest guide review.
+> This structure was **accepted by the owner on 2026-10-08 in issue #2** as the
+> architecture decision: the `application` profile, the intended workflow, the
+> canonical units and the parameter-set fields. Rules marked *enforced* below
+> are checked by `python tools/check.py`; the rest are enforced by review.
 
 <a id="profile-decision"></a>
 
 ## 🧭 Profile decision
 
-**The IRRBB Toolkit uses the `application` profile.**
+**The IRRBB Toolkit uses the `application` profile.** Decided by the owner on
+2026-10-08 in issue #2.
 
 | Question | Answer for the IRRBB Toolkit |
 | --- | --- |

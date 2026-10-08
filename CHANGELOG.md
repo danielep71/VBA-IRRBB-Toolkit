@@ -187,8 +187,8 @@ Use only the categories needed by a release.
   `INSTALLATION.md` separates these commitments from test evidence, and
   `docs/EXCEL_EVIDENCE.md` defines the clean-build, compile, smoke-run,
   failure-path and cleanup stages, their outcomes and per-bitness rules.
-- `docs/REPOSITORY_STRUCTURE.md` rewritten as the proposed architecture for
-  owner acceptance: profile rationale, the intended Excel workflow, layout,
+- `docs/REPOSITORY_STRUCTURE.md` rewritten as the architecture, accepted by
+  the owner: profile rationale, the intended Excel workflow, layout,
   dependency direction, public API boundary, canonical units at the facade,
   immutable versioned parameter sets and intentional non-goals (#2).
 
