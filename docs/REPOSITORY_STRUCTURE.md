@@ -179,7 +179,7 @@ A VBA `Public` declaration is not automatically supported API.
 - **Never supported:** test and example modules. They are not part of the
   production workbook.
 
-At v0.1.0 the manifest is empty: there is no implemented public API.
+The first supported declarations are the draft decay facade `IRRBB_Decay`; the manifest lists each with its normalized signature.
 
 <a id="parameter-and-units-boundary"></a>
 

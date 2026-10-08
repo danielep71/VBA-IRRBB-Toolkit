@@ -32,16 +32,18 @@ and removal**. Contribution workflow is owned by
 ## 🧭 Current status
 
 Milestone **v0.1.0 – Repository foundation** is in progress. There is **no
-IRRBB release** and **nothing to import into Excel yet**: the repository holds
-documentation, issue governance, CI and static source checks only.
+IRRBB release**. The only VBA in the repository is the draft decay model, its
+regression harness and an example; they can be imported for development and
+evidence, not for use.
 
 | Topic | Status |
 | --- | --- |
 | VBA source layout | Defined in [`docs/REPOSITORY_STRUCTURE.md`](docs/REPOSITORY_STRUCTURE.md) |
 | VBA conventions | Defined in [`docs/VBA_HOUSE_STYLE.md`](docs/VBA_HOUSE_STYLE.md) |
 | Static checks | Available: `python tools/check.py` |
-| VBA source, workbook template | Not yet present |
-| Regression harness | Not yet present |
+| VBA source | Decay model only (draft); rate and stable models not built |
+| Workbook template | Not yet present (#5) |
+| Regression harness | `TEST_Harness.RunTests` (#8); decay cases built, others NOT RUN |
 | Supported hosts and references | Decided in issue #3; see [supported hosts](#supported-hosts) |
 | Excel evidence | Requirements defined in [`docs/EXCEL_EVIDENCE.md`](docs/EXCEL_EVIDENCE.md); no record yet |
 | Released versions | None |
@@ -158,8 +160,15 @@ checks: they never compile VBA, run Excel or validate a model.
 ## 📂 Importing VBA into Excel
 
 > [!NOTE]
-> There is no VBA to import yet. This section fixes the contract that the first
-> source change must follow; the exact component list is added with it.
+> Components at this commit, in import order: `src/core/` `CORE_Math`,
+> `CORE_Codes`, `CORE_Decay`, `CORE_Overlay`; `src/modules/` `IRRBB_Decay`; development only:
+> `tests/modules/` `TEST_DecayData`, `TEST_DecayCases`, `TEST_Harness` and
+> `examples/modules/` `EX_DecayExample`. The harness writes to a sheet named
+> `Checks` and reads `Source commit` from a sheet named `Readme`; the example
+> uses a sheet named `DecayExample`. Until the template (#5) and import helper
+> (#6) exist, `python tools/devbuild/build_dev_workbook.py` assembles a
+> development workbook with these sheets from the checked-out commit
+> ([`tools/devbuild/README.md`](tools/devbuild/README.md)).
 
 1. Start from **one exact commit** in a Git checkout, so `.bas`, `.cls` and
    `.frm` files have CRLF line endings. Never mix components from different

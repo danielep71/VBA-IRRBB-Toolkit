@@ -118,6 +118,35 @@ Use only the categories needed by a release.
 
 ### Added
 
+- **Decay model** per `MODEL_CONTRACTS.md` (draft `DECAY-1.0-draft`, not
+  validated): host-independent core (`CORE_Math`, `CORE_Codes`,
+  `CORE_Decay`, `CORE_Overlay`) and the public facade `IRRBB_Decay` (`IRRBB_DecayFit`,
+  `IRRBB_DecayOverlay`, `IRRBB_DecayBacktest`, layout enums), listed in
+  `docs/PUBLIC_API.txt`. Log changes with declared impulse breaks, residual
+  sigma with n - 1 - K degrees of freedom, prudential drift, minimum probable
+  amount at confidence c, conserved runoff profile, core and non-core split,
+  mean lives in months, Ljung-Box and Jarque-Bera diagnostics with the
+  empirical quantile, the `REG-1` overlay (non-core overnight, core-share cap,
+  average-maturity cap by cutoff reduction; `REG-2` shown provisional and not
+  applied) and the out-of-sample exceedance score with frozen parameters.
+  Input is rejected below 36 log changes, on non-month-end dates, gaps,
+  non-positive balances, unknown segments and currencies outside the
+  versioned run allowlist (`EUR`, `USD` for the synthetic data).
+- **Regression harness** `TEST_Harness.RunTests` (#8): deterministic case IDs
+  from `TEST_CASES.md`, per-case and per-assertion outcomes, every unbuilt
+  case listed as NOT RUN, previous results withdrawn before a run, primary and
+  cleanup errors kept. Decay cases `DEC-LOG-01`, `DEC-MPA-01`, `DEC-PROF-01`,
+  `DEC-LIFE-01`, `DEC-CAP-01`, the new `DEC-E2E-01` and `DEC-ERR-01`, and the
+  decay parts of `OOS-FREEZE-01`, `OOS-LEAK-01`, `OOS-SCORE-01` are built,
+  with synthetic fixtures (`tests/fixtures/decay/`, generator and seed) and
+  independent expected values (`tests/expected/decay/`, numpy and scipy, with
+  provenance).
+- Example module `examples/modules/EX_DecayExample.bas` using only the facade.
+- Development workbook build `tools/devbuild/` (not the template of #5 nor
+  the import helper of #6): assembles `build/IRRBB_Dev.xlsm` from one commit
+  with the decay source, harness and example, and an optional headless
+  LibreOffice smoke run. Built workbooks stay out of Git.
+
 - Daily repository traffic export with private history, main-only analytics
   access, and traffic alerts, following the SA-CCR repository setup.
   Setup and verification are documented in `docs/TRAFFIC.md`.
@@ -214,9 +243,25 @@ Use only the categories needed by a release.
   milestone, so every issue carries a milestone; the run fails if there is
   no open milestone or more than one.
 
+### Validation
+
+- Decay source executed only in LibreOffice 24.2 with VBA compatibility
+  (`tools/devbuild/lo_smoke.py`): 10 built cases PASS, 647 of 647 assertions,
+  16 registered cases NOT RUN; the example run and its failure path (outputs
+  withdrawn) behave as specified. **No Excel compile or run has been
+  recorded**; LibreOffice is not a supported host and this is not Excel
+  evidence.
+
 ### Known limitations
 
-- No VBA source, workbook, regression harness or model engine exists yet.
+- Only the decay model exists. The rate pass-through and stable-amount models,
+  the account-panel importer (#4) and the workbook template (#5) are not built;
+  decay inputs are aggregate series that the caller derives from the panel.
+- Decay choices not fixed by the contract, pending owner review with #26: a
+  break date is the month end at which the affected log change ends; the
+  median path uses mu*; diagnostics use Ljung-Box with 12 lags, Jarque-Bera
+  with population moments and the type-7 empirical quantile; backtest pairs use
+  horizons 1 to 12 with origin and realisation inside the test window.
 - No automated check compiles VBA, runs Excel or validates a model; passing CI
   is not evidence of correct IRRBB calculations.
 - The methodology is a roadmap, not a validated specification, and its

@@ -39,6 +39,7 @@ Planned cross-cutting functionality includes data validation, calibration, histo
 
 **v0.1.0 – Repository foundation (in progress).** This initial milestone establishes source layout, documentation, issue governance, CI and static source checks; it does **not** deliver pricing, econometric fitting, a production workbook or certified IRRBB outputs.
 
+- **Decay model (draft, not validated):** core, public facade `IRRBB_Decay`, regression harness and example are in the source, built to [`MODEL_CONTRACTS.md`](docs/methodology/MODEL_CONTRACTS.md#decay-model); no Excel evidence is recorded yet. Rate and stable-amount models are not built.
 - Application profile: an Excel workbook will be the end-user deliverable, assembled from reviewed exported VBA source.
 - Production calculations will live in `src/core/` without direct Excel object dependencies.
 - `src/modules/` will expose a documented public facade; `src/workbook/` will contain host glue only.

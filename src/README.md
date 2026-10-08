@@ -7,4 +7,4 @@ Source-first application profile, adapted from VBA-SACCR-Toolkit.
 - `workbook/`: host adapters and exported Excel document modules.
 - `classes/`, `forms/`: introduce only when needed.
 
-No production VBA is shipped in the repository foundation milestone. Layout, dependency direction and the parameter and units boundary are defined in [`docs/REPOSITORY_STRUCTURE.md`](../docs/REPOSITORY_STRUCTURE.md).
+The first production source is the draft decay model: `core/CORE_Math`, `core/CORE_Codes`, `core/CORE_Decay`, `core/CORE_Overlay` and the facade `modules/IRRBB_Decay`. It is not validated and has no Excel evidence yet. Layout, dependency direction and the parameter and units boundary are defined in [`docs/REPOSITORY_STRUCTURE.md`](../docs/REPOSITORY_STRUCTURE.md).
