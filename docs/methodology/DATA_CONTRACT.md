@@ -25,7 +25,10 @@ model definitions are in [`README.md`](README.md); validation obligations in
 
 > [!IMPORTANT]
 > This contract was **accepted by the owner on 2026-10-08 in issue #4**,
-> including the [decisions](#decisions) below. Only synthetic data is ever
+> including the [decisions](#decisions) below; see the
+> [acceptance record](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/4#issuecomment-6068526038).
+> Audit amendments that affect model interpretation remain open in
+> [#26](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/26). Only synthetic data is ever
 > committed or attached. Real data is loaded locally
 > and never enters Git, issues or pull requests.
 
@@ -85,6 +88,17 @@ opened before the data window or unknown.
 
 ## 📈 Market rates
 
+Currency validation requires a versioned, explicit run allowlist of ISO 4217
+codes; matching three uppercase letters alone is insufficient. The synthetic
+reference checker uses `EUR` and `USD`. Extending that allowlist requires reviewed
+configuration and provenance; it does not claim to maintain the full ISO register.
+Balances must convert to finite VBA Double values; overflow is `E04`. Aggregate
+overflow must also fail the future importer rather than produce an infinite result.
+Known non-empty opening/closure dates must be consistent throughout an account's
+history (`E11`); an omitted repeat does not erase a known date. A row after any
+known closure is `E10`, regardless of file ordering. These consistency checks do
+not make future closure information eligible as a predictor.
+
 Header: `as_of_date,rate_id,currency,tenor_months,rate`
 
 | Field | Type and format | Unit | Required | Rules |
@@ -125,6 +139,7 @@ counts in the segment stated for that month, and the model specification
 After import, the toolkit reports for every (`as_of_date`, `segment`,
 `currency`) the number of accounts and the total balance, and checks that:
 
+- totals retain input precision; round only for presentation, after reconciliation;
 - the segment totals for each date and currency add up to the panel total for
   that date and currency; and
 - if the user supplies control totals, the counts match exactly and balances
@@ -153,10 +168,10 @@ same file always gives the same findings in the same order.
 | `E06` | Unknown segment code | Each row |
 | `E07` | Invalid currency code | Each row |
 | `E09` | Negative balance | Each row |
-| `E11` | `open_date` after `as_of_date`, or `close_date` before `open_date` | Each row |
+| `E11` | Inconsistent known history dates, `open_date` after `as_of_date`, or `close_date` before `open_date` | Each affected row |
 | `E10` | Row dated after the account's `close_date` | Each row |
 | `E05` | Duplicate (`as_of_date`, `account_id`) | Second and later occurrences |
-| `E08` | Account currency differs from its earlier rows | Each later row |
+| `E08` | Account currency or market-series currency/tenor differs from its earlier rows | Each later row |
 
 | Code | Warning | Reported at |
 | --- | --- | --- |
@@ -176,8 +191,9 @@ same file always gives the same findings in the same order.
 - An account **closes** at its `close_date`; it has no row after that date.
   Closure is a full cash-out in the month it happens.
 - An account that **disappears** without a `close_date` (`W05`) is treated as
-  closed after its last observation, and is reported so the data owner can
-  confirm.
+  closed after its last observation in the accepted baseline. **Implementation
+  is blocked on #26:** this rule must distinguish confirmed closure from missing
+  extraction and right censoring before generating outcomes or cash-out labels.
 
 ### Structural breaks and outliers
 
@@ -195,6 +211,12 @@ Every run has a data window (first and last month end). Rows outside it are
 excluded (`W06`). Backtests and forecasts receive only observations dated on or
 before their forecast date; the window is part of the lineage and the
 parameter set.
+
+This date filter alone does not establish point-in-time availability. A historical
+row may contain a closure learned later (the synthetic panel deliberately includes
+such future closure dates). Future closure dates are outcome information, never
+predictors at the earlier origin. The availability/vintage rule and missing-versus-
+closed decision require the amendment and leakage tests in #26 before modeling.
 
 <a id="dataset-size"></a>
 

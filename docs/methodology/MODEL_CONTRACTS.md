@@ -28,8 +28,28 @@ numerical cases that will test each model are registered in
 
 > [!IMPORTANT]
 > These contracts were **accepted by the owner on 2026-10-08 in issue #9**,
-> including the [decisions](#decisions) below. Regulatory figures are labelled with their source; those resting on an
+> including the [decisions](#decisions) below; see the
+> [acceptance record](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/9#issuecomment-6068527520). Regulatory figures are labelled with their source; those resting on an
 > unverified source in the [register](SOURCES.md) are provisional.
+
+### Implementation hold points from the repository audit
+
+The accepted baseline is not numerical validation. Before implementing estimators,
+resolve [#26](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/26) in a reviewed
+contract amendment:
+
+- field availability at each forecast origin, and verified closure versus missing
+  data/right censoring for W05;
+- full ECM dynamic stability with dependent-variable lags, root convention and
+  tolerance, beyond the beta/lambda bounds below;
+- account-cohort versus aggregate compounding and the exact evolution of survival
+  weights (50/50 balances, survival .9/.1, two months: 41 versus 25);
+- deterministic model/lag ties, comparable estimation samples, and complete HAC
+  settings and ECM/DIFF reporting;
+- outstanding source verification and independent numerical benchmarks.
+
+These are explicit implementation blockers. Do not silently choose one
+interpretation or report these models as validated.
 
 Notation: $t$ is a month end, $B$ a balance in currency units, $r$ a rate as a
 decimal per annum, $h$ a horizon in whole months. All models run per

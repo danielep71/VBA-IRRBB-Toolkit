@@ -14,6 +14,7 @@ from typing import Any
 from _gatelib import git_bytes as git
 from _gatelib import parse_report_args as parse_args
 from _gatelib import run_gate
+from _vba_lex import logical_lines
 from check_vba_conditionals import reachable_sources
 
 MANIFEST_PATH = "docs/PUBLIC_API.txt"
@@ -80,26 +81,6 @@ def tracked_vba(root: Path) -> list[str]:
     )
 
 
-def strip_vba(raw: str) -> str:
-    output: list[str] = []
-    in_string = False
-    index = 0
-    while index < len(raw):
-        character = raw[index]
-        if character == '"':
-            if in_string and index + 1 < len(raw) and raw[index + 1] == '"':
-                output.extend(('"', '"'))
-                index += 2
-                continue
-            in_string = not in_string
-        elif character == "'" and not in_string:
-            break
-        output.append(character)
-        index += 1
-    text = "".join(output)
-    return "" if re.match(r"^\s*Rem(?:\s|$)", text, re.I) else text.rstrip()
-
-
 def is_date_delimiter(code: str, index: int, in_date: bool) -> bool:
     if in_date:
         return True
@@ -141,22 +122,7 @@ def split_statements(code: str) -> list[str]:
 
 
 def logical(lines: list[str]) -> list[tuple[int, int, str]]:
-    result: list[tuple[int, int, str]] = []
-    buffer: list[str] = []
-    start = 0
-    for number, raw in enumerate(lines, 1):
-        code = strip_vba(raw)
-        if not buffer:
-            start = number
-        if re.search(r"\s_\s*$", code):
-            buffer.append(re.sub(r"\s_\s*$", " ", code))
-            continue
-        buffer.append(code)
-        result.append((start, number, " ".join(item.strip() for item in buffer)))
-        buffer.clear()
-    if buffer:
-        result.append((start, len(lines), " ".join(item.strip() for item in buffer)))
-    return [(start, end, part) for start, end, code in result
+    return [(start, end, part) for start, end, code in logical_lines(lines)
             for part in split_statements(code)]
 
 
@@ -289,7 +255,7 @@ def _parse_active_component(
     path: str, text: str, supported: bool
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     scan = _ComponentScan(path, supported)
-    statements = logical(text.splitlines())
+    statements = logical(text.replace("\r\n", "\n").split("\n"))
     inside_procedure = False
     index = 0
     while index < len(statements):
