@@ -94,6 +94,16 @@ Use only the categories needed by a release.
 
 ## [Unreleased]
 
+- Repository audit corrections (#25): shared VBA comment/continuation lexer,
+  exact workbook path and encoding-independent XML reference checks, stronger
+  account/market fixture validation, and reconciliation without premature rounding.
+- Automatic issue owner/milestone/priority reconciliation, including closed issues;
+  traffic alerts select an explicit configurable milestone. Ruff/mypy settings
+  are documented as optional development targets, not claimed CI gates.
+- Accepted host/data/model records now have direct evidence links; unresolved
+  model interpretation and reproducibility requirements are tracked in #26.
+
+
 - Core-boundary checks now reject `CreateObject` and `GetObject`, including
   variable or concatenated ProgIDs that could previously hide Excel access.
   External COM automation belongs in host adapters; these names are reserved

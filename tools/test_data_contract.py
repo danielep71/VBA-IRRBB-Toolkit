@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import calendar
 import json
+import math
 import re
 import unittest
 from datetime import date
@@ -24,6 +25,8 @@ SEGMENTS = {"RET_TX", "RET_NTX", "WHS_NFC"}
 ISO_DATE = re.compile(r"^(\d{4})-(\d{2})-(\d{2})$")
 ACCOUNT_ID = re.compile(r"^[A-Za-z0-9_-]{1,32}$")
 CURRENCY = re.compile(r"^[A-Z]{3}$")
+# Explicit fixture/run allowlist, not a claim to maintain the entire ISO register.
+SUPPORTED_CURRENCIES = frozenset({"EUR", "USD"})
 BALANCE = re.compile(r"^-?\d+(\.\d{1,4})?$")
 RATE = re.compile(r"^-?\d+(\.\d{1,8})?$")
 RATE_BOUNDS = (-0.05, 0.25)
@@ -48,7 +51,7 @@ def month_index(day: date) -> int:
     return day.year * 12 + day.month - 1
 
 
-def row_error(row: dict[str, str]) -> str | None:
+def row_error(row: dict[str, str], currencies=SUPPORTED_CURRENCIES) -> str | None:
     """First failing row rule, in the contract's order."""
     if any(not row[name] for name in REQUIRED):
         return "E03"
@@ -62,11 +65,12 @@ def row_error(row: dict[str, str]) -> str | None:
         RATE.match(row["customer_rate"])
         and RATE_BOUNDS[0] <= float(row["customer_rate"]) <= RATE_BOUNDS[1])
     if (not ACCOUNT_ID.match(row["account_id"]) or not BALANCE.match(row["balance"])
+            or not math.isfinite(float(row["balance"]))
             or not rate_ok or row["indexed"] not in {"0", "1"}):
         return "E04"
     if row["segment"] not in SEGMENTS:
         return "E06"
-    if not CURRENCY.match(row["currency"]):
+    if not CURRENCY.fullmatch(row["currency"]) or row["currency"] not in currencies:
         return "E07"
     if float(row["balance"]) < 0:
         return "E09"
@@ -77,9 +81,9 @@ def row_error(row: dict[str, str]) -> str | None:
     return None
 
 
-def read_accounts(path: Path) -> tuple[list[tuple[int, dict[str, str]]], list[dict]]:
+def read_accounts(path: Path, currencies=SUPPORTED_CURRENCIES) -> tuple[list[tuple[int, dict[str, str]]], list[dict]]:
     lines = path.read_text(encoding="ascii").splitlines()
-    if lines[0].split(",") != ACCOUNT_FIELDS:
+    if not lines or lines[0].split(",") != ACCOUNT_FIELDS:
         return [], [{"line": 1, "code": "E01"}]
     rows, errors, seen, currency = [], [], set(), {}
     for number, line in enumerate(lines[1:], 2):
@@ -88,7 +92,7 @@ def read_accounts(path: Path) -> tuple[list[tuple[int, dict[str, str]]], list[di
             errors.append({"line": number, "code": "E01"})
             continue
         row = dict(zip(ACCOUNT_FIELDS, values))
-        code = row_error(row)
+        code = row_error(row, currencies)
         key = (row["as_of_date"], row["account_id"])
         if code is None and key in seen:
             code = "E05"
@@ -99,7 +103,65 @@ def read_accounts(path: Path) -> tuple[list[tuple[int, dict[str, str]]], list[di
         else:
             seen.add(key)
             rows.append((number, row))
-    return rows, errors
+    # Whole-history checks are independent of input order and blank repeated dates.
+    dates = {}
+    for _, row in rows:
+        history = dates.setdefault(row["account_id"], {"open_date": set(), "close_date": set()})
+        for field in history:
+            if row[field]:
+                history[field].add(row[field])
+    accepted = []
+    for number, row in rows:
+        history = dates[row["account_id"]]
+        opened = min(history["open_date"], default="")
+        closed = min(history["close_date"], default="")
+        if any(len(values) > 1 for values in history.values()) or (
+                opened and (opened > row["as_of_date"] or (closed and closed < opened))):
+            errors.append({"line": number, "code": "E11"})
+        elif closed and row["as_of_date"] > closed:
+            errors.append({"line": number, "code": "E10"})
+        else:
+            accepted.append((number, row))
+    return accepted, sorted(errors, key=lambda error: error["line"])
+
+
+def read_market_rates(path: Path, currencies=SUPPORTED_CURRENCIES) -> list[dict]:
+    """Validate required fields, exact shape and invariants of each market series."""
+    lines = path.read_text(encoding="ascii").splitlines()
+    if not lines or lines[0].split(",") != RATE_FIELDS:
+        return [{"line": 1, "code": "E01"}]
+    errors, seen, series = [], set(), {}
+    for number, line in enumerate(lines[1:], 2):
+        values = line.split(",")
+        if len(values) != len(RATE_FIELDS):
+            errors.append({"line": number, "code": "E01"})
+            continue
+        row = dict(zip(RATE_FIELDS, values))
+        as_of = parse_date(row["as_of_date"])
+        key = (row["as_of_date"], row["rate_id"])
+        properties = (row["currency"], row["tenor_months"])
+        code = None
+        if not all(values):
+            code = "E03"
+        elif as_of is None or not is_month_end(as_of):
+            code = "E02"
+        elif (not ACCOUNT_ID.fullmatch(row["rate_id"])
+              or not re.fullmatch(r"[1-9]\d*", row["tenor_months"])
+              or not RATE.fullmatch(row["rate"])
+              or not RATE_BOUNDS[0] <= float(row["rate"]) <= RATE_BOUNDS[1]):
+            code = "E04"
+        elif row["currency"] not in currencies:
+            code = "E07"
+        elif key in seen:
+            code = "E05"
+        elif series.get(row["rate_id"], properties) != properties:
+            code = "E08"
+        if code:
+            errors.append({"line": number, "code": code})
+        else:
+            seen.add(key)
+            series[row["rate_id"]] = properties
+    return errors
 
 
 def warnings_and_totals(rows, first: date, last: date) -> tuple[list[dict], list[dict]]:
@@ -117,9 +179,9 @@ def warnings_and_totals(rows, first: date, last: date) -> tuple[list[dict], list
         for row in observed:
             as_of = parse_date(row["as_of_date"])
             balance = float(row["balance"])
-            cell = totals.setdefault((row["as_of_date"], row["segment"], row["currency"]), [0, 0.0])
+            cell = totals.setdefault((row["as_of_date"], row["segment"], row["currency"]), [0, []])
             cell[0] += 1
-            cell[1] += balance
+            cell[1].append(balance)
             if balance == 0:
                 warnings.append({"code": "W02", "account_id": account, "as_of_date": row["as_of_date"]})
             if previous is not None:
@@ -138,7 +200,7 @@ def warnings_and_totals(rows, first: date, last: date) -> tuple[list[dict], list
             previous = row
         if parse_date(observed[-1]["as_of_date"]) < last and not observed[-1]["close_date"]:
             warnings.append({"code": "W05", "account_id": account, "as_of_date": observed[-1]["as_of_date"]})
-    total_rows = [{"as_of_date": d, "segment": s, "currency": c, "accounts": n, "balance": round(b, 2)}
+    total_rows = [{"as_of_date": d, "segment": s, "currency": c, "accounts": n, "balance": math.fsum(b)}
                   for (d, s, c), (n, b) in totals.items()]
     order = lambda w: (w["code"], w["account_id"], w["as_of_date"])
     return sorted(warnings, key=order), sorted(total_rows, key=lambda t: (t["as_of_date"], t["segment"], t["currency"]))
@@ -187,19 +249,7 @@ class DataContractFixtures(unittest.TestCase):
             self.assertEqual(read_accounts(path), ([], [{"line": 1, "code": "E01"}]))
 
     def test_market_rates_fixture_follows_the_contract(self) -> None:
-        lines = (FIXTURES / "market_rates.csv").read_text(encoding="ascii").splitlines()
-        self.assertEqual(lines[0].split(","), RATE_FIELDS)
-        keys = set()
-        for line in lines[1:]:
-            row = dict(zip(RATE_FIELDS, line.split(",")))
-            as_of = parse_date(row["as_of_date"])
-            self.assertTrue(as_of and is_month_end(as_of), line)
-            self.assertRegex(row["currency"], CURRENCY)
-            self.assertRegex(row["tenor_months"], r"^[1-9]\d*$")
-            self.assertRegex(row["rate"], RATE)
-            self.assertTrue(RATE_BOUNDS[0] <= float(row["rate"]) <= RATE_BOUNDS[1], line)
-            self.assertNotIn((row["as_of_date"], row["rate_id"]), keys)
-            keys.add((row["as_of_date"], row["rate_id"]))
+        self.assertEqual(read_market_rates(FIXTURES / "market_rates.csv"), [])
 
     def test_fixtures_are_ascii_with_lf_endings(self) -> None:
         for path in sorted(FIXTURES.glob("*.csv")):

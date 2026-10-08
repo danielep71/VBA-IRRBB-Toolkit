@@ -10,10 +10,24 @@
 
 ## Issue metadata
 
-- One owner: `danielep71` for each new issue, unless explicitly reassigned.
+- Every issue, open or closed, must include `danielep71` as assignee.
 - Exactly one priority: `P1` (blocking correctness/security), `P2` (significant), `P3` (non-blocking).
 - Add suitable type labels, a milestone and verifiable checkboxes; titles do not carry version prefixes.
 - Issues may be closed only when their acceptance criteria are evidenced; links to code and tests should be recorded.
+
+The trusted default-branch `issue-metadata.yml` workflow reconciles issue events
+and a daily sweep, including closed issues, and verifies the saved metadata.
+It preserves an existing milestone; missing milestones use repository variable
+`ISSUE_MILESTONE_NUMBER` (default `1`), which must identify an open milestone.
+It adds `P3` only when no priority exists; conflicting priorities retain the
+highest severity (`P1`, then `P2`, then `P3`). Other labels and assignees remain.
+A manual dispatch on the default branch performs a full sweep. Change the
+variable before closing the configured default milestone.
+
+Administrator bypass is an exceptional capability, not permission to skip review
+or failing checks. The intended `main` and `release/**` bypass mode is **pull
+requests only**. Verify the saved GitHub ruleset after any settings change; an
+unsaved edit or an authentication prompt does not establish enforcement.
 
 ## Privacy and intellectual property
 
