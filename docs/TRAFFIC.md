@@ -48,3 +48,11 @@ workflow → main**. Confirm that the run succeeds, that `traffic-history`
 contains the expected files, and that repository visibility remains private.
 A run from a different branch is skipped. A missing/expired token or API error
 fails the run; it must not be reported as a successful traffic snapshot.
+
+## Repository backlog metric
+
+`data/traffic.csv` uses `open_issues_and_prs` for the REST repository count,
+which includes both open issues and pull requests. It is not an issue-only
+backlog. The next export renames the legacy `open_issues` column while
+preserving its historical values; no historical issue-only count is inferred.
+Consumers of the CSV must use the new column name.

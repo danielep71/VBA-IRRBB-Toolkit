@@ -234,7 +234,7 @@ jobs:
                       "stars": row.get("stars", "0"),
                       "forks": row.get("forks", "0"),
                       "watchers": row.get("watchers", "0"),
-                      "open_issues": row.get("open_issues", "0")
+                      "open_issues_and_prs": row.get("open_issues_and_prs", row.get("open_issues", "0"))
                   }
 
               if row.get("date"):
@@ -248,7 +248,7 @@ jobs:
                       "stars": row.get("stars", "0"),
                       "forks": row.get("forks", "0"),
                       "watchers": row.get("watchers", "0"),
-                      "open_issues": row.get("open_issues", "0")
+                      "open_issues_and_prs": row.get("open_issues_and_prs", row.get("open_issues", "0"))
                   }
 
               return None
@@ -288,7 +288,7 @@ jobs:
               "stars",
               "forks",
               "watchers",
-              "open_issues"
+              "open_issues_and_prs"
           ]
 
           traffic_row = {
@@ -301,7 +301,7 @@ jobs:
               "stars": to_int(repo.get("stargazers_count", 0)),
               "forks": to_int(repo.get("forks_count", 0)),
               "watchers": to_int(repo.get("subscribers_count", 0)),
-              "open_issues": to_int(repo.get("open_issues_count", 0))
+              "open_issues_and_prs": to_int(repo.get("open_issues_count", 0))
           }
 
           upsert_rows(
