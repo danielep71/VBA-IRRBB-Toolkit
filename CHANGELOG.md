@@ -99,6 +99,10 @@ Use only the categories needed by a release.
 
 ### Added
 
+- Daily repository traffic export with private history, main-only analytics
+  access, and traffic alerts, following the SA-CCR repository setup.
+  Setup and verification are documented in `docs/TRAFFIC.md`.
+
 - Initial repository foundation for a source-first Excel/VBA IRRBB behavioral
   modelling application.
 - Documentation of model scope, validation requirements, source boundaries and
