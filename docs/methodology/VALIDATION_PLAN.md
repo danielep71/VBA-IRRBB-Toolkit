@@ -24,6 +24,6 @@ Each test must identify source SHA, fixture name, expected result provenance, nu
 ## Open design decisions
 
 - Exact data schema and strategy for datasets larger than worksheet limits.
-- Choice of independent numerical benchmark (e.g. Python/R external reference calculations, not required runtime dependencies).
+- Choice of independent numerical benchmark. Decided in issue #3: Python or R may produce reference values **outside** the workbook; they are never runtime dependencies ([`INSTALLATION.md`](../../INSTALLATION.md#runtime-dependencies)).
 - Treatment of curve scenarios, behavioral caps and regulatory constraints.
 - Downstream ALM platform integration schema, ownership and reconciliation requirements.

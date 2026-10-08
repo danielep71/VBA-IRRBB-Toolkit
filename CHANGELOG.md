@@ -151,6 +151,14 @@ Use only the categories needed by a release.
   (#11).
 - The architecture, validation plan and feature issue form refer to a
   generic downstream ALM platform instead of a named vendor product (#11).
+- Supported hosts decided (#3): Windows 64-bit Microsoft 365 or Excel 2016+
+  is the supported target, 32-bit is best effort (kept compiling, not
+  certified), Mac, web and Excel 2013 or earlier are not supported. Only the
+  four default VBA references are allowed, and the workbook has no runtime
+  dependency beyond Excel; Python or R may produce reference values offline.
+  `INSTALLATION.md` separates these commitments from test evidence, and
+  `docs/EXCEL_EVIDENCE.md` defines the clean-build, compile, smoke-run,
+  failure-path and cleanup stages, their outcomes and per-bitness rules.
 - `docs/REPOSITORY_STRUCTURE.md` rewritten as the proposed architecture for
   owner acceptance: profile rationale, the intended Excel workflow, layout,
   dependency direction, public API boundary, canonical units at the facade,

@@ -42,7 +42,8 @@ documentation, issue governance, CI and static source checks only.
 | Static checks | Available: `python tools/check.py` |
 | VBA source, workbook template | Not yet present |
 | Regression harness | Not yet present |
-| Excel evidence | Policy defined in [`docs/EXCEL_EVIDENCE.md`](docs/EXCEL_EVIDENCE.md) |
+| Supported hosts and references | Decided in issue #3; see [supported hosts](#supported-hosts) |
+| Excel evidence | Requirements defined in [`docs/EXCEL_EVIDENCE.md`](docs/EXCEL_EVIDENCE.md); no record yet |
 | Released versions | None |
 
 Passing static checks is **not** evidence of correct IRRBB calculations.
@@ -56,21 +57,50 @@ Passing static checks is **not** evidence of correct IRRBB calculations.
 | Git | Cloning and all repository work |
 | Python 3.10 or later | `python tools/check.py`; standard library only, no packages |
 | Node.js 20 or later | Optional: local label-catalogue checks |
-| Microsoft Excel for Windows | **Future** VBA import, compile and model execution; not needed for static checks |
+| Microsoft Excel for Windows | **Future** VBA import, compile and model execution; see [supported hosts](#supported-hosts); not needed for static checks |
 
 <a id="supported-hosts"></a>
 
-## 🖥️ Intended hosts
+## 🖥️ Supported hosts
 
-| Host | Intended support level |
-| --- | --- |
-| Microsoft 365 or Excel 2016 and later, **Windows, 64-bit** | Target |
-| Same versions, Windows, 32-bit | To be decided |
-| Excel for Mac, Excel for the web | Not planned |
+Decided by the owner on 2026-10-08 in issue #3.
 
-This table is a **design intent**, not a support commitment or a test result.
-It is confirmed by an owner decision recorded in an issue before the first VBA
-source is added, together with the list of permitted VBA references.
+| Host | Support level | Evidence required |
+| --- | --- | --- |
+| Microsoft 365 or Excel 2016 and later, **Windows, 64-bit** | Supported target | Compile, regression and smoke run for every VBA change and release |
+| Same versions, Windows, 32-bit | Best effort: kept compiling, not certified | Compile when a 32-bit host is available; otherwise recorded as `NOT_RUN` |
+| Excel for Mac, Excel for the web, Excel 2013 and earlier | Not supported | None |
+
+<a id="vba-references"></a>
+
+**VBA references:** only the four defaults of a new workbook:
+
+1. *Visual Basic For Applications*
+2. *Microsoft Excel 16.0 Object Library*
+3. *OLE Automation*
+4. *Microsoft Office 16.0 Object Library*
+
+Adding any other reference, add-in (including Solver) or late-bound
+`CreateObject` dependency needs an issue and an update to this section first.
+
+<a id="runtime-dependencies"></a>
+
+**Runtime dependencies:** none beyond Excel and VBA. The workbook never calls
+Python, R, a database, a web service or any other external engine. Python or R
+may be used **outside** the workbook only to produce independent reference
+values for tests; such scripts are not part of the deliverable, and their
+results are committed as reviewed expected values with their provenance
+([`docs/methodology/VALIDATION_PLAN.md`](docs/methodology/VALIDATION_PLAN.md)).
+Python is also used by the static checks, which never run with the workbook.
+
+<a id="commitments-and-evidence"></a>
+
+**Commitments are not evidence.** The tables above state what the project
+commits to support. Whether a given commit actually compiles and runs on a
+host is shown only by an Excel evidence record bound to that commit, as defined
+in [`docs/EXCEL_EVIDENCE.md`](docs/EXCEL_EVIDENCE.md). No host is listed as
+tested until such a record exists; at v0.1.0 none does, because there is no VBA
+source yet.
 
 ## 📥 Get the source
 
@@ -137,14 +167,16 @@ checks: they never compile VBA, run Excel or validate a model.
    `src/workbook/IRRBB_Template.xlsx`) and save it as a macro-enabled workbook
    **outside** the checkout or in an ignored location. Built workbooks are never
    committed.
-3. Import in dependency order: `src/core/`, then `src/classes/`, then
+3. Open the VBE (**Alt+F11**) and check that **Tools → References** lists only
+   the [four default references](#vba-references).
+4. Import in dependency order: `src/core/`, then `src/classes/`, then
    `src/modules/`, then the standard modules in `src/workbook/`, then
    `src/forms/` (each `.frm` with its `.frx`). For a development workbook only,
    add `tests/` and `examples/` modules.
-4. Paste document-module code (`ThisWorkbook`, sheet modules) into the existing
+5. Paste document-module code (`ThisWorkbook`, sheet modules) into the existing
    module instead of importing it, which would create a duplicate class.
-5. Run **Debug → Compile VBAProject**; it must complete with no error.
-6. Run the synthetic regression harness and the specific scenario under test,
+6. Run **Debug → Compile VBAProject**; it must complete with no error.
+7. Run the synthetic regression harness and the specific scenario under test,
    then record the result as described under
    [validation record](#validation-record).
 

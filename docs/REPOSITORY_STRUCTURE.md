@@ -40,7 +40,7 @@ written by [`VBA_HOUSE_STYLE.md`](VBA_HOUSE_STYLE.md); model definitions by
 | Who calls it? | A model developer or validator working in the IRRBB workbook: loading a synthetic or permitted dataset, calibrating the behavioral models, backtesting them, running scenarios and exporting parameters. |
 | What does it own? | The workbook: input, parameter and result sheets, the model engines, run control, and their packaging. |
 | Lifecycle | The workbook is the deliverable; it is built from the exported source in this repository, never edited as the source of truth. |
-| Supported environments | Excel for Windows; see [intended hosts](../INSTALLATION.md#supported-hosts) (issue #3). |
+| Supported environments | Excel for Windows, 64-bit target and 32-bit best effort; see [supported hosts](../INSTALLATION.md#supported-hosts) (decided in issue #3). |
 
 **Why not `library`:** the user needs a guided workflow with persistent inputs,
 parameters, diagnostics and stale-result protection. Those belong to a
