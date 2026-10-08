@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import lzma
 import sys
 import zipfile
 import zlib
@@ -118,7 +119,7 @@ def check_workbook(root: Path, path: str) -> list[str]:
             text = "".join(package.read(name).decode("utf-8", errors="replace")
                            for name in ("[Content_Types].xml", "_rels/.rels") if name in parts)
     except (OSError, zipfile.BadZipFile, RuntimeError, NotImplementedError,
-            zlib.error, ElementTree.ParseError) as error:
+            zlib.error, lzma.LZMAError, ElementTree.ParseError) as error:
         return [f"{path}: not a readable workbook package ({error})"]
     findings = [f"{path}: must not contain {part}" for part in parts if FORBIDDEN_PART.search(part)]
     if "docProps/" in text or "vbaProject" in text:

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import csv
 import json
+import lzma
 import os
 import shutil
 import subprocess
@@ -85,6 +86,25 @@ class WorkbookPackageTests(unittest.TestCase):
                 with self.assertRaises(zipfile.BadZipFile):
                     archive.read(archive.infolist()[0])
             self.assertIn("duplicate", " ".join(check_workbook(root, path.name)))
+
+    def test_lzma_corruption_returns_a_finding(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / "template.xlsx"
+            with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_LZMA) as archive:
+                for name, value in CORE_PARTS.items():
+                    archive.writestr(name, value)
+            with zipfile.ZipFile(path) as archive:
+                entry = archive.infolist()[0]
+                offset = entry.header_offset + 30 + len(entry.filename.encode()) + len(entry.extra)
+            damaged = bytearray(path.read_bytes())
+            # ZIP LZMA prefix: version (2), properties length (2), properties (5).
+            damaged[offset + 4:offset + 9] = b"\xff" * 5
+            path.write_bytes(damaged)
+            with zipfile.ZipFile(path) as archive:
+                with self.assertRaises(lzma.LZMAError):
+                    archive.testzip()
+            self.assertIn("not a readable workbook package", " ".join(check_workbook(root, path.name)))
 
 
 class LabelDefaultsTests(unittest.TestCase):
