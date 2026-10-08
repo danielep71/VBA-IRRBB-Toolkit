@@ -6,7 +6,7 @@ import process from "node:process";
 
 const EXPECTED_SCHEMA_VERSION = 1;
 const DEFAULT_MANIFEST = ".github/labels.json";
-const DEFAULT_POLICY = ".github/repository-profile.json";
+const DEFAULT_POLICY = ".github/label-policy.json";
 const API_VERSION = "2022-11-28";
 const PROFILE_NAMES = ["application", "library", "ui-component"];
 const LABELS_PER_PAGE = 100;

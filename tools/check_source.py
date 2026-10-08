@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 import re
+import lzma
 import sys
 import zipfile
+import zlib
+from xml.etree import ElementTree
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -97,13 +100,29 @@ def check_component(root: Path, path: str, tracked: set[str], names: dict[str, s
 
 
 def check_workbook(root: Path, path: str) -> list[str]:
-    """A committed workbook must be a valid package without VBA or document properties."""
+    """Check core XML parts, archive integrity and sanitization, not Excel execution."""
+    binary = Path(path).suffix.lower() == ".xlsb"
+    workbook_part = "xl/workbook.bin" if binary else "xl/workbook.xml"
+    workbook_rels = "xl/_rels/workbook.bin.rels" if binary else "xl/_rels/workbook.xml.rels"
+    required = {"[Content_Types].xml", "_rels/.rels", workbook_part, workbook_rels}
     try:
         with zipfile.ZipFile(root / path) as package:
             parts = package.namelist()
+            if len(parts) != len(set(parts)):
+                return [f"{path}: duplicate workbook member names are not allowed"]
+            missing = sorted(required - set(parts))
+            if missing:
+                return [f"{path}: missing required workbook parts: {', '.join(missing)}"]
+            bad_part = package.testzip()
+            if bad_part is not None:
+                return [f"{path}: corrupt workbook member {bad_part}"]
+            for name in sorted(required):
+                if not (binary and name == workbook_part):
+                    ElementTree.fromstring(package.read(name))
             text = "".join(package.read(name).decode("utf-8", errors="replace")
                            for name in ("[Content_Types].xml", "_rels/.rels") if name in parts)
-    except (OSError, zipfile.BadZipFile) as error:
+    except (OSError, zipfile.BadZipFile, RuntimeError, NotImplementedError,
+            zlib.error, lzma.LZMAError, ElementTree.ParseError, LookupError, ValueError) as error:
         return [f"{path}: not a readable workbook package ({error})"]
     findings = [f"{path}: must not contain {part}" for part in parts if FORBIDDEN_PART.search(part)]
     if "docProps/" in text or "vbaProject" in text:
