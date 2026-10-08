@@ -159,7 +159,7 @@ Use only the categories needed by a release.
   (#11).
 - The architecture, validation plan and feature issue form refer to a
   generic downstream ALM platform instead of a named vendor product (#11).
-- Proposed model contracts (#9) in `docs/methodology/MODEL_CONTRACTS.md`:
+- Model contracts accepted (#9) in `docs/methodology/MODEL_CONTRACTS.md`:
   rate pass-through (unit roots, Engle-Granger long run and cointegration,
   symmetric and asymmetric ECM, constraints rejected not clipped), stable
   amount (one-month survival share, balance-weighted fractional logit,

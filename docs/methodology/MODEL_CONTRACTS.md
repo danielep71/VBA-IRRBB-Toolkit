@@ -4,7 +4,7 @@
 
 ### What the rate, stable-amount and decay models estimate, and how each is independently validated
 
-[![Status](https://img.shields.io/badge/Status-Proposed_(%239)-d97706?style=flat-square)](#open-decisions)
+[![Status](https://img.shields.io/badge/Status-Accepted_(%239)-217346?style=flat-square)](#decisions)
 [![Sources](https://img.shields.io/badge/Sources-partly_verified-d97706?style=flat-square)](SOURCES.md)
 [![Units](https://img.shields.io/badge/Units-decimal_%C2%B7_months-0969da?style=flat-square)](../REPOSITORY_STRUCTURE.md#parameter-and-units-boundary)
 
@@ -27,9 +27,8 @@ numerical cases that will test each model are registered in
 [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md).
 
 > [!IMPORTANT]
-> These contracts are **proposed** in issue #9 and become binding when the owner
-> accepts them there; the [open decisions](#open-decisions) need an answer
-> first. Regulatory figures are labelled with their source; those resting on an
+> These contracts were **accepted by the owner on 2026-10-08 in issue #9**,
+> including the [decisions](#decisions) below. Regulatory figures are labelled with their source; those resting on an
 > unverified source in the [register](SOURCES.md) are provisional.
 
 Notation: $t$ is a month end, $B$ a balance in currency units, $r$ a rate as a
@@ -356,11 +355,13 @@ and tolerance. Backtesting follows the
 [out-of-sample freeze](#estimation-window-and-out-of-sample-freeze) above and
 [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md).
 
-<a id="open-decisions"></a>
+<a id="decisions"></a>
 
-## ❓ Open decisions
+## ✅ Decisions
 
-| # | Decision | Proposed |
+Accepted by the owner on 2026-10-08 in issue #9.
+
+| # | Decision | Outcome |
 | ---: | --- | --- |
 | 1 | Model granularity | Separate model per segment × currency, all three models |
 | 2 | Minimum samples | 60 months (rate), 1,000 transitions from 30 accounts (stable), 36 log changes (decay) |

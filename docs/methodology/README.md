@@ -10,7 +10,7 @@ The contract accepted in issue #4 is [`DATA_CONTRACT.md`](DATA_CONTRACT.md): fie
 
 ## Model families
 
-The proposed specifications (issue #9) are in [`MODEL_CONTRACTS.md`](MODEL_CONTRACTS.md), with the numerical reference cases registered in [`TEST_CASES.md`](TEST_CASES.md). The requirements below are what those contracts must satisfy.
+The specifications accepted in issue #9 are in [`MODEL_CONTRACTS.md`](MODEL_CONTRACTS.md), with the numerical reference cases registered in [`TEST_CASES.md`](TEST_CASES.md). The requirements below are what those contracts must satisfy.
 
 ### Rate / pass-through
 

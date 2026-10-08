@@ -27,5 +27,5 @@ Each test must identify source SHA, fixture name, expected result provenance, nu
 
 - Exact data schema and strategy for datasets larger than worksheet limits. Decided in issue #4 ([`DATA_CONTRACT.md`](DATA_CONTRACT.md)).
 - Choice of independent numerical benchmark. Decided in issue #3: Python or R may produce reference values **outside** the workbook; they are never runtime dependencies ([`INSTALLATION.md`](../../INSTALLATION.md#runtime-dependencies)).
-- Treatment of curve scenarios, behavioral caps and regulatory constraints. Proposed in issue #9 ([`MODEL_CONTRACTS.md`](MODEL_CONTRACTS.md#regulatory-overlay)); depends on verifying the sources in [`SOURCES.md`](SOURCES.md).
+- Treatment of curve scenarios, behavioral caps and regulatory constraints. Specified in issue #9 ([`MODEL_CONTRACTS.md`](MODEL_CONTRACTS.md#regulatory-overlay)); depends on verifying the sources in [`SOURCES.md`](SOURCES.md).
 - Downstream ALM platform integration schema, ownership and reconciliation requirements.
