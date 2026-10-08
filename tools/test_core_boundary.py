@@ -46,6 +46,22 @@ class CoreHostIndependence(unittest.TestCase):
                 "End Sub\n")
         self.assertEqual(findings(body), [])
 
+    def test_comment_continuations_accept_vba_whitespace(self) -> None:
+        whitespace = [" ", "\t", "\x19", "\u1680", "\u202f", "\u205f", "\u3000"]
+        whitespace.extend(chr(n) for n in range(0x2000, 0x200b))
+        for prefix in ("'", "Rem"):
+            for space in whitespace:
+                with self.subTest(prefix=prefix, space=repr(space)):
+                    body = f"{prefix} prose{space}_\nGetObject{space}_\nCreateObject\nRange\n"
+                    self.assertEqual(findings(body),
+                                     ["src/core/CORE_Sample.bas:7: core must not use Excel host identifier Range"])
+
+    def test_non_continuations_do_not_hide_following_code(self) -> None:
+        for suffix in ("_", "\u00a0_", "\v_", "\f_", " _ ", " _\t"):
+            with self.subTest(suffix=repr(suffix)):
+                self.assertEqual(findings(f"' prose{suffix}\nGetObject\n"),
+                                 ["src/core/CORE_Sample.bas:5: core must not use COM automation identifier GetObject"])
+
     def test_host_adapter_may_use_com_automation(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

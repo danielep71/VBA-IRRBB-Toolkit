@@ -99,6 +99,8 @@ Use only the categories needed by a release.
   External COM automation belongs in host adapters; these names are reserved
   in core code even for non-Excel objects. Comments and strings remain allowed
   ([#22](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/22)).
+- Continued comments now recognize VBA whitespace, including tabs, and require
+  the continuation underscore immediately before the newline.
 
 > Not yet released. Development takes place on the active release branch,
 > `release/v0.1.0`; changes to `main` require an explicit owner instruction.
