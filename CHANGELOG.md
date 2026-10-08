@@ -94,6 +94,12 @@ Use only the categories needed by a release.
 
 ## [Unreleased]
 
+- Audit fixes (#25): share VBA comment/continuation parsing across gates, enforce
+  the exact workbook path and check XML references independent of encoding.
+- Automatically reconcile issue owner, milestone and one priority, including
+  closed issues; traffic alerts use an explicit configurable milestone.
+- Document Ruff/mypy as optional development targets rather than enforced CI.
+
 - Core-boundary checks now reject `CreateObject` and `GetObject`, including
   variable or concatenated ProgIDs that could previously hide Excel access.
   External COM automation belongs in host adapters; these names are reserved

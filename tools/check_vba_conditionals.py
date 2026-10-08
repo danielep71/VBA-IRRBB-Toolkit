@@ -14,6 +14,7 @@ from typing import Any
 from _gatelib import git_bytes as git
 from _gatelib import parse_report_args as parse_args
 from _gatelib import run_gate
+from _vba_lex import logical_lines
 
 VBA_SUFFIXES = {".bas", ".cls", ".frm"}
 TOOL_NAME = "VBA conditional compilation"
@@ -172,52 +173,9 @@ def tracked_vba(root: Path) -> list[str]:
     return sorted(paths)
 
 
-def strip_vba(raw: str) -> str:
-    result: list[str] = []
-    in_string = False
-    index = 0
-    while index < len(raw):
-        char = raw[index]
-        if char == '"':
-            if in_string and index + 1 < len(raw) and raw[index + 1] == '"':
-                result.extend(('"', '"'))
-                index += 2
-                continue
-            in_string = not in_string
-            result.append(char)
-            index += 1
-            continue
-        if char == "'" and not in_string:
-            break
-        result.append(char)
-        index += 1
-    text = "".join(result)
-    if re.match(r"^\s*Rem(?:\s|$)", text, re.IGNORECASE):
-        return ""
-    return text.rstrip()
-
-
 def logical_units(lines: list[str]) -> list[tuple[int, int, str, str]]:
-    units: list[tuple[int, int, str, str]] = []
-    buffer: list[str] = []
-    start = 0
-    for number, raw in enumerate(lines, start=1):
-        code = strip_vba(raw)
-        stripped = code.strip()
-        if not buffer and stripped.startswith("#"):
-            units.append((number, number, "directive", stripped))
-            continue
-        if not buffer:
-            start = number
-        if re.search(r"\s_\s*$", code):
-            buffer.append(re.sub(r"\s_\s*$", " ", code))
-            continue
-        buffer.append(code)
-        units.append((start, number, "code", " ".join(part.strip() for part in buffer)))
-        buffer.clear()
-    if buffer:
-        units.append((start, len(lines), "code", " ".join(part.strip() for part in buffer)))
-    return units
+    return [(start, end, "directive" if code.lstrip().startswith("#") else "code", code)
+            for start, end, code in logical_lines(lines)]
 
 
 def active(stack: list[Frame]) -> bool:
@@ -407,7 +365,7 @@ def _validate_declare(
 def analyze_component(path: str, text: str) -> list[dict[str, Any]]:
     findings: list[dict[str, Any]] = []
     stacks: dict[str, list[Frame]] = {name: [] for name in ENVIRONMENTS}
-    for start_line, end_line, unit_kind, code in logical_units(text.splitlines()):
+    for start_line, end_line, unit_kind, code in logical_units(text.replace("\r\n", "\n").split("\n")):
         if unit_kind == "directive":
             _handle_directive(path, start_line, code, stacks, findings)
         else:
@@ -426,7 +384,7 @@ def analyze_component(path: str, text: str) -> list[dict[str, Any]]:
 
 def reachable_sources(path: str, text: str) -> tuple[dict[str, str], list[dict[str, Any]]]:
     """Return each modeled source with inactive lines blanked, preserving line numbers."""
-    lines = text.splitlines()
+    lines = text.replace("\r\n", "\n").split("\n")
     sources = {name: [""] * len(lines) for name in ENVIRONMENTS}
     stacks: dict[str, list[Frame]] = {name: [] for name in ENVIRONMENTS}
     findings: list[dict[str, Any]] = []
@@ -449,7 +407,7 @@ def run_check(root: Path) -> dict[str, Any]:
     declare_count = 0
     for relative in paths:
         text = (root / relative).read_bytes().decode("cp1252")
-        units = logical_units(text.splitlines())
+        units = logical_units(text.replace("\r\n", "\n").split("\n"))
         declare_count += sum(
             unit_kind == "code" and bool(DECLARE_RE.match(code))
             for _, _, unit_kind, code in units

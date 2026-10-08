@@ -13,6 +13,7 @@ from typing import Any
 from _gatelib import git_bytes as git
 from _gatelib import parse_report_args as parse_args
 from _gatelib import run_gate
+from _vba_lex import logical_lines
 from check_vba_conditionals import reachable_sources
 
 VBA_SUFFIXES = {".bas", ".cls", ".frm"}
@@ -48,50 +49,8 @@ def tracked_vba(root: Path) -> list[str]:
     return sorted(paths)
 
 
-def strip_vba(raw: str) -> str:
-    result: list[str] = []
-    in_string = False
-    index = 0
-    while index < len(raw):
-        char = raw[index]
-        if char == '"':
-            if in_string and index + 1 < len(raw) and raw[index + 1] == '"':
-                result.extend('  ')
-                index += 2
-                continue
-            in_string = not in_string
-            result.append(' ')
-            index += 1
-            continue
-        if char == "'" and not in_string:
-            break
-        result.append(' ' if in_string else char)
-        index += 1
-    text = "".join(result)
-    if re.match(r"^\s*Rem(?:\s|$)", text, re.IGNORECASE):
-        return ""
-    return text.rstrip()
-
-
 def logical_statements(lines: list[str]) -> list[tuple[int, int, str]]:
-    statements: list[tuple[int, int, str]] = []
-    buffer: list[str] = []
-    start = 0
-    for number, raw in enumerate(lines, start=1):
-        code = strip_vba(raw)
-        if not buffer:
-            start = number
-        continued = bool(re.search(r"\s_\s*$", code))
-        if continued:
-            code = re.sub(r"\s_\s*$", " ", code)
-            buffer.append(code)
-            continue
-        buffer.append(code)
-        statements.append((start, number, " ".join(part.strip() for part in buffer)))
-        buffer.clear()
-    if buffer:
-        statements.append((start, len(lines), " ".join(part.strip() for part in buffer)))
-    return statements
+    return logical_lines(lines, mask_strings=True)
 
 
 def label_at_start(code: str) -> str | None:
@@ -179,7 +138,7 @@ def _analyze_active_component(path: str, text: str) -> list[dict[str, Any]]:
     procedures: list[dict[str, Any]] = []
     current: dict[str, Any] | None = None
 
-    for start_line, end_line, code in logical_statements(text.splitlines()):
+    for start_line, end_line, code in logical_statements(text.replace("\r\n", "\n").split("\n")):
         stripped = code.strip()
         if not stripped or stripped.startswith("#"):
             continue
@@ -271,7 +230,7 @@ def run_check(root: Path) -> dict[str, Any]:
         findings.extend(analyze_component(relative, text))
         procedure_count += sum(
             bool(PROC_OPEN.match(code))
-            for _, _, code in logical_statements(text.splitlines())
+            for _, _, code in logical_statements(text.replace("\r\n", "\n").split("\n"))
             if " declare " not in f" {code.casefold()} "
         )
     return {

@@ -20,3 +20,7 @@ The gate runner checks:
 CI runs these checks on GitHub's hosted Linux runner. **VBA compile, Excel workbook execution, econometric calibration and numerical result validation are not performed by these gates.** Record Excel host evidence separately under `docs/EXCEL_EVIDENCE.md`.
 
 Label reconciliation scripts and workflows mirror the SACCR label policy; merging them into the trusted default branch is needed before automatic label synchronization begins.
+
+Ruff and mypy settings in `pyproject.toml` are optional development targets, not
+CI checks or verified compliance. The required CI command remains the portable
+standard-library gate runner above.
