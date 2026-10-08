@@ -40,6 +40,11 @@ HOST_IDENTIFIER = re.compile(
     r"Workbooks?|Worksheets?|Sheets|Range|Cells|Charts?|Shapes|ListObjects?|PivotTables?|"
     r"WorksheetFunction|Evaluate|MsgBox|InputBox|UserForms?)\b", re.I)
 REM_STATEMENT = re.compile(r"(?:^|:)[ \t]*Rem\b", re.I)
+# Core cannot activate or attach to external COM objects, even via dynamic ProgIDs.
+AUTOMATION_IDENTIFIER = re.compile(r"\b(CreateObject|GetObject)\b", re.I)
+# MS-VBAL 3.2.2 WSC: tab, EOM, space, DBCS and Unicode Zs excluding CP2
+# characters (NBSP). The underscore must immediately precede the newline.
+COMMENT_CONTINUATION = re.compile(r"[\t\x19 \u1680\u2000-\u200a\u202f\u205f\u3000]_\Z")
 FORBIDDEN_PART = re.compile(r"(^|/)vbaProject\.bin$|^docProps/", re.I)
 
 
@@ -78,7 +83,7 @@ def code_lines(text: str) -> list[tuple[int, str]]:
     continued_comment = False
     for number, line in enumerate(text.split("\n"), 1):
         if continued_comment:
-            continued_comment = line.rstrip().endswith(" _")
+            continued_comment = bool(COMMENT_CONTINUATION.search(line))
             continue
         code, quoted, index = [], False, 0
         while index < len(line):
@@ -93,7 +98,7 @@ def code_lines(text: str) -> list[tuple[int, str]]:
                 quoted = True
                 code.append(" ")
             elif char == "'":
-                continued_comment = line.rstrip().endswith(" _")
+                continued_comment = bool(COMMENT_CONTINUATION.search(line))
                 break
             else:
                 code.append(char)
@@ -101,7 +106,7 @@ def code_lines(text: str) -> list[tuple[int, str]]:
         text_code = "".join(code)
         rem = REM_STATEMENT.search(text_code)
         if rem:
-            continued_comment = line.rstrip().endswith(" _")
+            continued_comment = bool(COMMENT_CONTINUATION.search(line))
             text_code = text_code[:rem.start()]
         result.append((number, text_code))
     return result
@@ -109,10 +114,15 @@ def code_lines(text: str) -> list[tuple[int, str]]:
 
 def check_core_host_independence(path: str, text: str) -> list[str]:
     """Core code must not reach the Excel object model or UI; comments and strings may."""
-    return [f"{path}:{number}: core must not use Excel host identifier {match.group(1)}"
-            for number, code in code_lines(text)
-            if not code.lstrip().startswith("Attribute ")
-            for match in HOST_IDENTIFIER.finditer(code)]
+    findings = []
+    for number, code in code_lines(text):
+        if code.lstrip().startswith("Attribute "):
+            continue
+        for pattern, kind in ((HOST_IDENTIFIER, "Excel host"),
+                              (AUTOMATION_IDENTIFIER, "COM automation")):
+            findings.extend(f"{path}:{number}: core must not use {kind} identifier {match.group(1)}"
+                            for match in pattern.finditer(code))
+    return findings
 
 
 def check_component(root: Path, path: str, tracked: set[str], names: dict[str, str]) -> list[str]:
