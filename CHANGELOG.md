@@ -103,6 +103,11 @@ Use only the categories needed by a release.
   access, and traffic alerts, following the SA-CCR repository setup.
   Setup and verification are documented in `docs/TRAFFIC.md`.
 
+- `tools/check_source.py` rejects Excel object-model and UI identifiers
+  (`Range`, `Cells`, `Application`, `MsgBox` and others) in `src/core/` code,
+  ignoring comments and string literals, so the model core stays
+  host-independent; covered by `tools/test_core_boundary.py` (#2).
+
 - Initial repository foundation for a source-first Excel/VBA IRRBB behavioral
   modelling application.
 - Documentation of model scope, validation requirements, source boundaries and
@@ -146,6 +151,10 @@ Use only the categories needed by a release.
   (#11).
 - The architecture, validation plan and feature issue form refer to a
   generic downstream ALM platform instead of a named vendor product (#11).
+- `docs/REPOSITORY_STRUCTURE.md` rewritten as the proposed architecture for
+  owner acceptance: profile rationale, the intended Excel workflow, layout,
+  dependency direction, public API boundary, canonical units at the facade,
+  immutable versioned parameter sets and intentional non-goals (#2).
 
 ### Fixed
 

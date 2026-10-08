@@ -157,6 +157,8 @@ it privately as described in [`SECURITY.md`](SECURITY.md#data-and-secrets).
 Rotate any exposed secret first. Removing it from history is an owner decision;
 a follow-up commit that deletes the file does not remove it.
 
+<a id="compatibility-and-model-contracts"></a>
+
 ## 🔄 Compatibility and model contracts
 
 A change to documented procedures, functions, classes, enums, parameters,

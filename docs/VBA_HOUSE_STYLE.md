@@ -3,6 +3,8 @@
 Adapted to IRRBB from the maintainer's SACCR source-first conventions.
 
 - Use `Option Explicit` on every module; `Option Private Module` in internal `src/core/` standard modules.
+- Core code never uses the Excel object model or UI. Host names such as `Range`, `Cells`, `Application` and `MsgBox` are reserved in `src/core/`, even as variable names; see [`REPOSITORY_STRUCTURE.md`](REPOSITORY_STRUCTURE.md#dependency-direction).
+- Pass rates as decimals, dates as `Date`, horizons in months; convert other units only in workbook adapters ([parameter and units boundary](REPOSITORY_STRUCTURE.md#parameter-and-units-boundary)).
 - Match exported file stems to `Attribute VB_Name`. Export to Git with LF stored and CRLF checkout under `.gitattributes`.
 - Place pure numeric/statistical computations in `CORE_*` modules, supported public entry points in `IRRBB_*`, tests in `TEST_*`.
 - Public functions document contract, units, allowed input domain, missing-data semantics, errors and numerical tolerance.
