@@ -32,6 +32,14 @@ RELEASE_SUFFIX = re.compile(r" - (\d{4}-\d{2}-\d{2})")
 # Committed workbooks (only the template, see docs/REPOSITORY_STRUCTURE.md) carry
 # no VBA project and no document properties: author, title, timestamps (#58).
 WORKBOOK_SUFFIXES = {".xlsx", ".xlsm", ".xlsb", ".xltx", ".xltm"}
+# Excel object model and UI that host-independent src/core code must not use;
+# see docs/REPOSITORY_STRUCTURE.md, "Dependency direction". VBA identifiers are
+# case-insensitive, so these names are reserved in core even as variable names.
+HOST_IDENTIFIER = re.compile(
+    r"\b(Application|Excel|ThisWorkbook|ActiveWorkbook|ActiveSheet|ActiveCell|ActiveChart|"
+    r"Workbooks?|Worksheets?|Sheets|Range|Cells|Charts?|Shapes|ListObjects?|PivotTables?|"
+    r"WorksheetFunction|Evaluate|MsgBox|InputBox|UserForms?)\b", re.I)
+REM_STATEMENT = re.compile(r"(?:^|:)[ \t]*Rem\b", re.I)
 FORBIDDEN_PART = re.compile(r"(^|/)vbaProject\.bin$|^docProps/", re.I)
 
 
@@ -64,6 +72,49 @@ def check_storage(root: Path) -> list[str]:
     return findings
 
 
+def code_lines(text: str) -> list[tuple[int, str]]:
+    """Return (line number, code) with comments and string literals blanked."""
+    result = []
+    continued_comment = False
+    for number, line in enumerate(text.split("\n"), 1):
+        if continued_comment:
+            continued_comment = line.rstrip().endswith(" _")
+            continue
+        code, quoted, index = [], False, 0
+        while index < len(line):
+            char = line[index]
+            if quoted:
+                if char == '"' and line[index + 1:index + 2] == '"':
+                    index += 1
+                elif char == '"':
+                    quoted = False
+                code.append(" ")
+            elif char == '"':
+                quoted = True
+                code.append(" ")
+            elif char == "'":
+                continued_comment = line.rstrip().endswith(" _")
+                break
+            else:
+                code.append(char)
+            index += 1
+        text_code = "".join(code)
+        rem = REM_STATEMENT.search(text_code)
+        if rem:
+            continued_comment = line.rstrip().endswith(" _")
+            text_code = text_code[:rem.start()]
+        result.append((number, text_code))
+    return result
+
+
+def check_core_host_independence(path: str, text: str) -> list[str]:
+    """Core code must not reach the Excel object model or UI; comments and strings may."""
+    return [f"{path}:{number}: core must not use Excel host identifier {match.group(1)}"
+            for number, code in code_lines(text)
+            if not code.lstrip().startswith("Attribute ")
+            for match in HOST_IDENTIFIER.finditer(code)]
+
+
 def check_component(root: Path, path: str, tracked: set[str], names: dict[str, str]) -> list[str]:
     try:
         text = (root / path).read_bytes().decode(VBA_ENCODING)
@@ -83,6 +134,8 @@ def check_component(root: Path, path: str, tracked: set[str], names: dict[str, s
         findings.append(f"{path}: missing Option Explicit")
     if path.startswith("src/core/") and path.lower().endswith(".bas") and not OPTION_PRIVATE.search(text):
         findings.append(f"{path}: core modules must declare Option Private Module")
+    if path.startswith("src/core/"):
+        findings.extend(check_core_host_independence(path, text))
     for home, prefix in ROLE_PREFIXES:
         if path.startswith(home) and path.lower().endswith(".bas") and not Path(path).stem.startswith(prefix):
             findings.append(f"{path}: standard modules in {home} must be named {prefix}<subject>")

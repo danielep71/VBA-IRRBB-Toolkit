@@ -119,6 +119,46 @@ contracts, errors and Excel-state handling follow
 Do not weaken a calculation, numerical or packaging gate merely because the
 generic repository gate passes.
 
+<a id="data-confidentiality-and-provenance"></a>
+
+## 🔐 Data, confidentiality and provenance
+
+**Synthetic data only.** Every dataset, fixture, example and screenshot in Git,
+in an issue or in a pull request must be synthetic. Synthetic means generated
+from a documented procedure, with its generator or seed committed or described,
+and not derived from real records: rescaled, shifted, anonymized or sampled
+real balances, rates or account histories are **not** synthetic.
+
+**Private visibility is not permission.** The repository being private does
+not authorize storing client, employer or personal data, and does not waive
+confidentiality, GDPR or contractual restrictions. Treat every commit as if the
+repository were public, because history is hard to erase.
+
+**Third-party material needs explicit rights.** Do not commit, attach or
+paraphrase at length:
+
+- vendor or third-party source code, workbooks or add-ins;
+- restricted manuals, model documentation, training material or methodology
+  papers from a vendor, bank or consultancy;
+- internal bank models, parameters, calibration results or validation reports;
+  or
+- licensed data that cannot be redistributed.
+
+Cite public sources (regulation, supervisory guidelines, academic papers) by
+reference and implement from that citation. Name a commercial product only
+where an integration contract requires it, never its internals.
+
+**State provenance.** A pull request that adds data, a fixture, an expected
+value or adapted code states where it came from: generator and seed, the public
+source cited, or the licence of the adapted material.
+
+**If sensitive material reaches Git**, stop pushing to that branch and report
+it privately as described in [`SECURITY.md`](SECURITY.md#data-and-secrets).
+Rotate any exposed secret first. Removing it from history is an owner decision;
+a follow-up commit that deletes the file does not remove it.
+
+<a id="compatibility-and-model-contracts"></a>
+
 ## 🔄 Compatibility and model contracts
 
 A change to documented procedures, functions, classes, enums, parameters,
@@ -215,6 +255,7 @@ A pull request answers five questions:
 - [ ] Estimator changes carry independent references, tolerances and failure cases.
 - [ ] Documentation and the `[Unreleased]` changelog entry are updated.
 - [ ] No confidential, real-portfolio, accidental binary or generated material is added.
+- [ ] New data, fixtures and adapted code are synthetic or licensed, with provenance stated.
 - [ ] Unverified environments and skipped checks are stated plainly.
 - [ ] The final diff contains no unrelated formatting or local artifacts.
 
@@ -244,7 +285,8 @@ technical and respectful under the [Code of Conduct](CODE_OF_CONDUCT.md).
 This project is distributed under the [MIT License](LICENSE). Contributors must
 have the right to submit every part of a contribution, including code, tests,
 data, images and generated material. Third-party methodologies are cited, not
-copied.
+copied. The licence is reviewed before any external distribution; see
+[`docs/GOVERNANCE.md`](docs/GOVERNANCE.md#licensing-and-distribution).
 
 Maintained by **Daniele Penza**.
 

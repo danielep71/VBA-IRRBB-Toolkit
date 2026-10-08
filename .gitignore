@@ -70,8 +70,9 @@
 # Example for a deliberately version-controlled workbook:
 # !/examples/Project-demo.xlsm
 
-# Approved in issue #58: the macro-free template that holds the workbook's
-# sheets; the VBA is imported from src/ when the workbook is built.
+# Planned in issue #5: the sanitized macro-free template that will hold the
+# workbook's sheets; the VBA is imported from src/ when the workbook is built.
+# It may be committed only after that issue's inspection is accepted.
 !/src/workbook/IRRBB_Template.xlsx
 
 
@@ -86,6 +87,53 @@
 /output/
 /outputs/
 /dist/
+
+
+#------------------------------------------------------------------------------
+# LOCAL DATA, EXTRACTS AND MODEL EXPORTS
+#------------------------------------------------------------------------------
+# Only synthetic data belongs in Git (CONTRIBUTING.md, "Data, confidentiality
+# and provenance"). Keep real or client data, extracts, snapshots and
+# calibration or parameter exports in these rooted local folders, which are
+# never committed. Synthetic fixtures belong under tests/ or examples/.
+/private/
+/local-data/
+/extracts/
+/snapshots/
+/exports/
+/parameter-exports/
+
+# Binary data, statistical-package and archive formats are not reviewable
+# source and commonly carry extracts. Re-include a reviewed synthetic file only
+# by its exact rooted path. CSV stays trackable for synthetic fixtures, so
+# review every added CSV for provenance.
+*.parquet
+*.feather
+*.arrow
+*.avro
+*.orc
+*.sas7bdat
+*.xpt
+*.dta
+*.sav
+*.rds
+*.rda
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.npy
+*.npz
+*.mat
+*.db
+*.sqlite
+*.sqlite3
+*.zip
+*.7z
+*.rar
+*.tar
+*.tgz
+*.tar.gz
 
 
 #------------------------------------------------------------------------------
@@ -204,6 +252,20 @@ session.xml
 *.pvk
 *.key
 *.pem
+*.ppk
+*.jks
+*.keystore
+*.kdbx
+id_rsa
+id_rsa.*
+id_ecdsa
+id_ecdsa.*
+id_ed25519
+id_ed25519.*
+.netrc
+.pgpass
+credentials.json
+client_secret*.json
 
 
 #------------------------------------------------------------------------------

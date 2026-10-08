@@ -86,8 +86,11 @@ A release is valid only when:
 5. every implemented calculation has independent numerical reference cases
    within stated tolerances, recorded against that candidate;
 6. any distributed artifact is built from and tested against that candidate;
-7. an annotated `v*` tag targets the certified commit on `main`; and
-8. post-publication checks pass.
+7. the licensing and distribution review in
+   [`docs/GOVERNANCE.md`](docs/GOVERNANCE.md#licensing-and-distribution) is
+   recorded and closed by the owner;
+8. an annotated `v*` tag targets the certified commit on `main`; and
+9. post-publication checks pass.
 
 If source changes after certification, the evidence is stale and must be
 rerun. Never compensate by editing an already-tested artifact.
@@ -211,14 +214,15 @@ it does not replace it.
 | ---: | --- | :---: |
 | 1 | Owner requested the release | ☐ |
 | 2 | Scope frozen and diff reviewed | ☐ |
-| 3 | Changelog finalized and `VERSION` created or updated | ☐ |
-| 4 | Static checks pass locally and in CI | ☐ |
-| 5 | Excel certification and reference cases pass | ☐ |
-| 6 | Artifacts built, tested and hashed (if any) | ☐ |
-| 7 | Release branch merged into `main` with a merge commit | ☐ |
-| 8 | Release branch level with `main` again | ☐ |
-| 9 | Annotated tag targets the certified `main` SHA | ☐ |
-| 10 | GitHub Release published and verified | ☐ |
+| 3 | Licensing and distribution review recorded and closed | ☐ |
+| 4 | Changelog finalized and `VERSION` created or updated | ☐ |
+| 5 | Static checks pass locally and in CI | ☐ |
+| 6 | Excel certification and reference cases pass | ☐ |
+| 7 | Artifacts built, tested and hashed (if any) | ☐ |
+| 8 | Release branch merged into `main` with a merge commit | ☐ |
+| 9 | Release branch level with `main` again | ☐ |
+| 10 | Annotated tag targets the certified `main` SHA | ☐ |
+| 11 | GitHub Release published and verified | ☐ |
 
 ## 📚 Related documents
 

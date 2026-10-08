@@ -13,7 +13,7 @@ body:
         - "Stable / logit"
         - "Decay"
         - "Backtesting"
-        - "Workbook / ERMAS export"
+        - "Workbook / downstream ALM platform export"
         - "Repository and CI"
     validations:
       required: true
