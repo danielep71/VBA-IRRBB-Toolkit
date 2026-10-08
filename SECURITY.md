@@ -140,10 +140,8 @@ impact.
   code under review never receives Git credentials. The static-check and
   label-drift jobs run with a read-only token. `issues: write` is granted only
   to the label-reconciliation job, which runs on pushes to `main` and manual
-  dispatch, never on pull requests, and to the one-off foundation bootstrap,
-  which runs on pushes to `release/v0.1.0` and manual dispatch to create the
-  milestone and issue metadata. All actions are pinned to full commit SHAs. See
-  [`tools/README.md`](tools/README.md) and [`docs/LABELS.md`](docs/LABELS.md).
+  dispatch, never on pull requests. All actions are pinned to full commit SHAs.
+  See [`tools/README.md`](tools/README.md) and [`docs/LABELS.md`](docs/LABELS.md).
 - **Artifacts.** No workbook, add-in or other binary is distributed. Office
   packages are ignored by Git unless an exact path is re-included.
 
