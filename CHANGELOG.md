@@ -95,9 +95,13 @@ Use only the categories needed by a release.
 ## [Unreleased]
 
 > Not yet released. Development takes place on the active release branch,
-> `release/0.1.0`; changes to `main` require an explicit owner instruction.
+> `release/v0.1.0`; changes to `main` require an explicit owner instruction.
 
 ### Added
+
+- Daily repository traffic export with private history, main-only analytics
+  access, and traffic alerts, following the SA-CCR repository setup.
+  Setup and verification are documented in `docs/TRAFFIC.md`.
 
 - Initial repository foundation for a source-first Excel/VBA IRRBB behavioral
   modelling application.
@@ -105,6 +109,13 @@ Use only the categories needed by a release.
   synthetic-data policy.
 - Portable static-checking tools and CI configuration adapted from the
   maintainer's SA-CCR repository.
+
+### Changed
+
+- The active release branch is now `release/v0.1.0`, opened from `main` after
+  the foundation was integrated (PR #13). Documentation, the PR template and
+  the `Bootstrap v0.1.0 tracking` workflow trigger point to it, and release
+  branches are named `release/vX.Y.Z` from now on.
 
 ### Documentation
 
@@ -123,4 +134,4 @@ Use only the categories needed by a release.
 
 ---
 
-[Unreleased]: https://github.com/danielep71/VBA-IRRBB-Toolkit/compare/main...release/0.1.0
+[Unreleased]: https://github.com/danielep71/VBA-IRRBB-Toolkit/compare/main...release/v0.1.0

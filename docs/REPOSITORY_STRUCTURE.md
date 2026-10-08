@@ -45,4 +45,4 @@ Excel sheets / ribbon / workbook events
 
 Exported `.bas`, `.cls` and `.frm` modules are authoritative. Generated macro-enabled workbooks and unapproved binary files must not be committed. A future sanitized macro-free `.xlsx` template may be versioned as an explicit exception after inspection.
 
-Development branch: `release/0.1.0`; `main` is updated only by an owner-approved integration. A release is not implied by creating a milestone.
+Development branch: `release/v0.1.0`; `main` is updated only by an owner-approved integration. A release is not implied by creating a milestone.
