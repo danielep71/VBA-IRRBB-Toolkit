@@ -36,7 +36,9 @@ The repository and traffic branch remain private. Public shields.io badges
 cannot read these private JSON files. Traffic does not require GitHub Pages.
 
 After at least two snapshots, qualifying traffic spikes, increases in stars or
-forks, or new referrers create a `P3` issue assigned to `danielep71`.
+forks, or new referrers create a `P3` issue assigned to `danielep71` in the
+repository's single open milestone. If there is no open milestone, or more than
+one, the run fails instead of creating an issue without a milestone.
 The workflow prevents duplicate alerts for the same day.
 
 ## Verification

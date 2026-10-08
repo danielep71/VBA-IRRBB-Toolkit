@@ -514,6 +514,7 @@ jobs:
 
           python3 << 'PY'
           import csv
+          import json
           import os
           import subprocess
           import sys
@@ -688,6 +689,36 @@ jobs:
               "4. Consider adding a short README CTA asking users to star the repository if they are using the project",
           ])
 
+          # Every issue needs a milestone (docs/GOVERNANCE.md). Alerts take the
+          # repository's single open milestone; zero or several open milestones
+          # stop the run instead of opening an issue without one.
+          milestones = subprocess.run(
+              [
+                  "gh",
+                  "api",
+                  f"repos/{os.environ['GITHUB_REPOSITORY']}/milestones?state=open&per_page=100"
+              ],
+              capture_output=True,
+              text=True,
+              check=False
+          )
+
+          if milestones.returncode != 0:
+              print("::error::Could not list open milestones for the alert issue")
+              print(milestones.stderr.strip())
+              sys.exit(1)
+
+          open_milestones = [m["title"] for m in json.loads(milestones.stdout)]
+
+          if len(open_milestones) != 1:
+              print(
+                  "::error::Traffic alert needs exactly one open milestone; found "
+                  f"{len(open_milestones)}: {open_milestones}"
+              )
+              sys.exit(1)
+
+          milestone = open_milestones[0]
+
           created = subprocess.run(
               [
                   "gh",
@@ -699,6 +730,8 @@ jobs:
                   "danielep71",
                   "--label",
                   "P3",
+                  "--milestone",
+                  milestone,
                   "--body",
                   body
               ],
