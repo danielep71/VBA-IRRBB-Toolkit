@@ -1,2 +1,85 @@
-# VBA-IRRBB-Toolkit
-Excel/VBA toolkit for IRRBB behavioral modeling, including non-maturity deposit stability, decay, interest rate pass-through, calibration, scenario analysis, and backtesting.
+<div align="center">
+
+# 🏦 IRRBB Behavioral Models — Excel/VBA Toolkit
+
+### Interest Rate Risk in the Banking Book | behavioral modelling, calibration and independent testing
+
+[![Excel VBA](https://img.shields.io/badge/Excel_VBA-Windows-217346?style=for-the-badge&logo=microsoft-excel&logoColor=white)](INSTALLATION.md)
+[![Status](https://img.shields.io/badge/Status-Foundation%20only-6e7781?style=for-the-badge)](#status)
+[![Development](https://img.shields.io/badge/Development-release%2F0.1.0-6f42c1?style=for-the-badge)](https://github.com/danielep71/VBA-IRRBB-Toolkit/tree/release/0.1.0)
+[![License](https://img.shields.io/badge/License-MIT-2ea44f?style=for-the-badge)](LICENSE)
+
+<br>
+
+**Source-first · Host-independent calculation core · Synthetic data only · Auditable model results**
+
+</div>
+
+---
+
+## ✨ Purpose
+
+**VBA-IRRBB-Toolkit** is an Excel/VBA **application project** intended to develop transparent, independently testable tools for behavioral assumptions in Interest Rate Risk in the Banking Book (IRRBB). It addresses the modelling of non-maturity deposits (NMDs) and, where applicable, demand-side balances, with an emphasis on reproducible calculations, model risk management and ALM parameter export.
+
+The planned scope has three distinct model families:
+
+| Model | Question answered | Intended techniques |
+| --- | --- | --- |
+| **Interest-rate model** | How do administered customer rates respond to market rates? | Long-run relationship, error-correction dynamics (ECM), asymmetric pass-through, OLS and specification tests |
+| **Stable amount model** | What portion of demand balances is expected to persist over a chosen horizon? | Cash-out / survival estimation, binomial-logit GLM, account or cluster predictors, rate-dependent scenarios |
+| **Decay model** | How does the stable component amortize over time? | Log balance-change dynamics, volatility, minimum-probable-amount profiles, mean life and maturity constraints |
+
+Planned cross-cutting functionality includes data validation, calibration, historical out-of-sample backtesting, scenario sensitivity, diagnostics, versioned parameter sets and controlled export for downstream ALM platforms.
+
+> [!IMPORTANT]
+> The models above are **design objectives**, not implemented or independently validated features. Methodological choices, econometric assumptions, statistical tests and regulatory constraints require explicit documentation and numerical validation before use. In particular, a statistical decay horizon does not by itself establish regulatory compliance of an IRRBB repricing profile.
+
+<a id="status"></a>
+## 🧭 Status
+
+**v0.1.0 – Repository foundation (in progress).** This initial milestone establishes source layout, documentation, issue governance, CI and static source checks; it does **not** deliver pricing, econometric fitting, a production workbook or certified IRRBB outputs.
+
+- Application profile: an Excel workbook will be the end-user deliverable, assembled from reviewed exported VBA source.
+- Production calculations will live in `src/core/` without direct Excel object dependencies.
+- `src/modules/` will expose a documented public facade; `src/workbook/` will contain host glue only.
+- `tests/` will hold synthetic test cases and expected results; evidence from a real Excel run must be separately recorded.
+- No client data, confidential third-party material, vendor source code or customer-specific models are allowed in Git, even while the repository is private.
+
+## 📁 Repository navigation
+
+| Resource | Purpose |
+| --- | --- |
+| [Structure](docs/REPOSITORY_STRUCTURE.md) | Application profile, ownership and dependency boundaries |
+| [Methodology roadmap](docs/methodology/README.md) | Model definitions, reference and calibration obligations |
+| [Validation plan](docs/methodology/VALIDATION_PLAN.md) | Backtesting, numerical evidence and model-risk controls |
+| [Installation](INSTALLATION.md) | Development prerequisites and local static checks |
+| [Contribution guide](CONTRIBUTING.md) | Review requirements, branches, tests and privacy |
+| [Governance](docs/GOVERNANCE.md) | Metadata, priority and completion criteria |
+| [VBA house style](docs/VBA_HOUSE_STYLE.md) | Module contracts, error handling and export discipline |
+| [Excel evidence](docs/EXCEL_EVIDENCE.md) | Real-host evidence, independent of static checks |
+| [Tooling](tools/README.md) | Repository checks and CI limits |
+| [Security](SECURITY.md) | Vulnerability and information-handling policy |
+| [Changelog](CHANGELOG.md) | Unreleased work and eventual versions |
+
+## 🛠️ Getting started
+
+```shell
+git clone https://github.com/danielep71/VBA-IRRBB-Toolkit.git
+cd VBA-IRRBB-Toolkit
+git switch release/0.1.0
+python tools/check.py
+```
+
+Git and Python 3.10+ are needed for the static checks. A Windows 64-bit Excel host is intended for future workbook import, compile and execution. **Passing Python checks does not imply VBA compilation or model validation.**
+
+## 🔒 Data, confidentiality and provenance
+
+This project is **generic and independent**. Only synthetic or redistributable reference datasets and expressly permitted source material may be committed. Do not copy third-party proprietary methodologies verbatim, internal bank models, customer balances, reports, or tools into this repository. The current MIT license covers original repository content; it does not grant rights over third-party intellectual property.
+
+## 👤 Maintainer
+
+**Daniele Penza** — [@danielep71](https://github.com/danielep71)
+
+## 📄 License
+
+[MIT](LICENSE)
