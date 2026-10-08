@@ -154,8 +154,10 @@ def check_component(root: Path, path: str, tracked: set[str], names: dict[str, s
 
 def check_workbook(root: Path, path: str) -> list[str]:
     """Check core XML parts, archive integrity and sanitization, not Excel execution."""
-    required = {"[Content_Types].xml", "_rels/.rels", "xl/workbook.xml",
-                "xl/_rels/workbook.xml.rels"}
+    binary = Path(path).suffix.lower() == ".xlsb"
+    workbook_part = "xl/workbook.bin" if binary else "xl/workbook.xml"
+    workbook_rels = "xl/_rels/workbook.bin.rels" if binary else "xl/_rels/workbook.xml.rels"
+    required = {"[Content_Types].xml", "_rels/.rels", workbook_part, workbook_rels}
     try:
         with zipfile.ZipFile(root / path) as package:
             parts = package.namelist()
@@ -168,11 +170,12 @@ def check_workbook(root: Path, path: str) -> list[str]:
             if bad_part is not None:
                 return [f"{path}: corrupt workbook member {bad_part}"]
             for name in sorted(required):
-                ElementTree.fromstring(package.read(name))
+                if not (binary and name == workbook_part):
+                    ElementTree.fromstring(package.read(name))
             text = "".join(package.read(name).decode("utf-8", errors="replace")
                            for name in ("[Content_Types].xml", "_rels/.rels") if name in parts)
     except (OSError, zipfile.BadZipFile, RuntimeError, NotImplementedError,
-            zlib.error, lzma.LZMAError, ElementTree.ParseError) as error:
+            zlib.error, lzma.LZMAError, ElementTree.ParseError, LookupError, ValueError) as error:
         return [f"{path}: not a readable workbook package ({error})"]
     findings = [f"{path}: must not contain {part}" for part in parts if FORBIDDEN_PART.search(part)]
     if "docProps/" in text or "vbaProject" in text:

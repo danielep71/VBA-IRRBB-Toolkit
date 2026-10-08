@@ -50,6 +50,25 @@ class WorkbookPackageTests(unittest.TestCase):
     def test_malformed_core_xml_rejected(self):
         self.assertTrue(self.check_parts({**CORE_PARTS, "xl/workbook.xml": "<broken"}))
 
+    def test_unsupported_xml_encodings_reported(self):
+        for xml in ('<?xml version="1.0" encoding="NO-SUCH-ENCODING"?><workbook/>',
+                    '<?xml version="1.0" encoding="UTF-32"?><workbook/>'):
+            with self.subTest(xml=xml):
+                self.assertTrue(self.check_parts({**CORE_PARTS, "xl/workbook.xml": xml}))
+
+    def test_binary_workbook_uses_binary_parts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / "template.xlsb"
+            with zipfile.ZipFile(path, "w") as archive:
+                archive.writestr("[Content_Types].xml", CORE_PARTS["[Content_Types].xml"])
+                archive.writestr("_rels/.rels", CORE_PARTS["_rels/.rels"])
+                # Synthetic binary bytes exercise structural dispatch, not BIFF validity.
+                archive.writestr("xl/workbook.bin", b"\x83\x01\x00\x84\x01\x00")
+                archive.writestr("xl/_rels/workbook.bin.rels", CORE_PARTS["xl/_rels/workbook.xml.rels"])
+            self.assertEqual(check_workbook(root, path.name), [])
+            self.assertTrue(check_workbook(root, "missing.xlsb"))
+
     def test_forbidden_parts_still_rejected(self):
         for name in ("xl/vbaProject.bin", "docProps/core.xml"):
             with self.subTest(name=name):
