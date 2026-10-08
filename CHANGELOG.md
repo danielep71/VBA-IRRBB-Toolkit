@@ -151,7 +151,7 @@ Use only the categories needed by a release.
   (#11).
 - The architecture, validation plan and feature issue form refer to a
   generic downstream ALM platform instead of a named vendor product (#11).
-- Proposed data contract (#4) in `docs/methodology/DATA_CONTRACT.md`: account
+- Data contract accepted (#4) in `docs/methodology/DATA_CONTRACT.md`: account
   panel and market-rate field dictionaries with types, units and null policy;
   segment codes `RET_TX`, `RET_NTX`, `WHS_NFC`; reconciliation; all-or-nothing
   import with error codes `E01`–`E11` and warnings `W01`–`W06`; gaps,

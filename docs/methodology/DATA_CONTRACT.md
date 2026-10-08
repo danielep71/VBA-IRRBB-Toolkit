@@ -4,7 +4,7 @@
 
 ### Input data, segmentation and lineage for the IRRBB behavioral models
 
-[![Status](https://img.shields.io/badge/Status-Proposed_(%234)-d97706?style=flat-square)](#open-decisions)
+[![Status](https://img.shields.io/badge/Status-Accepted_(%234)-217346?style=flat-square)](#decisions)
 [![Data](https://img.shields.io/badge/Data-synthetic_only-217346?style=flat-square)](../../CONTRIBUTING.md#data-confidentiality-and-provenance)
 [![Fixtures](https://img.shields.io/badge/Fixtures-reference--checked-0969da?style=flat-square)](#synthetic-fixtures)
 
@@ -24,9 +24,9 @@ model definitions are in [`README.md`](README.md); validation obligations in
 [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md).
 
 > [!IMPORTANT]
-> This contract is **proposed** in issue #4 and becomes binding when the owner
-> accepts it there; the [open decisions](#open-decisions) need an answer first.
-> Only synthetic data is ever committed or attached. Real data is loaded locally
+> This contract was **accepted by the owner on 2026-10-08 in issue #4**,
+> including the [decisions](#decisions) below. Only synthetic data is ever
+> committed or attached. Real data is loaded locally
 > and never enters Git, issues or pull requests.
 
 <a id="datasets"></a>
@@ -203,15 +203,16 @@ parameter set.
 A worksheet holds at most 1,048,576 rows, while an account panel easily
 exceeds that (50,000 accounts × 120 months = 6 million rows).
 
-**Proposed:** the account panel is read from the CSV file by VBA's own file
+**Decided:** the account panel is read from the CSV file by VBA's own file
 input, streamed line by line into arrays and aggregates in memory. Worksheets
 hold only summaries, parameters and results, never the raw panel. No external
 engine is involved ([runtime dependencies](../../INSTALLATION.md#runtime-dependencies)).
 
 Reading a user-selected input file is a file-system access that
 [`SECURITY.md`](../../SECURITY.md#security-scope) requires to be agreed in an
-issue: read-only, the file the user picks, nothing written next to it. If
-accepted here, `SECURITY.md` is updated in the same change as the importer.
+issue: read-only, the file the user picks, nothing written next to it. This
+issue (#4) is that agreement; `SECURITY.md` is updated in the same change as
+the importer.
 Memory use and import time for large panels are measured when the importer
 exists; nothing about performance is claimed here.
 
@@ -253,11 +254,13 @@ re-reads the fixtures with an independent Python reading of this contract and
 fails if fixtures, expectations and rules disagree. The VBA importer, when it
 exists, must reproduce the same expected files.
 
-<a id="open-decisions"></a>
+<a id="decisions"></a>
 
-## ❓ Open decisions
+## ✅ Decisions
 
-| # | Decision | Proposed |
+Accepted by the owner on 2026-10-08 in issue #4.
+
+| # | Decision | Outcome |
 | ---: | --- | --- |
 | 1 | Input route for the account panel | CSV file streamed by VBA file input, with the read-only file access added to `SECURITY.md` |
 | 2 | Segment list | `RET_TX`, `RET_NTX`, `WHS_NFC` |
