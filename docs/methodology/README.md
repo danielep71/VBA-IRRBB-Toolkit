@@ -10,6 +10,8 @@ The contract accepted in issue #4 is [`DATA_CONTRACT.md`](DATA_CONTRACT.md): fie
 
 ## Model families
 
+The proposed specifications (issue #9) are in [`MODEL_CONTRACTS.md`](MODEL_CONTRACTS.md), with the numerical reference cases registered in [`TEST_CASES.md`](TEST_CASES.md). The requirements below are what those contracts must satisfy.
+
 ### Rate / pass-through
 
 Specify long-run equilibrium and short-run ECM independently. Record the market rate, spread factors, transformations, unit roots, cointegration or other evidence supporting ECM, identification constraints, statistical significance, dynamic stability, up/down asymmetry and out-of-sample performance. Do not assume beta = 1 without a documented test.
@@ -24,7 +26,7 @@ Define the balance unit (aggregate vs per-account), logarithmic changes, structu
 
 ## Regulatory overlay
 
-Maintain an explicit reference register for the applicable EBA Guidelines, EU RTS and supervisory expectations before implementing any rule. Separate **internal measurement assumptions** from **standardized method assumptions**. Regulatory rule versions and sources must be attached to test evidence, not inferred from the econometric output.
+Maintain an explicit reference register for the applicable EBA Guidelines, EU RTS and supervisory expectations before implementing any rule: [`SOURCES.md`](SOURCES.md). No entry is verified yet. Separate **internal measurement assumptions** from **standardized method assumptions**. Regulatory rule versions and sources must be attached to test evidence, not inferred from the econometric output.
 
 ## Reproducibility
 

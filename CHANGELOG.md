@@ -159,6 +159,17 @@ Use only the categories needed by a release.
   (#11).
 - The architecture, validation plan and feature issue form refer to a
   generic downstream ALM platform instead of a named vendor product (#11).
+- Proposed model contracts (#9) in `docs/methodology/MODEL_CONTRACTS.md`:
+  rate pass-through (unit roots, Engle-Granger long run and cointegration,
+  symmetric and asymmetric ECM, constraints rejected not clipped), stable
+  amount (one-month survival share, balance-weighted fractional logit,
+  predictors known at the forecast date, convergence and separation
+  failures) and decay (log changes, prudential drift, minimum probable
+  amount, conserved profile, mean life), with segment granularity,
+  out-of-sample freeze, confidence bands, scenarios, and the regulatory
+  overlay kept separate from the fit. `SOURCES.md` registers the cited
+  sources, none verified yet; `TEST_CASES.md` registers the numerical
+  reference cases with provenance rules and tolerances.
 - Data contract accepted (#4) in `docs/methodology/DATA_CONTRACT.md`: account
   panel and market-rate field dictionaries with types, units and null policy;
   segment codes `RET_TX`, `RET_NTX`, `WHS_NFC`; reconciliation; all-or-nothing
