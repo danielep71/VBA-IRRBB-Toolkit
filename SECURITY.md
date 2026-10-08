@@ -136,12 +136,24 @@ impact.
   code is expected to read and write only its own workbook; any use of files,
   network, native code (`Declare`), `Shell` or `CreateObject` needs an issue and
   explicit review.
-- **Automation.** Every workflow checkout sets `persist-credentials: false`, so
-  code under review never receives Git credentials. The static-check and
-  label-drift jobs run with a read-only token. `issues: write` is granted only
-  to the label-reconciliation job, which runs on pushes to `main` and manual
-  dispatch, never on pull requests. All actions are pinned to full commit SHAs.
-  See [`tools/README.md`](tools/README.md) and [`docs/LABELS.md`](docs/LABELS.md).
+- **Automation.** Every workflow checkout that can run code under review sets
+  `persist-credentials: false`, so that code never receives Git credentials.
+  The static-check and label-drift jobs run with a read-only token. The
+  label-reconciliation job holds `issues: write` and runs only on pushes to
+  `main` and manual dispatch, never on pull requests.
+  The one exception to the credential rule is the daily traffic export. It
+  runs only on the default branch, on a schedule or manual dispatch, keeps Git
+  credentials to push its data to the `traffic-history` branch, and holds
+  `contents: write` and `issues: write` for that branch and for its alert
+  issues. Its `TRAFFIC_TOKEN`, a fine-grained token with `Administration:
+  read` on this repository only, lives in the `analytics` environment, which
+  is restricted to `main`; rotate it every 90 days and immediately after
+  suspected exposure. The environment name is not a boundary that binds the
+  token to that one workflow, so keep the environment out of every build,
+  test and release job.
+  All actions are pinned to full commit SHAs. See
+  [`tools/README.md`](tools/README.md), [`docs/LABELS.md`](docs/LABELS.md) and
+  [`docs/TRAFFIC.md`](docs/TRAFFIC.md).
 - **Artifacts.** No workbook, add-in or other binary is distributed. Office
   packages are ignored by Git unless an exact path is re-included.
 
