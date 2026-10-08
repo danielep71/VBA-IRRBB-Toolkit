@@ -5,6 +5,8 @@ from __future__ import annotations
 import re
 import sys
 import zipfile
+import zlib
+from xml.etree import ElementTree
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -97,13 +99,24 @@ def check_component(root: Path, path: str, tracked: set[str], names: dict[str, s
 
 
 def check_workbook(root: Path, path: str) -> list[str]:
-    """A committed workbook must be a valid package without VBA or document properties."""
+    """Check core XML parts, archive integrity and sanitization, not Excel execution."""
+    required = {"[Content_Types].xml", "_rels/.rels", "xl/workbook.xml",
+                "xl/_rels/workbook.xml.rels"}
     try:
         with zipfile.ZipFile(root / path) as package:
             parts = package.namelist()
+            missing = sorted(required - set(parts))
+            if missing:
+                return [f"{path}: missing required workbook parts: {', '.join(missing)}"]
+            bad_part = package.testzip()
+            if bad_part is not None:
+                return [f"{path}: corrupt workbook member {bad_part}"]
+            for name in sorted(required):
+                ElementTree.fromstring(package.read(name))
             text = "".join(package.read(name).decode("utf-8", errors="replace")
                            for name in ("[Content_Types].xml", "_rels/.rels") if name in parts)
-    except (OSError, zipfile.BadZipFile) as error:
+    except (OSError, zipfile.BadZipFile, RuntimeError, NotImplementedError,
+            zlib.error, ElementTree.ParseError) as error:
         return [f"{path}: not a readable workbook package ({error})"]
     findings = [f"{path}: must not contain {part}" for part in parts if FORBIDDEN_PART.search(part)]
     if "docProps/" in text or "vbaProject" in text:
