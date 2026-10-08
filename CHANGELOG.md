@@ -125,12 +125,6 @@ Use only the categories needed by a release.
   data, statistical-package and archive formats, and covers more key and
   credential files. Synthetic CSV and JSON fixtures stay trackable (#11).
 
-### Fixed
-
-- Traffic alert issues are now created in the repository's single open
-  milestone, so every issue carries a milestone; the run fails if there is
-  no open milestone or more than one.
-
 ### Removed
 
 - The one-off `Bootstrap v0.1.0 tracking` workflow and
@@ -160,6 +154,9 @@ Use only the categories needed by a release.
   these structural checks do not certify Excel compatibility.
 - Traffic history labels the repository count `open_issues_and_prs`, including
   pull requests, and preserves values when migrating the old CSV column.
+- Traffic alert issues are now created in the repository's single open
+  milestone, so every issue carries a milestone; the run fails if there is
+  no open milestone or more than one.
 
 ### Known limitations
 
