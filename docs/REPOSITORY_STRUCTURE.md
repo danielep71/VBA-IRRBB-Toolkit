@@ -38,7 +38,7 @@ Excel sheets / ribbon / workbook events
 - `src/modules/` owns supported entry points named `IRRBB_*`, and they are inventoried in `docs/PUBLIC_API.txt`.
 - `src/workbook/` is an adapter; it does not silently transform regulatory or statistical assumptions.
 - Units, rate conventions, temporal alignment, model version and segment identifiers are explicit at API boundaries.
-- Parameter export formats, including ERMAS, are adapters, not business logic, and will be implemented only after a contract is agreed.
+- Parameter export formats for downstream ALM platforms are adapters, not business logic, and will be implemented only after a contract is agreed.
 - Every change to a model requires independently sourced expected values and numerical tolerances; the model must not validate itself.
 
 ## Version control

@@ -77,7 +77,9 @@ Git and Python 3.10+ are needed for the static checks. A Windows 64-bit Excel ho
 
 ## 🔒 Data, confidentiality and provenance
 
-This project is **generic and independent**. Only synthetic or redistributable reference datasets and expressly permitted source material may be committed. Do not copy third-party proprietary methodologies verbatim, internal bank models, customer balances, reports, or tools into this repository. The current MIT license covers original repository content; it does not grant rights over third-party intellectual property.
+This project is **generic and independent**. Only synthetic or redistributable reference datasets and expressly permitted source material may be committed. Do not copy third-party proprietary methodologies verbatim, internal bank models, customer balances, reports, restricted vendor manuals or training material, or tools into this repository. Private repository visibility is not permission to store any of these. The current MIT license covers original repository content; it does not grant rights over third-party intellectual property, and it is reviewed before any external distribution.
+
+Contributor rules are in [Data, confidentiality and provenance](CONTRIBUTING.md#data-confidentiality-and-provenance); the distribution gate is in [Governance](docs/GOVERNANCE.md#licensing-and-distribution).
 
 ## 👤 Maintainer
 

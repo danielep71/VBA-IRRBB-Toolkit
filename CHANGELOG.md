@@ -117,6 +117,14 @@ Use only the categories needed by a release.
   the `Bootstrap v0.1.0 tracking` workflow trigger point to it, and release
   branches are named `release/vX.Y.Z` from now on.
 
+### Security
+
+- `.gitignore` now keeps local data, extracts, snapshots and parameter
+  exports out of Git (rooted `private/`, `local-data/`, `extracts/`,
+  `snapshots/`, `exports/` and `parameter-exports/` folders), ignores binary
+  data, statistical-package and archive formats, and covers more key and
+  credential files. Synthetic CSV and JSON fixtures stay trackable (#11).
+
 ### Removed
 
 - The one-off `Bootstrap v0.1.0 tracking` workflow and
@@ -130,6 +138,14 @@ Use only the categories needed by a release.
   `INSTALLATION.md`, `RELEASING.md`, `SECURITY.md`) expanded to the
   maintainer's documentation standard, with headers, badges and complete
   workflow, evidence, security and release sections.
+- `CONTRIBUTING.md` gains a "Data, confidentiality and provenance" section:
+  what counts as synthetic, private visibility is not permission, no
+  third-party code or restricted manuals without rights, provenance in every
+  PR, and what to do if sensitive material is committed. `docs/GOVERNANCE.md`
+  adds a licensing and distribution gate with a full-history scan procedure
+  (#11).
+- The architecture, validation plan and feature issue form refer to a
+  generic downstream ALM platform instead of a named vendor product (#11).
 
 ### Known limitations
 

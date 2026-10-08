@@ -17,7 +17,33 @@
 
 ## Privacy and intellectual property
 
-Use only synthetic examples and independent work. The repository's private status is not authorization to store client files, personal data or confidential vendor methods. Third-party licensing and method provenance must be resolved before implementation.
+Use only synthetic examples and independent work. The repository's private status is not authorization to store client files, personal data or confidential vendor methods. Third-party licensing and method provenance must be resolved before implementation. Contributor rules are in [`CONTRIBUTING.md`](../CONTRIBUTING.md#data-confidentiality-and-provenance).
+
+## Licensing and distribution
+
+The [MIT License](../LICENSE) (copyright 2026 Daniele Penza) covers original repository content only. It grants no rights over third-party material and does not decide whether the project may be distributed.
+
+**External distribution** means making the repository public, sharing a clone, archive or built workbook with anyone outside the maintainer, or publishing a GitHub Release. Before any of these, the owner reviews and records in an issue:
+
+1. that the licence is still the intended one;
+2. that every file is original or carries a compatible licence and attribution (the static-check tooling is adapted from the maintainer's own MIT-licensed VBA-SACCR-Toolkit);
+3. that no employer, client or vendor has a claim on the content or on the methods it implements;
+4. that a full-history scan finds no sensitive material (see below); and
+5. that issue and pull-request text, which becomes visible with the repository, contains no confidential material.
+
+No external distribution is authorized until that issue is closed by the owner.
+
+### History scan
+
+Scan every blob reachable from any branch, not only the current tree:
+
+```shell
+git fetch origin '+refs/heads/*:refs/remotes/origin/*'
+git rev-list --objects --all
+git log --all --numstat --format= | awk '$1 == "-"'   # binary files ever committed
+```
+
+Search each blob for credentials, keys, email addresses, institution and vendor names, and real-data markers; inspect every binary and every data file. Record the scanned commit range, the patterns and the findings in the issue.
 
 ## Definition of done
 
