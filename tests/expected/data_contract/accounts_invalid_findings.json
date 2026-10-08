@@ -1,0 +1,18 @@
+{
+  "fixture": "tests/fixtures/data_contract/accounts_invalid.csv",
+  "provenance": "Hand-constructed: one invalid row per error rule; expected first-failing rule per line written by hand.",
+  "errors": [
+    {"line": 2,  "code": "E02"},
+    {"line": 3,  "code": "E03"},
+    {"line": 4,  "code": "E04"},
+    {"line": 5,  "code": "E09"},
+    {"line": 7,  "code": "E05"},
+    {"line": 8,  "code": "E06"},
+    {"line": 9,  "code": "E07"},
+    {"line": 11, "code": "E08"},
+    {"line": 12, "code": "E10"},
+    {"line": 13, "code": "E11"},
+    {"line": 14, "code": "E04"},
+    {"line": 15, "code": "E04"}
+  ]
+}

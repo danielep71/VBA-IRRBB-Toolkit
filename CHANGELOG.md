@@ -151,6 +151,13 @@ Use only the categories needed by a release.
   (#11).
 - The architecture, validation plan and feature issue form refer to a
   generic downstream ALM platform instead of a named vendor product (#11).
+- Proposed data contract (#4) in `docs/methodology/DATA_CONTRACT.md`: account
+  panel and market-rate field dictionaries with types, units and null policy;
+  segment codes `RET_TX`, `RET_NTX`, `WHS_NFC`; reconciliation; all-or-nothing
+  import with error codes `E01`–`E11` and warnings `W01`–`W06`; gaps,
+  openings, closures, migrations, outliers and look-ahead; CSV streaming for
+  panels beyond worksheet limits; and lineage. Synthetic fixtures with
+  hand-computed totals and warnings are checked by `tools/test_data_contract.py`.
 - Supported hosts decided (#3): Windows 64-bit Microsoft 365 or Excel 2016+
   is the supported target, 32-bit is best effort (kept compiling, not
   certified), Mac, web and Excel 2013 or earlier are not supported. Only the

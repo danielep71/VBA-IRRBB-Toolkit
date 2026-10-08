@@ -6,6 +6,8 @@ This is a model-development roadmap, **not a validated specification**. Do not a
 
 Define segments, currencies, observation frequency, account identifiers, balance signs, rate units, missing-period handling, portfolio migrations, structural breaks, indexed/non-indexed products, winsorization and time alignment. Keep transformations deterministic and independently testable.
 
+The proposed contract (issue #4) is [`DATA_CONTRACT.md`](DATA_CONTRACT.md): field dictionary, segmentation, reconciliation, validation codes, dataset size, lineage and synthetic fixtures.
+
 ## Model families
 
 ### Rate / pass-through

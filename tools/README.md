@@ -12,6 +12,7 @@ The gate runner checks:
 - Python-tool regression self-tests;
 - committed / working-tree whitespace;
 - source placement, LF storage and VBA export headers;
+- data-contract fixtures in `tests/` agree with their hand-computed expectations and with `docs/methodology/DATA_CONTRACT.md` (`test_data_contract.py`);
 - `src/core/` host independence: no Excel object-model or UI identifiers outside comments and strings;
 - VBA jump targets and conditional compilation across supported Windows bitness contexts;
 - explicit public API declarations compared with `docs/PUBLIC_API.txt`;
