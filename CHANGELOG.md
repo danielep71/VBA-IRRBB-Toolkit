@@ -168,7 +168,9 @@ Use only the categories needed by a release.
   amount, conserved profile, mean life), with segment granularity,
   out-of-sample freeze, confidence bands, scenarios, and the regulatory
   overlay kept separate from the fit. `SOURCES.md` registers the cited
-  sources, none verified yet; `TEST_CASES.md` registers the numerical
+  sources: BCBS d368 (core-deposit categories and caps) and Delegated
+  Regulation (EU) 2024/856 (outlier-test scenarios and floor) verified,
+  EBA/GL/2022/14 not yet; `TEST_CASES.md` registers the numerical
   reference cases with provenance rules and tolerances.
 - Data contract accepted (#4) in `docs/methodology/DATA_CONTRACT.md`: account
   panel and market-rate field dictionaries with types, units and null policy;

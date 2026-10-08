@@ -5,7 +5,7 @@
 ### What the rate, stable-amount and decay models estimate, and how each is independently validated
 
 [![Status](https://img.shields.io/badge/Status-Proposed_(%239)-d97706?style=flat-square)](#open-decisions)
-[![Sources](https://img.shields.io/badge/Sources-unverified-d97706?style=flat-square)](SOURCES.md)
+[![Sources](https://img.shields.io/badge/Sources-partly_verified-d97706?style=flat-square)](SOURCES.md)
 [![Units](https://img.shields.io/badge/Units-decimal_%C2%B7_months-0969da?style=flat-square)](../REPOSITORY_STRUCTURE.md#parameter-and-units-boundary)
 
 <br>
@@ -29,8 +29,8 @@ numerical cases that will test each model are registered in
 > [!IMPORTANT]
 > These contracts are **proposed** in issue #9 and become binding when the owner
 > accepts them there; the [open decisions](#open-decisions) need an answer
-> first. No source in the register is verified yet, so every regulatory figure
-> below is provisional.
+> first. Regulatory figures are labelled with their source; those resting on an
+> unverified source in the [register](SOURCES.md) are provisional.
 
 Notation: $t$ is a month end, $B$ a balance in currency units, $r$ a rate as a
 decimal per annum, $h$ a horizon in whole months. All models run per
@@ -90,10 +90,10 @@ observed at the forecast origin $r^m_{t_0}$:
 | Parallel up / down | $r^m_{t_0} \pm \Delta$ from the first month, held |
 | Ramp up / down | $r^m_{t_0} \pm \Delta \cdot \min(k, 12)/12$ |
 
-Shock sizes $\Delta$ are run settings, recorded with the results. Supervisory
-shock sizes and the post-shock floor come from `REG-3` once verified, and are
-applied as an [overlay](#regulatory-overlay), not as part of the fit. Each
-model below states how a scenario reaches it.
+Shock sizes $\Delta$ are run settings, recorded with the results. The
+supervisory scenarios and the post-shock floor of `REG-3` are applied as an
+[overlay](#regulatory-overlay), not as part of the fit. Each model below states
+how a scenario reaches it.
 
 <a id="rate-model"></a>
 
@@ -305,24 +305,42 @@ The toolkit keeps two separate layers and always reports both:
 | Layer | Content | Source |
 | --- | --- | --- |
 | **Fit** | Estimated parameters, profiles and bands from the data, as specified above | The data and the methods cited |
-| **Overlay** | Constraints on what may be used for regulatory repricing assumptions | `REG-1`, `REG-2`, `REG-3`, once verified |
+| **Overlay** | Constraints on what may be used for regulatory repricing assumptions | `REG-1`, `REG-2`, `REG-3` |
 
 The overlay never changes a fitted parameter. It produces a separate,
 constrained profile, labelled with the source ID and the verification status of
 each constraint applied:
 
-1. **Core-share cap** per segment: if $MPA(1) / B_{t_0}$ exceeds the cap
+1. **Non-core in the overnight bucket**: the overlay profile places the
+   non-core amount in the overnight bucket, not in month 1 (`REG-1` ¶114,
+   verified).
+2. **Core-share cap** per segment: if $MPA(1) / B_{t_0}$ exceeds the cap
    $k$, the core profile is scaled by $k\, B_{t_0} / MPA(1)$ for every
-   $h \ge 1$ and the difference moves to the first-month bucket, so the profile
-   stays non-increasing and still sums to $B_{t_0}$. `REG-1` caps, to be verified:
-   retail transactional 90 %, retail non-transactional 70 %, wholesale 50 %.
-2. **Average-maturity cap** per segment: if the core mean life exceeds the cap,
+   $h \ge 1$ and the difference moves to the overnight bucket, so the profile
+   stays non-increasing and still sums to $B_{t_0}$. Caps per `REG-1` ¶113,
+   Table 2 (verified): retail transactional 90 %, retail non-transactional
+   70 %, wholesale 50 %.
+3. **Average-maturity cap** per segment: if the core mean life exceeds the cap,
    the cutoff is reduced to the largest $H' \le H$ that meets it, with the
-   remainder placed at $H'$. `REG-1` caps, to be verified: 5 years, 4.5 years,
-   4 years; `REG-3` adds a cap on the average repricing maturity used in the
-   outlier test.
-3. **Supervisory scenarios and floor** for scenario runs: shock sizes and the
-   post-shock floor from `REG-3`.
+   remainder placed at $H'$. Caps per `REG-1` ¶115, Table 2 (verified):
+   5 years, 4.5 years, 4 years. An EU 5-year cap on the average repricing
+   maturity of non-maturity deposits is attributed to `REG-2` and stays
+   **provisional** until `REG-2` is verified; `REG-3` contains no such cap.
+4. **Supervisory scenarios and floor** for scenario runs, per `REG-3`
+   (verified): six scenarios for the economic value of equity (parallel up,
+   parallel down, steepener, flattener, short rates up, short rates down) and
+   two for net interest income (parallel up, parallel down); a post-shock lower
+   bound of $F(m) = \min(-150 + 3m,\ 0)$ basis points at maturity $m$ in
+   years, replaced by the observed rate where that is lower. Shock sizes per
+   currency are not yet verified, so supervisory shock runs stay provisional.
+
+The `REG-1` categories map to the data-contract segments as follows:
+retail transactional to `RET_TX`, retail non-transactional to `RET_NTX`, and
+wholesale to `WHS_NFC`. `WHS_NFC` covers only the non-financial part of `REG-1`
+wholesale, and `REG-1` treats qualifying small businesses (managed as retail,
+total liabilities below EUR 1 million) as retail; segments are supplied with the
+data ([data contract](DATA_CONTRACT.md#segmentation)), so the data owner applies
+that rule.
 
 An overlay resting on an unverified source is shown as **provisional** and may
 not be presented as compliant. A statistical decay horizon is never evidence
@@ -353,7 +371,7 @@ and tolerance. Backtesting follows the
 | 7 | Decay drift | $\mu^{*} = \min(\hat\mu, 0)$ |
 | 8 | Profile cutoff | 120 months |
 | 9 | Meeting the average-maturity cap | Reduce the cutoff until the cap is met |
-| 10 | Default scenario shocks | Base, parallel and 12-month ramp, ±200 bp, until `REG-3` is verified |
+| 10 | Default scenario shocks | Base, parallel and 12-month ramp, ±200 bp, until the `REG-3` shock sizes per currency are verified |
 
 ---
 
