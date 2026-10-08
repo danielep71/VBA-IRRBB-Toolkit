@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from _gatelib import git_bytes, parse_report_args, run_gate, tracked_files
+from _vba_lex import physical_lines
 
 VBA_SUFFIXES = {".bas", ".cls", ".frm"}
 # The VBE exports in the Windows code page; IRRBB targets Western-European hosts.
@@ -30,7 +31,7 @@ SEMVER = r"(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)"
 VERSION_HEADING = re.compile(r"^## \[([^\]]+)\](.*)$", re.M)
 RELEASE_SUFFIX = re.compile(r" - (\d{4}-\d{2}-\d{2})")
 # Committed workbooks (only the template, see docs/REPOSITORY_STRUCTURE.md) carry
-# no VBA project and no document properties: author, title, timestamps (#58).
+# no VBA project and no document properties: author, title, timestamps (#5).
 WORKBOOK_SUFFIXES = {".xlsx", ".xlsm", ".xlsb", ".xltx", ".xltm"}
 # Excel object model and UI that host-independent src/core code must not use;
 # see docs/REPOSITORY_STRUCTURE.md, "Dependency direction". VBA identifiers are
@@ -39,12 +40,8 @@ HOST_IDENTIFIER = re.compile(
     r"\b(Application|Excel|ThisWorkbook|ActiveWorkbook|ActiveSheet|ActiveCell|ActiveChart|"
     r"Workbooks?|Worksheets?|Sheets|Range|Cells|Charts?|Shapes|ListObjects?|PivotTables?|"
     r"WorksheetFunction|Evaluate|MsgBox|InputBox|UserForms?)\b", re.I)
-REM_STATEMENT = re.compile(r"(?:^|:)[ \t]*Rem\b", re.I)
 # Core cannot activate or attach to external COM objects, even via dynamic ProgIDs.
 AUTOMATION_IDENTIFIER = re.compile(r"\b(CreateObject|GetObject)\b", re.I)
-# MS-VBAL 3.2.2 WSC: tab, EOM, space, DBCS and Unicode Zs excluding CP2
-# characters (NBSP). The underscore must immediately precede the newline.
-COMMENT_CONTINUATION = re.compile(r"[\t\x19 \u1680\u2000-\u200a\u202f\u205f\u3000]_\Z")
 FORBIDDEN_PART = re.compile(r"(^|/)vbaProject\.bin$|^docProps/", re.I)
 
 
@@ -79,37 +76,8 @@ def check_storage(root: Path) -> list[str]:
 
 def code_lines(text: str) -> list[tuple[int, str]]:
     """Return (line number, code) with comments and string literals blanked."""
-    result = []
-    continued_comment = False
-    for number, line in enumerate(text.split("\n"), 1):
-        if continued_comment:
-            continued_comment = bool(COMMENT_CONTINUATION.search(line))
-            continue
-        code, quoted, index = [], False, 0
-        while index < len(line):
-            char = line[index]
-            if quoted:
-                if char == '"' and line[index + 1:index + 2] == '"':
-                    index += 1
-                elif char == '"':
-                    quoted = False
-                code.append(" ")
-            elif char == '"':
-                quoted = True
-                code.append(" ")
-            elif char == "'":
-                continued_comment = bool(COMMENT_CONTINUATION.search(line))
-                break
-            else:
-                code.append(char)
-            index += 1
-        text_code = "".join(code)
-        rem = REM_STATEMENT.search(text_code)
-        if rem:
-            continued_comment = bool(COMMENT_CONTINUATION.search(line))
-            text_code = text_code[:rem.start()]
-        result.append((number, text_code))
-    return result
+    return [(number, code) for number, code, _ in
+            physical_lines(text.split("\n"), mask_strings=True)]
 
 
 def check_core_host_independence(path: str, text: str) -> list[str]:
@@ -179,16 +147,18 @@ def check_workbook(root: Path, path: str) -> list[str]:
             bad_part = package.testzip()
             if bad_part is not None:
                 return [f"{path}: corrupt workbook member {bad_part}"]
-            for name in sorted(required):
-                if not (binary and name == workbook_part):
-                    ElementTree.fromstring(package.read(name))
-            text = "".join(package.read(name).decode("utf-8", errors="replace")
-                           for name in ("[Content_Types].xml", "_rels/.rels") if name in parts)
+            references = []
+            for name in parts:
+                if name.endswith(".rels") or name == "[Content_Types].xml" or name == "xl/workbook.xml":
+                    xml = ElementTree.fromstring(package.read(name))
+                    references.extend(value for element in xml.iter() for value in element.attrib.values())
+
     except (OSError, zipfile.BadZipFile, RuntimeError, NotImplementedError,
             zlib.error, lzma.LZMAError, ElementTree.ParseError, LookupError, ValueError) as error:
         return [f"{path}: not a readable workbook package ({error})"]
     findings = [f"{path}: must not contain {part}" for part in parts if FORBIDDEN_PART.search(part)]
-    if "docProps/" in text or "vbaProject" in text:
+    if any("docprops/" in value.casefold() or "vbaproject" in value.casefold()
+           for value in references):
         findings.append(f"{path}: package still references document properties or a VBA project")
     return findings
 
@@ -265,6 +235,8 @@ def run_check(root: Path) -> dict[str, Any]:
     for path in components:
         findings.extend(check_component(root, path, tracked, names))
     for path in sorted(p for p in tracked if Path(p).suffix.lower() in WORKBOOK_SUFFIXES):
+        if path != "src/workbook/IRRBB_Template.xlsx":
+            findings.append(f"{path}: only src/workbook/IRRBB_Template.xlsx may be tracked")
         findings.extend(check_workbook(root, path))
     findings.extend(check_changelog(root))
     findings.extend(check_version(root))
