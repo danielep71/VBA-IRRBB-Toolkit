@@ -35,7 +35,7 @@ sequence**. Day-to-day contribution is owned by
 | Property | State |
 | --- | --- |
 | Released versions | None |
-| Active branch | `release/0.1.0` |
+| Active branch | `release/v0.1.0` |
 | Active milestone | `v0.1.0 - Repository foundation` |
 | Version file | Not present; created when the first release is prepared ([versioning](#versioning)) |
 | Release evidence tooling | Static checks (`tools/check.py`) |
@@ -60,7 +60,7 @@ to produce a release.
 | Item | Convention |
 | --- | --- |
 | Version | Semantic Versioning `MAJOR.MINOR.PATCH`; rules in [`CHANGELOG.md`](CHANGELOG.md#date-and-version-rules) |
-| Release branch | `release/X.Y.Z`, without `v`, opened only by owner decision |
+| Release branch | `release/vX.Y.Z`, matching the milestone, opened only by owner decision |
 | Milestone | `vX.Y.Z - <title>`, matching the release branch |
 | `VERSION` | Root file holding one `X.Y.Z` line. Created in the release-preparation PR, never before; afterwards it always names the newest released version |
 | Changelog | Work stays under `## [Unreleased]` until release preparation is approved; the release PR moves it to `## [X.Y.Z] - YYYY-MM-DD` |
@@ -102,7 +102,7 @@ Done only when the owner asks. This is an integration, not a release.
 2. Open a PR from the release branch into `main`.
 3. The owner reviews and merges it with a **merge commit**, not a squash.
 4. Bring the release branch back level with `main` with a merge commit, or, at
-   a milestone closeout, open the next `release/X.Y.Z` branch from the merge
+   a milestone closeout, open the next `release/vX.Y.Z` branch from the merge
    commit and point the docs at it.
 5. Verify both branches contain the merge commit and that CI passed on it.
 

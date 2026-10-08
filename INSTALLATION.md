@@ -79,10 +79,10 @@ Use a **Git clone**:
 ```sh
 git clone https://github.com/danielep71/VBA-IRRBB-Toolkit.git
 cd VBA-IRRBB-Toolkit
-git switch release/0.1.0
+git switch release/v0.1.0
 ```
 
-`release/0.1.0` is the active development branch; `main` receives it only on
+`release/v0.1.0` is the active development branch; `main` receives it only on
 the owner's request.
 
 Do not use **Code → Download ZIP**. `.gitattributes` excludes repository

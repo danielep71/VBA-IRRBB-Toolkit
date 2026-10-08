@@ -2,9 +2,9 @@
 
 ## Workflow
 
-- Active integration branch: `release/0.1.0`.
+- Active integration branch: `release/v0.1.0`.
 - Start focused task branches from the release branch; open PRs back into it.
-- No direct commits to `release/0.1.0` or `main` after the initial repository bootstrap.
+- No direct commits to `release/v0.1.0` or `main` after the initial repository bootstrap.
 - A release-to-main PR requires the owner's explicit approval. No version tags or releases are implied.
 - Merge only with reviewer sign-off and green repository checks; Excel evidence is separately recorded when VBA changes exist.
 

@@ -46,7 +46,7 @@ version carries production security support.
 
 | Source state | Security support |
 | --- | --- |
-| `release/0.1.0` (active development) | ⚠️ Best effort |
+| `release/v0.1.0` (active development) | ⚠️ Best effort |
 | `main` | ⚠️ Best effort |
 | Modified copies or unofficial mirrors | ❌ Unsupported unless reproduced in official source |
 
@@ -141,7 +141,7 @@ impact.
   label-drift jobs run with a read-only token. `issues: write` is granted only
   to the label-reconciliation job, which runs on pushes to `main` and manual
   dispatch, never on pull requests, and to the one-off foundation bootstrap,
-  which runs on pushes to `release/0.1.0` and manual dispatch to create the
+  which runs on pushes to `release/v0.1.0` and manual dispatch to create the
   milestone and issue metadata. All actions are pinned to full commit SHAs. See
   [`tools/README.md`](tools/README.md) and [`docs/LABELS.md`](docs/LABELS.md).
 - **Artifacts.** No workbook, add-in or other binary is distributed. Office
