@@ -37,7 +37,7 @@ Planned cross-cutting functionality includes data validation, calibration, histo
 <a id="status"></a>
 ## 🧭 Status
 
-**v0.1.0 – Repository foundation (in progress).** This initial milestone establishes source layout, documentation, issue governance, CI and static source checks; it does **not** deliver pricing, econometric fitting, a production workbook or certified IRRBB outputs.
+**v0.2.0 – Workbook, data and Excel tests (in progress).** The [v0.1.0 foundation](docs/Milestones/v0.1.0.md), closed on 2026-10-09, established source layout, documentation, issue governance, CI and static source checks; v0.2.0 builds the first workbook, data import and Excel test harness. Neither delivers pricing, econometric fitting, a production workbook or certified IRRBB outputs.
 
 - Application profile: an Excel workbook will be the end-user deliverable, assembled from reviewed exported VBA source.
 - Production calculations will live in `src/core/` without direct Excel object dependencies.

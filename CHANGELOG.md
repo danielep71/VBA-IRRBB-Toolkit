@@ -160,7 +160,9 @@ Use only the categories needed by a release.
 - The v0.1.0 guide records the milestone as closed on 2026-10-09: each
   deliverable links its issue and the document where it lives, the
   distribution review (#42) and MPL-2.0 relicensing (#49) are included, and
-  the completion criteria are marked met.
+  the completion criteria are marked met. The status sections of README,
+  `CONTRIBUTING.md`, `INSTALLATION.md` and `RELEASING.md` now name v0.2.0 as
+  the active milestone.
 
 - Root documents (`CHANGELOG.md`, `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`,
   `INSTALLATION.md`, `RELEASING.md`, `SECURITY.md`) expanded to the

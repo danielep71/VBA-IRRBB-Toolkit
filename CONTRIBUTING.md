@@ -27,7 +27,8 @@ Participation is governed by the [Code of Conduct](CODE_OF_CONDUCT.md).
 Suspected vulnerabilities must never be disclosed in an issue or pull request.
 
 > [!NOTE]
-> Milestone **v0.1.0 – Repository foundation** is in progress. No VBA source,
+> Milestone **v0.2.0 – Workbook, data and Excel tests** is in progress;
+> **v0.1.0 – Repository foundation** closed on 2026-10-09. No VBA source,
 > workbook, regression harness or model engine exists yet. The model families
 > and their obligations are described in
 > [`docs/methodology/`](docs/methodology/README.md); the source layout is set in
