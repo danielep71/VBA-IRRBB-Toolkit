@@ -99,6 +99,24 @@ Use only the categories needed by a release.
 
 ### Added
 
+- Regression harness for Excel (#8): `TEST_Harness.RunTests` runs every case
+  in `docs/methodology/TEST_CASES.md` in register order and writes per-case and
+  per-assertion results to the `Checks` sheet. Earlier results are withdrawn
+  before a run; a case with no assertion or an unexpected error never passes; an
+  unbuilt case is `NOT RUN`. First VBA cases: `HARN-OUT-01` (outcome and
+  tolerance rules), `DATA-PARSE-01`, `DATA-PARSE-02` and `DATA-CODES-01`.
+  `tools/test_vba_harness.py` checks their expectations against the contract
+  and the registry against the register without Excel. No Excel run is
+  recorded yet.
+- First core modules: `CORE_Parse` parses the data contract's dates,
+  decimals and rates without Excel's locale-dependent conversions, returning
+  missing and invalid separately; `CORE_Codes` holds the segment codes and the
+  currency allowlist.
+- Development workbook builder (`tools/devbuild/`, import route for #6):
+  writes `build/IRRBB_Dev.xlsm` with the VBA project generated from source, so
+  no VBA trust setting is needed; checked by `tools/test_devbuild.py` with an
+  independent decoder.
+
 - Daily repository traffic export with history on a separate branch,
   main-only analytics access, and traffic alerts, following the SA-CCR
   repository setup.
@@ -121,6 +139,9 @@ Use only the categories needed by a release.
 
 ### Changed
 
+- The data contract now states that dates have a year from 1900 to 9999 (the
+  Excel date system) and that a decimal has digits on both sides of any `.`
+  (#8).
 - The repository is now licensed under the Mozilla Public License 2.0
   (MPL-2.0) instead of MIT (#49). `LICENSE` holds the MPL-2.0 text and is the
   license notice for every file; contributions are accepted under MPL-2.0.
