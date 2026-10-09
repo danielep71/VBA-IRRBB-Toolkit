@@ -73,7 +73,9 @@ requests follow [the PR template](.github/PULL_REQUEST_TEMPLATE.md).
 8. Review the complete diff, then open a pull request **against the release
    branch** with evidence and explicit limitations.
 9. Merge only after review, with the **Repository integrity** check green and
-   every review finding resolved.
+   every review finding resolved. The release branch accepts changes only
+   through pull requests; a merge commit keeps each commit as authored, and a
+   squash must carry a commit message that follows the rules below.
 
 Nothing is committed directly to the release branch or to `main`. Integration
 of the release branch into `main` happens only on the owner's request; see
@@ -129,10 +131,11 @@ from a documented procedure, with its generator or seed committed or described,
 and not derived from real records: rescaled, shifted, anonymized or sampled
 real balances, rates or account histories are **not** synthetic.
 
-**Private visibility is not permission.** The repository being private does
-not authorize storing client, employer or personal data, and does not waive
-confidentiality, GDPR or contractual restrictions. Treat every commit as if the
-repository were public, because history is hard to erase.
+**Visibility is not permission.** The repository is public, and its full
+history, branches and pull-request refs are readable by anyone. A private fork
+or branch does not authorize storing client, employer or personal data, and
+does not waive confidentiality, GDPR or contractual restrictions. Treat every
+commit as published, because history is hard to erase.
 
 **Third-party material needs explicit rights.** Do not commit, attach or
 paraphrase at length:

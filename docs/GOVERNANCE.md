@@ -31,7 +31,7 @@ unsaved edit or an authentication prompt does not establish enforcement.
 
 ## Privacy and intellectual property
 
-Use only synthetic examples and independent work. The repository's private status is not authorization to store client files, personal data or confidential vendor methods. Third-party licensing and method provenance must be resolved before implementation. Contributor rules are in [`CONTRIBUTING.md`](../CONTRIBUTING.md#data-confidentiality-and-provenance).
+Use only synthetic examples and independent work. The repository is public, and no visibility setting or private fork is authorization to store client files, personal data or confidential vendor methods. Third-party licensing and method provenance must be resolved before implementation. Contributor rules are in [`CONTRIBUTING.md`](../CONTRIBUTING.md#data-confidentiality-and-provenance).
 
 ## Licensing and distribution
 

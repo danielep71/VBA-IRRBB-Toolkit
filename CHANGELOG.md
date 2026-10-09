@@ -94,32 +94,14 @@ Use only the categories needed by a release.
 
 ## [Unreleased]
 
-- Repository audit corrections (#25): shared VBA comment/continuation lexer,
-  exact workbook path and encoding-independent XML reference checks, stronger
-  account/market fixture validation, and reconciliation without premature rounding.
-- Automatic issue owner/milestone/priority reconciliation, including closed issues;
-  traffic alerts select an explicit configurable milestone. Ruff/mypy settings
-  are documented as optional development targets, not claimed CI gates.
-- Accepted host/data/model records now have direct evidence links; unresolved
-  model interpretation and reproducibility requirements are tracked in #26.
-
-
-
-- Core-boundary checks now reject `CreateObject` and `GetObject`, including
-  variable or concatenated ProgIDs that could previously hide Excel access.
-  External COM automation belongs in host adapters; these names are reserved
-  in core code even for non-Excel objects. Comments and strings remain allowed
-  ([#22](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/22)).
-- Continued comments now recognize VBA whitespace, including tabs, and require
-  the continuation underscore immediately before the newline.
-
 > Not yet released. Development takes place on the active release branch,
 > `release/v0.1.0`; changes to `main` require an explicit owner instruction.
 
 ### Added
 
-- Daily repository traffic export with private history, main-only analytics
-  access, and traffic alerts, following the SA-CCR repository setup.
+- Daily repository traffic export with history on a separate branch,
+  main-only analytics access, and traffic alerts, following the SA-CCR
+  repository setup.
   Setup and verification are documented in `docs/TRAFFIC.md`.
 
 - `tools/check_source.py` rejects Excel object-model and UI identifiers
@@ -133,6 +115,9 @@ Use only the categories needed by a release.
   synthetic-data policy.
 - Portable static-checking tools and CI configuration adapted from the
   maintainer's SA-CCR repository.
+- Automatic issue owner/milestone/priority reconciliation, including closed issues;
+  traffic alerts select an explicit configurable milestone. Ruff/mypy settings
+  are documented as optional development targets, not claimed CI gates.
 
 ### Changed
 
@@ -202,6 +187,23 @@ Use only the categories needed by a release.
   the owner: profile rationale, the intended Excel workflow, layout,
   dependency direction, public API boundary, canonical units at the facade,
   immutable versioned parameter sets and intentional non-goals (#2).
+- Owner-approved v0.1.0-to-v1.0.0 roadmap: workbook/import/harness work moves
+  to v0.2.0, with all Excel obligations retained; model-contract amendments
+  are split into milestone-specific prerequisites (#26, #32-#37). Independent
+  benchmarks accompany each model, and Stable-Decay composition is explicit.
+- Accepted host/data/model records now have direct evidence links; unresolved
+  model interpretation and reproducibility requirements are tracked in #26.
+- `RELEASING.md` describes integration through pull requests only: always
+  open it from an integration branch (never the release branch, which would be
+  deleted on merge), bring a moved `main` into it first, merge into `main`
+  with a merge commit, and bring the release branch level with a second PR
+  from `main`, also merged with a merge commit.
+- Documentation prepared for public visibility (#42): `SECURITY.md` routes
+  reports through GitHub private vulnerability reporting, with email as the
+  fallback; `docs/TRAFFIC.md` states that the traffic branch is public and
+  holds aggregate counts only; README, `CONTRIBUTING.md`, `GOVERNANCE.md` and
+  the foundation closeout no longer assume a private repository, and public
+  visibility is recorded as an owner decision separate from any release.
 
 ### Fixed
 
@@ -217,6 +219,16 @@ Use only the categories needed by a release.
   (`E11`) before duplicate (`E05`) and currency-change (`E08`) rules and to
   every affected row, as `DATA_CONTRACT.md` orders them; duplicates and
   currency changes no longer hide inconsistent account dates.
+- Repository audit corrections (#25): shared VBA comment/continuation lexer,
+  exact workbook path and encoding-independent XML reference checks, stronger
+  account/market fixture validation, and reconciliation without premature rounding.
+- Core-boundary checks now reject `CreateObject` and `GetObject`, including
+  variable or concatenated ProgIDs that could previously hide Excel access.
+  External COM automation belongs in host adapters; these names are reserved
+  in core code even for non-Excel objects. Comments and strings remain allowed
+  ([#22](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/22)).
+- Continued comments now recognize VBA whitespace, including tabs, and require
+  the continuation underscore immediately before the newline.
 
 ### Known limitations
 
