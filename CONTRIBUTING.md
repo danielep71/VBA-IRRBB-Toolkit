@@ -300,7 +300,8 @@ technical and respectful under the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## 📄 Licensing and maintainer
 
-This project is distributed under the [MIT License](LICENSE). Contributors must
+This project is distributed under the [Mozilla Public License 2.0](LICENSE)
+(MPL-2.0); contributions are accepted under the same license. Contributors must
 have the right to submit every part of a contribution, including code, tests,
 data, images and generated material. Third-party methodologies are cited, not
 copied. The license is reviewed before any external distribution; see
