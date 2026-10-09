@@ -3,24 +3,44 @@
 This checklist defines milestone closeout (#12). It is not authorization to
 publish a release, tag a version, make the repository public, or certify models.
 
-- [ ] Architecture decision and source/provenance review recorded (#2, #11).
-- [ ] Host, data and model baseline acceptance records are linked (#3, #4, #9),
+> ✅ **Closed on 2026-10-09.** The owner closed milestone v0.1.0; each item
+> below records the evidence it rests on. Excel and model checks were not run
+> in this milestone and remain NOT RUN.
+
+- [x] Architecture decision and source/provenance review recorded (#2, #11).
+  Architecture in [`REPOSITORY_STRUCTURE.md`](REPOSITORY_STRUCTURE.md);
+  full-history scans recorded in #11 and #42.
+- [x] Host, data and model baseline acceptance records are linked (#3, #4, #9),
   with audit amendments and implementation blockers explicitly tracked (#26,
-  #32, #33, #34, #35, #36, #37).
-- [ ] Sanitized template, import/export and regression harness obligations are
+  #32, #33, #34, #35, #36, #37). Each amendment issue sits in the milestone
+  that needs it (table below).
+- [x] Sanitized template, import/export and regression harness obligations are
   satisfied with exact-commit Excel evidence (#5, #6, #8), or the owner explicitly
   records a scope/milestone change for each deferred obligation. Foundation scope
-  alone does not waive these existing acceptance criteria.
-- [ ] Static gates pass on the final candidate, with regressions for known defects
-  and no unresolved blocking review findings (#7, #22, #25).
-- [ ] All open and closed issues have `danielep71`, a milestone and one priority;
+  alone does not waive these existing acceptance criteria. The owner moved all
+  three to v0.2.0 on 2026-10-09 (#12, roadmap below); their Excel evidence
+  remains mandatory there.
+- [x] Static gates pass on the final candidate, with regressions for known defects
+  and no unresolved blocking review findings (#7, #22, #25). All 10 gates pass
+  on `main` at the #55 merge (a231fee); every review finding on the closing PRs
+  was fixed before merge.
+- [x] All open and closed issues have `danielep71`, a milestone and one priority;
   default milestone configuration is updated before retiring milestone 1 (#10).
-- [ ] Rulesets and repository visibility are re-read after settings changes; no
+  `ISSUE_MILESTONE_NUMBER` was set to 2 (v0.2.0) before the milestone closed.
+- [x] Rulesets and repository visibility are re-read after settings changes; no
   direct protected-branch commits or history rewriting is used to hide past gaps.
-- [ ] Every remaining issue is completed with evidence or explicitly deferred
+  Rulesets read back on 2026-10-09 (#42); the repository became public after the
+  distribution review. Earlier direct commits are disclosed in the
+  retrospective record below, not hidden.
+- [x] Every remaining issue is completed with evidence or explicitly deferred
   by the owner. Excel/model checks not executed are recorded as NOT RUN.
-- [ ] Owner explicitly accepts closeout and separately authorizes any subsequent
+  Milestone v0.1.0 has no open issues; every closing PR records Excel as
+  NOT RUN.
+- [x] Owner explicitly accepts closeout and separately authorizes any subsequent
   release-to-main integration, tag, release or distribution under RELEASING.md.
+  Closeout accepted by closing the milestone; integrations into `main` were made
+  on explicit owner instruction (#44, #51, #55); no tag or release exists, and
+  public visibility was decided separately in #42.
 
 ## Approved roadmap and deferred obligations
 
