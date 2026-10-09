@@ -86,7 +86,7 @@ def row_error(row: dict[str, str], currencies=SUPPORTED_CURRENCIES) -> str | Non
         return "E09"
     if (opened and opened > as_of) or (opened and closed and closed < opened):
         return "E11"
-    if closed and as_of > closed:
+    if closed and as_of >= closed:
         return "E10"
     return None
 
@@ -126,7 +126,7 @@ def read_accounts(path: Path, currencies=SUPPORTED_CURRENCIES) -> tuple[list[tup
         if any(len(values) > 1 for values in history.values()) or (
                 opened and (opened > row["as_of_date"] or (closed and closed < opened))):
             code = "E11"
-        elif closed and row["as_of_date"] > closed:
+        elif closed and row["as_of_date"] >= closed:
             code = "E10"
         elif key in seen:
             code = "E05"
@@ -358,14 +358,29 @@ class PointInTimeAvailability(unittest.TestCase):
 
     def test_a_known_closure_never_reaches_a_per_account_predictor(self) -> None:
         # A close_date <= origin is treated as known at the origin (timely-reporting
-        # assumption), but no account with a row at the origin can already be closed
-        # (E10), so it can only label earlier transitions, never a predictor.
+        # assumption), but no account with a row at the origin can be closed on or
+        # before it (E10), so it can only label earlier transitions, never a predictor.
         for path in (ROOT / self.expected["fixture"], FIXTURES / "accounts.csv"):
             rows, _ = read_accounts(path)
             for origin in self.origins():
                 with self.subTest(fixture=path.name, origin=origin.isoformat()):
                     view = point_in_time_view(rows, origin)
                     self.assertTrue(all(features[6] == "" for features in predictors(view, origin).values()))
+
+    def test_a_row_dated_on_its_closure_is_rejected(self) -> None:
+        # A month-end closure has no row in its closure month; otherwise the row at the
+        # origin would carry a visible closure into a predictor (#64 review).
+        import tempfile
+        lines = [",".join(ACCOUNT_FIELDS),
+                 "2025-05-31,M001,RET_TX,EUR,10.00,,0,2020-01-01,2025-06-30",
+                 "2025-06-30,M001,RET_TX,EUR,0.00,,0,2020-01-01,2025-06-30"]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "month_end_closure.csv"
+            path.write_text("\n".join(lines) + "\n", encoding="ascii")
+            rows, errors = read_accounts(path)
+        self.assertEqual(errors, [{"line": 3, "code": "E10"}])
+        self.assertEqual(transition_outcomes(rows, date(2025, 5, 31), date(2025, 7, 31))[0]["outcome"],
+                         "closure")
 
     def test_without_masking_the_same_change_would_leak(self) -> None:
         rows, _ = read_accounts(ROOT / self.expected["fixture"])
