@@ -31,7 +31,8 @@ and removal**. Contribution workflow is owned by
 
 ## 🧭 Current status
 
-Milestone **v0.1.0 – Repository foundation** is in progress. There is **no
+Milestone **v0.2.0 – Workbook, data and Excel tests** is in progress;
+**v0.1.0 – Repository foundation** closed on 2026-10-09. There is **no
 IRRBB release** and **nothing to import into Excel yet**: the repository holds
 documentation, issue governance, CI and static source checks only.
 

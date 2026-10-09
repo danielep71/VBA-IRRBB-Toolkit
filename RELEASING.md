@@ -36,14 +36,15 @@ sequence**. Day-to-day contribution is owned by
 | --- | --- |
 | Released versions | None |
 | Active branch | `release/v0.1.0` |
-| Active milestone | `v0.1.0 - Repository foundation` |
+| Active milestone | `v0.2.0 - Workbook, data and Excel tests` |
+| Closed milestones | `v0.1.0 - Repository foundation` (2026-10-09, no release) |
 | Version file | Not present; created when the first release is prepared ([versioning](#versioning)) |
 | Release evidence tooling | Static checks (`tools/check.py`) |
 | Excel certification procedure | Policy in [`docs/EXCEL_EVIDENCE.md`](docs/EXCEL_EVIDENCE.md); harness *(to be defined)* |
 
 Steps below marked *(to be defined)* are settled with the first VBA source and
-the first distributed artifact. The v0.1.0 foundation milestone is not expected
-to produce a release.
+the first distributed artifact. The v0.1.0 foundation milestone closed without
+producing a release.
 
 ## 🌿 Branch model
 
