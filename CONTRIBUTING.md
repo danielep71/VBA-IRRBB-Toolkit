@@ -131,10 +131,11 @@ from a documented procedure, with its generator or seed committed or described,
 and not derived from real records: rescaled, shifted, anonymized or sampled
 real balances, rates or account histories are **not** synthetic.
 
-**Private visibility is not permission.** The repository being private does
-not authorize storing client, employer or personal data, and does not waive
-confidentiality, GDPR or contractual restrictions. Treat every commit as if the
-repository were public, because history is hard to erase.
+**Visibility is not permission.** The repository is public, and its full
+history, branches and pull-request refs are readable by anyone. A private fork
+or branch does not authorize storing client, employer or personal data, and
+does not waive confidentiality, GDPR or contractual restrictions. Treat every
+commit as published, because history is hard to erase.
 
 **Third-party material needs explicit rights.** Do not commit, attach or
 paraphrase at length:

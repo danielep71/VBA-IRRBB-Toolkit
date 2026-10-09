@@ -15,7 +15,7 @@ publish a release, tag a version, make the repository public, or certify models.
   and no unresolved blocking review findings (#7, #22, #25).
 - [ ] All open and closed issues have `danielep71`, a milestone and one priority;
   default milestone configuration is updated before retiring milestone 1 (#10).
-- [ ] Rulesets and private visibility are re-read after settings changes; no
+- [ ] Rulesets and repository visibility are re-read after settings changes; no
   direct protected-branch commits or history rewriting is used to hide past gaps.
 - [ ] Every remaining issue is completed with evidence or explicitly deferred
   by the owner. Excel/model checks not executed are recorded as NOT RUN.
@@ -49,8 +49,10 @@ Independent benchmarks and real-Excel tests accompany each model milestone;
 v0.9.0 consolidates qualification rather than starting validation.
 
 The initial v1.0.0 scope is the NMD behavioural-model application. A full
-banking-book EVE/NII engine needs separate scope approval. No dates, release
-publication or change from private visibility are implied by this roadmap.
+banking-book EVE/NII engine needs separate scope approval. No dates or release
+publication are implied by this roadmap. Public visibility is a separate owner
+decision, recorded in the distribution review #42; it does not authorize a
+tag, release or workbook distribution.
 
 The 2026-10-08 audit found no production VBA or workbook. Portable static tests
 cannot satisfy the unexecuted Excel, numerical, provenance or distribution gates.
