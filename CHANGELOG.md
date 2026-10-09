@@ -163,6 +163,8 @@ Use only the categories needed by a release.
   the completion criteria are marked met. The status sections of README,
   `CONTRIBUTING.md`, `INSTALLATION.md` and `RELEASING.md` now name v0.2.0 as
   the active milestone.
+- `docs/FOUNDATION_CLOSEOUT.md` records the v0.1.0 closeout: every checklist
+  item is marked met with the evidence it rests on.
 
 - Root documents (`CHANGELOG.md`, `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`,
   `INSTALLATION.md`, `RELEASING.md`, `SECURITY.md`) expanded to the
