@@ -34,19 +34,28 @@ numerical cases that will test each model are registered in
 
 ### Implementation hold points from the repository audit
 
-The accepted baseline is not numerical validation. Before implementing estimators,
-resolve [#26](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/26) in a reviewed
-contract amendment:
+The accepted baseline is not numerical validation. The owner-approved roadmap
+of 2026-10-09 splits [#26](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/26)
+into focused prerequisites. Each affected implementation must wait for its
+reviewed contract amendment; the parent's v0.7.0 milestone does not defer the
+earlier gates:
 
 - field availability at each forecast origin, and verified closure versus missing
-  data/right censoring for W05;
+  data/right censoring for W05 (#32, v0.2.0);
 - full ECM dynamic stability with dependent-variable lags, root convention and
-  tolerance, beyond the beta/lambda bounds below;
+  tolerance, beyond the beta/lambda bounds below (#33, v0.4.0);
 - account-cohort versus aggregate compounding and the exact evolution of survival
-  weights (50/50 balances, survival .9/.1, two months: 41 versus 25);
+  weights (50/50 balances, survival .9/.1, two months: 41 versus 25), together
+  with reproducible fractional-logit conventions (#34, v0.5.0);
 - deterministic model/lag ties, comparable estimation samples, and complete HAC
-  settings and ECM/DIFF reporting;
-- outstanding source verification and independent numerical benchmarks.
+  settings and ECM/DIFF reporting (#33, v0.4.0);
+- outstanding official-source verification and regulatory applicability (#35,
+  v0.7.0, before each affected overlay);
+- independent numerical benchmarks delivered with each model: Decay #36
+  (v0.3.0), Rates #33 (v0.4.0), Stable #34 (v0.5.0);
+- the Stable-Decay integration contract, reconciling existing-account survival
+  with aggregate balances without double-counting runoff (#37, before v0.6.0
+  integration).
 
 These are explicit implementation blockers. Do not silently choose one
 interpretation or report these models as validated.

@@ -28,7 +28,9 @@ model definitions are in [`README.md`](README.md); validation obligations in
 > including the [decisions](#decisions) below; see the
 > [acceptance record](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/4#issuecomment-6068526038).
 > Audit amendments that affect model interpretation remain open in
-> [#26](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/26). Only synthetic data is ever
+> [#26](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/26); the data-contract
+> amendment is [#32](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/32)
+> (v0.2.0). Only synthetic data is ever
 > committed or attached. Real data is loaded locally
 > and never enters Git, issues or pull requests.
 
@@ -192,8 +194,9 @@ same file always gives the same findings in the same order.
   Closure is a full cash-out in the month it happens.
 - An account that **disappears** without a `close_date` (`W05`) is treated as
   closed after its last observation in the accepted baseline. **Implementation
-  is blocked on #26:** this rule must distinguish confirmed closure from missing
-  extraction and right censoring before generating outcomes or cash-out labels.
+  is blocked on #32** (v0.2.0; tracked under #26): this rule must distinguish
+  confirmed closure from missing extraction and right censoring before
+  generating outcomes or cash-out labels.
 
 ### Structural breaks and outliers
 
@@ -216,7 +219,8 @@ This date filter alone does not establish point-in-time availability. A historic
 row may contain a closure learned later (the synthetic panel deliberately includes
 such future closure dates). Future closure dates are outcome information, never
 predictors at the earlier origin. The availability/vintage rule and missing-versus-
-closed decision require the amendment and leakage tests in #26 before modeling.
+closed decision require the amendment and leakage tests in #32 (v0.2.0; tracked
+under #26) before modeling.
 
 <a id="dataset-size"></a>
 
