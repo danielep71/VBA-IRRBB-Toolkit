@@ -147,6 +147,16 @@ Use only the categories needed by a release.
 
 ### Documentation
 
+- Data-contract amendment for point-in-time data (#32), decided by the owner
+  on 2026-10-09: a back-filled `close_date` is accepted but masked in the
+  point-in-time view at earlier forecast origins; only a recorded closure is a
+  cash-out, and an account that disappears without one is right-censored
+  (`W05`, redefined); a month end with no rows inside the window rejects the
+  import (new `E12`). `DATA_CONTRACT.md` defines the outcome of every
+  transition (observed, verified closure, gap, censored, end of sample) and its
+  eligibility and lineage; `MODEL_CONTRACTS.md` updates the stable-model
+  cash-out rule and the predictor timing. A hand-built fixture and leakage
+  tests (`DATA-PIT-01`, `DATA-PIT-02`) check it.
 - Translate all milestone guides into US English and establish US English
   as the repository language standard. Standardize surrounding documentation
   while preserving glyphs, navigation, technical scope, and official source

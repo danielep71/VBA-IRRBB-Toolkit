@@ -27,10 +27,10 @@ model definitions are in [`README.md`](README.md); validation obligations in
 > This contract was **accepted by the owner on 2026-10-08 in issue #4**,
 > including the [decisions](#decisions) below; see the
 > [acceptance record](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/4#issuecomment-6068526038).
-> Audit amendments that affect model interpretation remain open in
-> [#26](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/26); the data-contract
-> amendment is [#32](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/32)
-> (v0.2.0). Only synthetic data is ever
+> The point-in-time, closure and censoring amendment was decided by the owner
+> on 2026-10-09 in [#32](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/32)
+> ([decisions 6–8](#decisions)). Other audit amendments remain tracked in
+> [#26](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/26). Only synthetic data is ever
 > committed or attached. Real data is loaded locally
 > and never enters Git, issues or pull requests.
 
@@ -174,6 +174,7 @@ same file always gives the same findings in the same order.
 | `E10` | Row dated after the account's `close_date` | Each row |
 | `E05` | Duplicate (`as_of_date`, `account_id`) | Second and later occurrences |
 | `E08` | Account currency or market-series currency/tenor differs from its earlier rows | Each later row |
+| `E12` | **Missing extract**: a month end inside the data window has no account rows | Once per missing month end |
 
 | Code | Warning | Reported at |
 | --- | --- | --- |
@@ -181,22 +182,43 @@ same file always gives the same findings in the same order.
 | `W02` | Zero balance (dormant account) | The row |
 | `W03` | **Migration**: segment differs from the previous observation | The row |
 | `W04` | **Outlier candidate**: balance more than 10× or less than 1/10 of the previous month, both positive | The later month |
-| `W05` | Account stops before the window end without a `close_date` | Its last observation |
+| `W05` | **Censored disappearance**: account stops before the window end without a closure recorded in the following month (no `close_date`, or one later than the next month end) | Its last observation |
 | `W06` | Row outside the data window; excluded and counted | The row |
 
-### Missing observations, openings and closures
+<a id="outcomes"></a>
 
-- A **gap** is missing data, not a zero balance. Transitions that span a gap
-  are excluded from estimation; the gap is never filled.
+### Missing observations, openings, closures and censoring
+
+A transition runs from an observed month end $t$ of an account to the next
+month end $t+1$. Its **outcome** is the first of these that applies:
+
+| Outcome | Condition | In estimation |
+| --- | --- | --- |
+| **End of sample** | $t$ is the last month end of the data window | No outcome: right-censored |
+| **Observed** | The account has a row at $t+1$ | Transition with the observed balance |
+| **Verified closure** | No row at $t+1$, and the account's `close_date` lies in $(t, t+1]$ | Full cash-out: balance $0$ at $t+1$ |
+| **Gap** (`W01`) | No row at $t+1$, but a later row exists | Excluded; the gap is never filled |
+| **Censored disappearance** (`W05`) | No row at $t+1$, no later row, and no closure in $(t, t+1]$ | No outcome: right-censored |
+
+- Only a recorded `close_date` is a **verified closure**. Disappearance alone
+  is never treated as cash-out: the account leaves the risk set after its last
+  observation. A `close_date` later than $t+1$ for an account with no further
+  rows does not make the missing months a closure; the account is censored.
 - An account **opens** at its first observation. Its first month has no
-  predecessor and enters no transition.
-- An account **closes** at its `close_date`; it has no row after that date.
-  Closure is a full cash-out in the month it happens.
-- An account that **disappears** without a `close_date` (`W05`) is treated as
-  closed after its last observation in the accepted baseline. **Implementation
-  is blocked on #32** (v0.2.0; tracked under #26): this rule must distinguish
-  confirmed closure from missing extraction and right censoring before
-  generating outcomes or cash-out labels.
+  predecessor and enters no transition as an outcome.
+- A **missing extract** (a month end in the window with no account rows) is a
+  data-delivery fault, not a mass closure or a panel-wide gap: the import is
+  rejected (`E12`).
+- A **migration** (`W03`) does not change the outcome: the transition belongs to
+  the segment stated at $t$, which is known at $t$.
+- **Eligibility:** a transition enters an account-level estimation sample only
+  with outcome *observed* or *verified closure*. Model-specific conditions (for
+  example a positive balance at $t$) are set in
+  [`MODEL_CONTRACTS.md`](MODEL_CONTRACTS.md).
+- **Lineage** records, per month end, segment and currency, the number of
+  verified closures, censored disappearances with their last balance, gaps and
+  end-of-sample accounts, and the number of `close_date` values masked at each
+  forecast origin ([point-in-time availability](#look-ahead)).
 
 ### Structural breaks and outliers
 
@@ -208,19 +230,30 @@ effect.
 
 <a id="look-ahead"></a>
 
-### Look-ahead prevention
+### Point-in-time availability and look-ahead prevention
 
 Every run has a data window (first and last month end). Rows outside it are
-excluded (`W06`). Backtests and forecasts receive only observations dated on or
-before their forecast date; the window is part of the lineage and the
-parameter set.
+excluded (`W06`). The window is part of the lineage and the parameter set.
 
-This date filter alone does not establish point-in-time availability. A historical
-row may contain a closure learned later (the synthetic panel deliberately includes
-such future closure dates). Future closure dates are outcome information, never
-predictors at the earlier origin. The availability/vintage rule and missing-versus-
-closed decision require the amendment and leakage tests in #32 (v0.2.0; tracked
-under #26) before modeling.
+Each row is an **observation** of the account at its `as_of_date`: segment,
+currency, balance, customer rate, `indexed` and `open_date` are known at that
+date (`open_date` cannot be later, `E11`). `close_date` is the exception: an
+extract may back-fill it on earlier rows, so it can be **learned after** the
+row's `as_of_date`.
+
+The **point-in-time view at a forecast origin** $t$ is what every predictor,
+backtest and forecast at $t$ may use:
+
+1. only rows with `as_of_date` $\le t$;
+2. on those rows, `close_date` is shown only if it is $\le t$; a later
+   `close_date` is **masked** (treated as empty) in the view.
+
+A masked `close_date` is outcome information: it decides a later transition's
+outcome ([above](#outcomes)) and never enters a predictor at $t$. Consequently
+changing, adding or removing any information learned after $t$ (later rows,
+later closure dates) cannot change any predictor at $t$. The reference checker
+tests exactly this. No extract-vintage column is required; the rows are
+accepted as supplied.
 
 <a id="dataset-size"></a>
 
@@ -271,20 +304,26 @@ or reference may be used at runtime.
 | [`tests/fixtures/data_contract/accounts.csv`](../../tests/fixtures/data_contract/accounts.csv) | 10 accounts, 6 month ends (Jan–Jun 2025), 51 rows: two currencies, all three segments, an opening mid-window, a closure, a gap, a dormant account, a migration, a disappearance and an outlier |
 | [`tests/fixtures/data_contract/accounts_invalid.csv`](../../tests/fixtures/data_contract/accounts_invalid.csv) | One invalid row per error rule `E02`–`E11` |
 | [`tests/fixtures/data_contract/market_rates.csv`](../../tests/fixtures/data_contract/market_rates.csv) | `EUR_1M` and `USD_1M`, 6 month ends |
+| [`tests/fixtures/data_contract/availability.csv`](../../tests/fixtures/data_contract/availability.csv) | 7 accounts, Jan–Jun 2025: every [transition outcome](#outcomes), back-filled closure dates before and after the window end, and a migration |
+| [`tests/expected/data_contract/availability_outcomes.json`](../../tests/expected/data_contract/availability_outcomes.json) | Hand-assigned outcome for every transition, warnings, and the `close_date` values visible at each origin |
 | [`tests/expected/data_contract/accounts_summary.json`](../../tests/expected/data_contract/accounts_summary.json) | Hand-computed totals per date, segment and currency, and every expected warning |
 | [`tests/expected/data_contract/accounts_invalid_findings.json`](../../tests/expected/data_contract/accounts_invalid_findings.json) | Expected first error per invalid line |
 
 The fixtures are hand-constructed; the expected values were computed by hand
 from the rows. `tools/test_data_contract.py`, run by `python tools/check.py`,
 re-reads the fixtures with an independent Python reading of this contract and
-fails if fixtures, expectations and rules disagree. The VBA importer, when it
-exists, must reproduce the same expected files.
+fails if fixtures, expectations and rules disagree. It also runs the
+leakage tests: altering, adding or removing information learned after an
+origin leaves every predictor at that origin unchanged, and dropping a month
+end from the window gives `E12`. The VBA importer, when it exists, must
+reproduce the same expected files.
 
 <a id="decisions"></a>
 
 ## ✅ Decisions
 
-Accepted by the owner on 2026-10-08 in issue #4.
+Decisions 1–5 were accepted by the owner on 2026-10-08 in issue #4;
+decisions 6–8 on 2026-10-09 in issue #32.
 
 | # | Decision | Outcome |
 | ---: | --- | --- |
@@ -293,6 +332,9 @@ Accepted by the owner on 2026-10-08 in issue #4.
 | 3 | Negative balances | Invalid (`E09`): overdrafts are assets and out of scope |
 | 4 | Outlier threshold for `W04` | Factor 10 month on month |
 | 5 | Data fingerprint | SHA-256 implemented in VBA, tested against published test vectors |
+| 6 | Back-filled `close_date` (#32, 2026-10-09) | Accepted as supplied; masked in the point-in-time view at origins before it |
+| 7 | Disappearance without a verified closure (#32, 2026-10-09) | Right-censored (`W05`), never cash-out |
+| 8 | Month end with no rows inside the window (#32, 2026-10-09) | Import rejected (`E12`) |
 
 ---
 
