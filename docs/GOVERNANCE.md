@@ -22,7 +22,10 @@ It preserves an existing milestone; missing milestones use repository variable
 It adds `P3` only when no priority exists; conflicting priorities retain the
 highest severity (`P1`, then `P2`, then `P3`). Other labels and assignees remain.
 A manual dispatch on the default branch performs a full sweep. Change the
-variable before closing the configured default milestone.
+variable before closing the configured default milestone. Issue events that
+GitHub raises for pull requests are skipped before any API call, and a failed
+API call is logged with its HTTP status and response, with token-like strings
+redacted (#41).
 
 Administrator bypass is an exceptional capability, not permission to skip review
 or failing checks. The intended `main` and `release/**` bypass mode is **pull
