@@ -59,7 +59,7 @@ Planned cross-cutting functionality includes data validation, calibration, histo
 | [VBA house style](docs/VBA_HOUSE_STYLE.md) | Module contracts, error handling and export discipline |
 | [Excel evidence](docs/EXCEL_EVIDENCE.md) | Real-host evidence, independent of static checks |
 | [Tooling](tools/README.md) | Repository checks and CI limits |
-| [Labels](docs/LABELS.md) | Issue-label catalogue and priority rules |
+| [Labels](docs/LABELS.md) | Issue-label catalog and priority rules |
 | [Releasing](RELEASING.md) | Integration into `main` and the release sequence |
 | [Security](SECURITY.md) | Vulnerability and information-handling policy |
 | [Code of conduct](CODE_OF_CONDUCT.md) | Participant behavior and conduct reporting |
