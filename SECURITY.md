@@ -217,7 +217,7 @@ Users should:
 - obtain source only from this repository and know which commit it is;
 - test with synthetic data in a controlled environment before using real data;
   and
-- understand that IRRBB Toolkit output is a modelling aid. It is not
+- understand that IRRBB Toolkit output is a modeling aid. It is not
   regulatory approval, independent model validation or an authentication or
   authorization control.
 

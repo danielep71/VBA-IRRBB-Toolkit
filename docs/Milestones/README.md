@@ -1,86 +1,84 @@
-# 🗺️ Milestones — dalla foundation alla v1.0.0
+# 🗺️ Milestones — from repository foundation to v1.0.0
 
-Queste guide spiegano in italiano **che cosa deve consegnare ogni milestone,
-perché serve e quali evidenze consentono di considerarla completata**.
-I titoli inglesi corrispondono alle milestone GitHub. La roadmap di riferimento
-è quella approvata il 9 ottobre 2026 e registrata nel
-[foundation closeout](../FOUNDATION_CLOSEOUT.md).
+These guides explain **what each milestone must deliver, why it matters,
+and what evidence is required to consider it complete**. The titles match
+the GitHub milestones. The reference roadmap was approved on October 9,
+2026, and is recorded in the [foundation closeout](../FOUNDATION_CLOSEOUT.md).
 
-## 🧭 Percorso e risultati attesi
+## 🧭 Roadmap and expected outcomes
 
-| Milestone | Domanda a cui risponde | Consegna principale |
+| Milestone | Question it answers | Main deliverable |
 | --- | --- | --- |
-| [🏗️ v0.1.0](v0.1.0.md) | Su quali regole costruiamo? | Architettura, contratti di base, controlli e governance |
-| [📊 v0.2.0](v0.2.0.md) | Come rendiamo operativi workbook, dati e test? | Applicazione Excel di base riproducibile e importazione controllata |
-| [📉 v0.3.0](v0.3.0.md) | Come descriviamo il deflusso del saldo aggregato? | Motore Decay verificato con riferimenti indipendenti |
-| [📈 v0.4.0](v0.4.0.md) | Come reagiscono i tassi cliente ai tassi di mercato? | Modello Rates con stima, diagnostica e simulazione |
-| [🏦 v0.5.0](v0.5.0.md) | Quanto dei saldi esistenti permane nel tempo? | Modello Stable e aggregazione coerente delle coorti |
-| [🔗 v0.6.0](v0.6.0.md) | Come lavorano insieme i modelli? | Calibrazione e backtesting integrati e riproducibili |
-| [⚖️ v0.7.0](v0.7.0.md) | Come applichiamo scenari e vincoli pertinenti? | Scenari coerenti e vincoli tracciabili alle fonti |
-| [🖥️ v0.8.0](v0.8.0.md) | Come usa ed esporta i risultati un utente? | Percorso operativo, persistenza ed esportazione ALM |
-| [🧪 v0.9.0](v0.9.0.md) | L'intera applicazione è pronta al rilascio? | Candidato congelato e qualificato con evidenze complete |
-| [🚀 v1.0.0](v1.0.0.md) | Quale prodotto accettiamo e rilasciamo? | Prima applicazione NMD stabile, nei limiti dichiarati |
+| [🏗️ v0.1.0](v0.1.0.md) | What rules will guide development? | Architecture, baseline contracts, checks, and governance |
+| [📊 v0.2.0](v0.2.0.md) | How do the workbook, data, and tests become operational? | Reproducible Excel application foundation and controlled data import |
+| [📉 v0.3.0](v0.3.0.md) | How do we describe aggregate balance runoff? | Decay engine verified against independent references |
+| [📈 v0.4.0](v0.4.0.md) | How do customer rates respond to market rates? | Rates model with estimation, diagnostics, and simulation |
+| [🏦 v0.5.0](v0.5.0.md) | How much of the existing balance persists over time? | Stable model with consistent cohort aggregation |
+| [🔗 v0.6.0](v0.6.0.md) | How do the models work together? | Integrated, reproducible calibration and backtesting |
+| [⚖️ v0.7.0](v0.7.0.md) | How do we apply relevant scenarios and constraints? | Consistent scenarios and constraints traceable to their sources |
+| [🖥️ v0.8.0](v0.8.0.md) | How does a user operate the application and export results? | User workflow, persistence, and ALM export |
+| [🧪 v0.9.0](v0.9.0.md) | Is the complete application ready for release? | Frozen, qualified candidate with complete evidence |
+| [🚀 v1.0.0](v1.0.0.md) | What product do we accept and release? | First stable NMD application within its stated limits |
 
-## 📖 Come leggere le guide
+## 📖 How to read these guides
 
-Ogni file contiene scopo, motivazione, attività e risultati osservabili,
-dipendenze, esempio sintetico, criteri di completamento e collegamenti.
-Le attività sono una scomposizione operativa dello scopo approvato: non sono
-una certificazione di funzionalità già disponibili. I criteri elencati non
-costituiscono un registro di test eseguiti.
+Each file covers purpose, rationale, activities and observable outcomes,
+dependencies, a synthetic example, completion criteria, and references.
+Activities break down the approved scope into practical work; they do not
+certify that a feature is already available. The listed criteria are not
+a record of completed tests.
 
-Le issue GitHub conservano stato corrente, assegnazione, priorità e prove di
-chiusura. Le guide non duplicano percentuali o contatori destinati a diventare
-obsoleti. La sezione di tracciamento in ogni file identifica le issue note al
-9 ottobre 2026 e gli eventuali pacchetti ancora da dettagliare.
+GitHub issues hold current status, ownership, priority, and closure evidence.
+These guides do not duplicate percentages or counters that would become
+outdated. Each tracking section identifies issues known on October 9, 2026,
+and work that still needs a detailed implementation issue.
 
-## 🔗 Dipendenze: ordine di consegna e prerequisiti
+## 🔗 Dependencies: delivery order and prerequisites
 
-La v0.2.0 fornisce dati, host e test ai tre modelli. La numerazione colloca
-Decay prima di Rates e Stable, ma non introduce una dipendenza matematica di
-Rates dalla formula Decay. La v0.6.0 richiede i tre modelli e un contratto
-esplicito per la loro composizione. La v0.7.0 aggiunge gli scenari coordinati
-e i vincoli applicabili; la v0.8.0 completa il percorso utente. La v0.9.0
-riunisce le evidenze prima dell'accettazione della v1.0.0.
+v0.2.0 provides data, the Excel host foundation, and tests for all three
+models. Decay precedes Rates and Stable in the delivery sequence, but this
+does not create a mathematical dependency of Rates on the Decay formula.
+v0.6.0 requires all three models and an explicit composition contract.
+v0.7.0 adds coordinated scenarios and applicable constraints; v0.8.0 completes
+the user workflow. v0.9.0 consolidates the evidence before v1.0.0 acceptance.
 
-Le correzioni metodologiche [#32–#37](../methodology/MODEL_CONTRACTS.md)
-precedono le implementazioni interessate. L'issue ombrello
-[#26](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/26), assegnata
-alla v0.7.0, non rinvia a quella versione i prerequisiti dei modelli precedenti.
+The methodological amendments [#32–#37](../methodology/MODEL_CONTRACTS.md)
+must precede the affected implementations. Umbrella issue
+[#26](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/26), assigned
+to v0.7.0, does not defer the earlier models' prerequisites to that version.
 
-## 🧪 Regole comuni di completamento
+## 🧪 Common completion requirements
 
-- **Dati sintetici e provenienza:** esempi e prove nel repository devono essere
-  riproducibili e privi di dati reali riservati.
-- **Riferimenti indipendenti:** i valori attesi non provengono dal modello che
-  si sta verificando; fonti, versioni, semi e tolleranze sono registrati.
-- **Evidenza Excel:** quando si introduce VBA, compilazione, test e scenari
-  devono essere eseguiti sull'host concordato e associati all'esatto commit.
-  CI statica e LibreOffice non sostituiscono queste prove.
-- **Errori e risultati:** un errore non produce un PASS; risultati precedenti,
-  incompleti o relativi a input cambiati non devono apparire correnti. Errore
-  principale ed eventuale errore di ripristino restano entrambi visibili.
-- **Chiusura e pubblicazione:** chiudere una milestone non autorizza da solo
-  integrazione in main, tag, release, distribuzione o cambio di visibilità.
-  Si segue [RELEASING.md](../../RELEASING.md) con le decisioni del proprietario.
+- **Synthetic data and provenance:** examples and evidence committed to the
+  repository must be reproducible and contain no confidential real data.
+- **Independent references:** expected values must not come from the model
+  being tested. Record sources, versions, seeds, and tolerances.
+- **Excel evidence:** when VBA is introduced, compilation, tests, and
+  scenarios must run on the agreed host and be tied to the exact commit.
+  Static CI and LibreOffice do not replace these checks.
+- **Errors and results:** an error must not produce a PASS. Previous,
+  incomplete, or outdated results must not appear current after inputs change.
+  Preserve both the primary error and any cleanup error.
+- **Closeout and publication:** closing a milestone does not independently
+  authorize main integration, a tag, a release, distribution, or a visibility
+  change. Follow [RELEASING.md](../../RELEASING.md) and the owner's decisions.
 
-## 📚 Documenti che governano le decisioni
+## 📚 Authoritative decision records
 
-Queste guide spiegano la roadmap; non modificano equazioni, soglie, API o
-decisioni di supporto. In caso di discrepanza, registrare il punto in un'issue
-e aggiornare insieme guida e contratto tramite PR.
+These guides explain the roadmap; they do not amend equations, thresholds,
+APIs, or support decisions. If a discrepancy arises, record it in an issue
+and update the guide and authoritative contract together through a PR.
 
-| Argomento | Riferimento |
+| Topic | Reference |
 | --- | --- |
-| Architettura e confini del codice | [Repository structure](../REPOSITORY_STRUCTURE.md) |
-| Dati e regole temporali | [Data contract](../methodology/DATA_CONTRACT.md) |
-| Specifiche e prerequisiti dei modelli | [Model contracts](../methodology/MODEL_CONTRACTS.md) |
-| Fonti e loro stato di verifica | [Sources](../methodology/SOURCES.md) |
-| Casi numerici e validazione | [Test cases](../methodology/TEST_CASES.md), [Validation plan](../methodology/VALIDATION_PLAN.md) |
-| Evidenze sull'host Excel | [Excel evidence](../EXCEL_EVIDENCE.md) |
-| Workflow e chiusura delle issue | [Governance](../GOVERNANCE.md), [Contributing](../../CONTRIBUTING.md) |
+| Architecture and source boundaries | [Repository structure](../REPOSITORY_STRUCTURE.md) |
+| Data and information timing | [Data contract](../methodology/DATA_CONTRACT.md) |
+| Model specifications and prerequisites | [Model contracts](../methodology/MODEL_CONTRACTS.md) |
+| Sources and verification status | [Sources](../methodology/SOURCES.md) |
+| Numerical cases and validation | [Test cases](../methodology/TEST_CASES.md), [Validation plan](../methodology/VALIDATION_PLAN.md) |
+| Excel host evidence | [Excel evidence](../EXCEL_EVIDENCE.md) |
+| Workflow and issue closure | [Governance](../GOVERNANCE.md), [Contributing](../../CONTRIBUTING.md) |
 
-Il perimetro della v1.0.0 è l'applicazione comportamentale per i depositi
-senza scadenza contrattuale (NMD). Un motore EVE/NII dell'intero banking book
-o un'integrazione specifica con un fornitore richiedono un perimetro approvato
-separatamente. Non sono fissate date di consegna da queste guide.
+The v1.0.0 scope is the behavioral application for non-maturity deposits
+(NMDs). A full banking-book EVE/NII engine or a vendor-specific integration
+requires separately approved scope. These guides do not set delivery dates.

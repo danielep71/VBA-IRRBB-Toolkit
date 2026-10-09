@@ -39,8 +39,8 @@ The [MIT License](../LICENSE) (copyright 2026 Daniele Penza) covers original rep
 
 **External distribution** means making the repository public, sharing a clone, archive or built workbook with anyone outside the maintainer, or publishing a GitHub Release. Before any of these, the owner reviews and records in an issue:
 
-1. that the licence is still the intended one;
-2. that every file is original or carries a compatible licence and attribution (the static-check tooling is adapted from the maintainer's own MIT-licensed VBA-SACCR-Toolkit);
+1. that the license is still the intended one;
+2. that every file is original or carries a compatible license and attribution (the static-check tooling is adapted from the maintainer's own MIT-licensed VBA-SACCR-Toolkit);
 3. that no employer, client or vendor has a claim on the content or on the methods it implements;
 4. that a full-history scan finds no sensitive material (see below); and
 5. that issue and pull-request text, which becomes visible with the repository, contains no confidential material.

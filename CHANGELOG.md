@@ -110,7 +110,7 @@ Use only the categories needed by a release.
   host-independent; covered by `tools/test_core_boundary.py` (#2).
 
 - Initial repository foundation for a source-first Excel/VBA IRRBB behavioral
-  modelling application.
+  modeling application.
 - Documentation of model scope, validation requirements, source boundaries and
   synthetic-data policy.
 - Portable static-checking tools and CI configuration adapted from the
@@ -143,7 +143,12 @@ Use only the categories needed by a release.
 
 ### Documentation
 
-- Detailed Italian milestone guides in `docs/Milestones/`, one per milestone
+- Translate all milestone guides into US English and establish US English
+  as the repository language standard. Standardize surrounding documentation
+  while preserving glyphs, navigation, technical scope, and official source
+  titles.
+
+- Detailed milestone guides in `docs/Milestones/`, one per milestone
   from v0.1.0 through v1.0.0, with a navigation index, purpose, deliverables,
   dependencies, synthetic examples and completion evidence. Implementation
   tracking gaps are explicit; the guides do not change model contracts or

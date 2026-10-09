@@ -2,7 +2,7 @@
 
 # 🏦 IRRBB Behavioral Models — Excel/VBA Toolkit
 
-### Interest Rate Risk in the Banking Book | behavioral modelling, calibration and independent testing
+### Interest Rate Risk in the Banking Book | behavioral modeling, calibration and independent testing
 
 [![Excel VBA](https://img.shields.io/badge/Excel_VBA-Windows-217346?style=for-the-badge&logo=microsoft-excel&logoColor=white)](INSTALLATION.md)
 [![Status](https://img.shields.io/badge/Status-Foundation%20only-6e7781?style=for-the-badge)](#status)
@@ -19,7 +19,7 @@
 
 ## ✨ Purpose
 
-**VBA-IRRBB-Toolkit** is an Excel/VBA **application project** intended to develop transparent, independently testable tools for behavioral assumptions in Interest Rate Risk in the Banking Book (IRRBB). It addresses the modelling of non-maturity deposits (NMDs) and, where applicable, demand-side balances, with an emphasis on reproducible calculations, model risk management and ALM parameter export.
+**VBA-IRRBB-Toolkit** is an Excel/VBA **application project** intended to develop transparent, independently testable tools for behavioral assumptions in Interest Rate Risk in the Banking Book (IRRBB). It addresses the modeling of non-maturity deposits (NMDs) and, where applicable, demand-side balances, with an emphasis on reproducible calculations, model risk management and ALM parameter export.
 
 The planned scope has three distinct model families:
 
@@ -50,7 +50,7 @@ Planned cross-cutting functionality includes data validation, calibration, histo
 | Resource | Purpose |
 | --- | --- |
 | [Structure](docs/REPOSITORY_STRUCTURE.md) | Application profile, ownership and dependency boundaries |
-| [Milestone guides](docs/Milestones/README.md) | Detailed Italian guides to each milestone: purpose, deliverables, dependencies and completion evidence |
+| [Milestone guides](docs/Milestones/README.md) | Detailed guides to each milestone: purpose, deliverables, dependencies and completion evidence |
 | [Methodology roadmap](docs/methodology/README.md) | Model definitions, reference and calibration obligations |
 | [Validation plan](docs/methodology/VALIDATION_PLAN.md) | Backtesting, numerical evidence and model-risk controls |
 | [Installation](INSTALLATION.md) | Development prerequisites and local static checks |
