@@ -63,6 +63,8 @@ statistical check, not a tolerance test.
 | --- | --- | --- | --- | --- |
 | `DATA-VALID-01` | Totals per date, segment and currency; warnings `W01`–`W05` | Hand computation, [`accounts_summary.json`](../../tests/expected/data_contract/accounts_summary.json) | `abs 0.005` balances; `exact` counts and codes | Built |
 | `DATA-INVALID-01` | First error per line, `E02`–`E11` | Hand construction, [`accounts_invalid_findings.json`](../../tests/expected/data_contract/accounts_invalid_findings.json) | `exact` | Built |
+| `DATA-PIT-01` | Transition outcome per account month (observed, verified closure, gap, censored, end of sample), `W05` censoring, `close_date` visible at each origin | Hand assignment, [`availability_outcomes.json`](../../tests/expected/data_contract/availability_outcomes.json) | `exact` | Built |
+| `DATA-PIT-02` | Leakage: altering, adding or removing information learned after an origin leaves every predictor at that origin unchanged; a missing month end gives `E12` | Property test on both panels at every origin, with an unmasked negative control | `exact` | Built |
 
 ### Rate pass-through
 
