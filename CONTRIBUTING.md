@@ -34,6 +34,21 @@ Suspected vulnerabilities must never be disclosed in an issue or pull request.
 > [`docs/REPOSITORY_STRUCTURE.md`](docs/REPOSITORY_STRUCTURE.md). Sections below
 > that refer to VBA describe the rules those changes must follow once they exist.
 
+## 🌐 Repository language
+
+Use **US English** for all repository-authored content: documentation, code
+comments, diagnostics and user-facing messages, issue and pull request titles
+and bodies, review comments, milestone descriptions, commit messages, and
+release notes. Use US spellings such as `behavior`, `modeling`, `license`,
+`analyze`, and `color`. Write new identifiers and descriptive filenames in
+English, while preserving existing API and file-format compatibility.
+
+Keep proper names, official publication titles, quotations, and external API
+identifiers accurate to their sources. Explain quoted non-English material
+in US English. Preserve glyphs and mathematical notation where useful; the
+language standard does not require ASCII-only text. Do not rewrite published
+Git history to apply an editorial correction.
+
 <a id="ways-to-contribute"></a>
 
 ## 🌱 Ways to contribute
@@ -153,7 +168,7 @@ where an integration contract requires it, never its internals.
 
 **State provenance.** A pull request that adds data, a fixture, an expected
 value or adapted code states where it came from: generator and seed, the public
-source cited, or the licence of the adapted material.
+source cited, or the license of the adapted material.
 
 **If sensitive material reaches Git**, stop pushing to that branch and report
 it privately as described in [`SECURITY.md`](SECURITY.md#data-and-secrets).
@@ -288,7 +303,7 @@ technical and respectful under the [Code of Conduct](CODE_OF_CONDUCT.md).
 This project is distributed under the [MIT License](LICENSE). Contributors must
 have the right to submit every part of a contribution, including code, tests,
 data, images and generated material. Third-party methodologies are cited, not
-copied. The licence is reviewed before any external distribution; see
+copied. The license is reviewed before any external distribution; see
 [`docs/GOVERNANCE.md`](docs/GOVERNANCE.md#licensing-and-distribution).
 
 Maintained by **Daniele Penza**.

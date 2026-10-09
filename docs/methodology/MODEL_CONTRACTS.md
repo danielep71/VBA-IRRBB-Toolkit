@@ -29,7 +29,7 @@ numerical cases that will test each model are registered in
 > [!IMPORTANT]
 > These contracts were **accepted by the owner on 2026-10-08 in issue #9**,
 > including the [decisions](#decisions) below; see the
-> [acceptance record](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/9#issuecomment-6068527520). Regulatory figures are labelled with their source; those resting on an
+> [acceptance record](https://github.com/danielep71/VBA-IRRBB-Toolkit/issues/9#issuecomment-6068527520). Regulatory figures are labeled with their source; those resting on an
 > unverified source in the [register](SOURCES.md) are provisional.
 
 ### Implementation hold points from the repository audit
@@ -336,7 +336,7 @@ The toolkit keeps two separate layers and always reports both:
 | **Overlay** | Constraints on what may be used for regulatory repricing assumptions | `REG-1`, `REG-2`, `REG-3` |
 
 The overlay never changes a fitted parameter. It produces a separate,
-constrained profile, labelled with the source ID and the verification status of
+constrained profile, labeled with the source ID and the verification status of
 each constraint applied:
 
 1. **Non-core in the overnight bucket**: the overlay profile places the
