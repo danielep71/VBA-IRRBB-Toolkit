@@ -163,6 +163,16 @@ class Compression(unittest.TestCase):
                 self.assertEqual(decompress(vba_project.compress(data)), data)
 
 
+    def test_incompressible_last_chunk_names_the_module(self) -> None:
+        # About 4 KB of random printable text in the last, short chunk does not fit
+        # one compressed chunk; the build stops and names the module.
+        rng = random.Random(97)
+        noise = "".join(chr(rng.randrange(33, 127)) for _ in range(4000))
+        module = vba_project.Module("CORE_Noise", f'Attribute VB_Name = "CORE_Noise"\r\n\' {noise}\r\n')
+        with self.assertRaisesRegex(ValueError, r"module CORE_Noise: .*Manual import"):
+            vba_project.build_vba_project([module], ProjectStorage.project_id)
+
+
 class Encryption(unittest.TestCase):
     def test_project_protection_fields_round_trip(self) -> None:
         rng = random.Random("{ID}")
