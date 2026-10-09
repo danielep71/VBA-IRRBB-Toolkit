@@ -94,6 +94,11 @@ Use only the categories needed by a release.
 
 ## [Unreleased]
 
+- Owner-approved v0.1.0-to-v1.0.0 roadmap: workbook/import/harness work moves
+  to v0.2.0, with all Excel obligations retained; model-contract amendments
+  are split into milestone-specific prerequisites (#26, #32-#37). Independent
+  benchmarks accompany each model, and Stable-Decay composition is explicit.
+
 - Repository audit corrections (#25): shared VBA comment/continuation lexer,
   exact workbook path and encoding-independent XML reference checks, stronger
   account/market fixture validation, and reconciliation without premature rounding.
