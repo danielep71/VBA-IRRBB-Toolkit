@@ -157,6 +157,10 @@ Use only the categories needed by a release.
   dependencies, synthetic examples and completion evidence. Implementation
   tracking gaps are explicit; the guides do not change model contracts or
   assert that planned functions are delivered.
+- The v0.1.0 guide records the milestone as closed on 2026-10-09: each
+  deliverable links its issue and the document where it lives, the
+  distribution review (#42) and MPL-2.0 relicensing (#49) are included, and
+  the completion criteria are marked met.
 
 - Root documents (`CHANGELOG.md`, `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`,
   `INSTALLATION.md`, `RELEASING.md`, `SECURITY.md`) expanded to the
