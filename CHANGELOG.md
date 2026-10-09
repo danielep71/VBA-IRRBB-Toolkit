@@ -230,6 +230,11 @@ Use only the categories needed by a release.
 
 ### Fixed
 
+- The issue-metadata workflow no longer fails on issue events that GitHub
+  raises for pull requests (#41): it skips them before reading the item, which
+  its token, without pull-request access, cannot do. Failed API calls now log
+  the HTTP status and response, with token-like strings redacted, instead of a
+  bare `CalledProcessError`.
 - Label commands now default to the checked-in `.github/label-policy.json`.
 - Workbook package checks reject missing core parts and archive corruption;
   these structural checks do not certify Excel compatibility.
