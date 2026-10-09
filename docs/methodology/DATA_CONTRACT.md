@@ -255,6 +255,18 @@ later closure dates) cannot change any predictor at $t$. The reference checker
 tests exactly this. No extract-vintage column is required; the rows are
 accepted as supplied.
 
+**Timely closure reporting (source requirement).** Without a vintage field the
+view cannot tell a closure known when it happened from one the source reported
+months later. The contract therefore **assumes a closure is known at the month
+end of the month in which it occurs**: a `close_date` $\le t$ is treated as known
+at $t$. A per-account predictor cannot expose it (an account with a row at $t$
+cannot already be closed, `E10`), but a fit or backtest at $t$ uses it to label
+earlier transitions as closures. A source that reports closures later than the
+month end of their occurrence breaks this assumption and **must not be loaded
+as-is**; supporting it needs an availability field and a reopened decision 6.
+The import cannot detect late reporting, so the user attests timely reporting
+for each import and the attestation is part of the [lineage](#lineage).
+
 <a id="dataset-size"></a>
 
 ## 📦 Dataset size
@@ -287,6 +299,7 @@ built from it:
 | Source | File name (no directory path), size in bytes, SHA-256 of the file bytes |
 | Counts | Rows read, accepted, excluded by window; accounts; warnings by code |
 | Settings | Data window, segment list, rate series selected |
+| Attestation | Closure dates reported by the month end of the closure ([timely closure reporting](#look-ahead)) |
 | Code | Toolkit commit SHA |
 | Time | Import timestamp with UTC offset |
 
@@ -332,7 +345,7 @@ decisions 6–8 on 2026-10-09 in issue #32.
 | 3 | Negative balances | Invalid (`E09`): overdrafts are assets and out of scope |
 | 4 | Outlier threshold for `W04` | Factor 10 month on month |
 | 5 | Data fingerprint | SHA-256 implemented in VBA, tested against published test vectors |
-| 6 | Back-filled `close_date` (#32, 2026-10-09) | Accepted as supplied; masked in the point-in-time view at origins before it |
+| 6 | Back-filled `close_date` (#32, 2026-10-09) | Accepted as supplied; masked in the point-in-time view at origins before it; closures assumed reported by the month end in which they occur, attested per import |
 | 7 | Disappearance without a verified closure (#32, 2026-10-09) | Right-censored (`W05`), never cash-out |
 | 8 | Month end with no rows inside the window (#32, 2026-10-09) | Import rejected (`E12`) |
 

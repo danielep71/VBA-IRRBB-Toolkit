@@ -356,6 +356,17 @@ class PointInTimeAvailability(unittest.TestCase):
                                      predictors(point_in_time_view(rows, origin), origin))
                 origin = next_month_end(origin)
 
+    def test_a_known_closure_never_reaches_a_per_account_predictor(self) -> None:
+        # A close_date <= origin is treated as known at the origin (timely-reporting
+        # assumption), but no account with a row at the origin can already be closed
+        # (E10), so it can only label earlier transitions, never a predictor.
+        for path in (ROOT / self.expected["fixture"], FIXTURES / "accounts.csv"):
+            rows, _ = read_accounts(path)
+            for origin in self.origins():
+                with self.subTest(fixture=path.name, origin=origin.isoformat()):
+                    view = point_in_time_view(rows, origin)
+                    self.assertTrue(all(features[6] == "" for features in predictors(view, origin).values()))
+
     def test_without_masking_the_same_change_would_leak(self) -> None:
         rows, _ = read_accounts(ROOT / self.expected["fixture"])
         unmasked = lambda panel: [dict(r) for _, r in panel if parse_date(r["as_of_date"]) <= self.first]

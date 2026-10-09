@@ -149,7 +149,9 @@ Use only the categories needed by a release.
 
 - Data-contract amendment for point-in-time data (#32), decided by the owner
   on 2026-10-09: a back-filled `close_date` is accepted but masked in the
-  point-in-time view at earlier forecast origins; only a recorded closure is a
+  point-in-time view at earlier forecast origins, and closures are assumed
+  reported by the month end in which they occur (attested per import, recorded
+  in the lineage); only a recorded closure is a
   cash-out, and an account that disappears without one is right-censored
   (`W05`, redefined); a month end with no rows inside the window rejects the
   import (new `E12`). `DATA_CONTRACT.md` defines the outcome of every
