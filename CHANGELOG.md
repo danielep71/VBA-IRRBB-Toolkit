@@ -121,6 +121,10 @@ Use only the categories needed by a release.
 
 ### Changed
 
+- The repository is now licensed under the Mozilla Public License 2.0
+  (MPL-2.0) instead of MIT (#49). `LICENSE` holds the MPL-2.0 text and is the
+  license notice for every file; contributions are accepted under MPL-2.0.
+  Copies obtained before the change keep the MIT License.
 - The active release branch is now `release/v0.1.0`, opened from `main` after
   the foundation was integrated (PR #13). Documentation, the PR template and
   the `Bootstrap v0.1.0 tracking` workflow trigger point to it, and release

@@ -7,7 +7,7 @@
 [![Excel VBA](https://img.shields.io/badge/Excel_VBA-Windows-217346?style=for-the-badge&logo=microsoft-excel&logoColor=white)](INSTALLATION.md)
 [![Status](https://img.shields.io/badge/Status-Foundation%20only-6e7781?style=for-the-badge)](#status)
 [![Development](https://img.shields.io/badge/Development-release%2Fv0.1.0-6f42c1?style=for-the-badge)](https://github.com/danielep71/VBA-IRRBB-Toolkit/tree/release/v0.1.0)
-[![License](https://img.shields.io/badge/License-MIT-2ea44f?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/License-MPL--2.0-2ea44f?style=for-the-badge)](LICENSE)
 
 <br>
 
@@ -78,7 +78,7 @@ Git and Python 3.10+ are needed for the static checks. A Windows 64-bit Excel ho
 
 ## 🔒 Data, confidentiality and provenance
 
-This project is **generic and independent**. Only synthetic or redistributable reference datasets and expressly permitted source material may be committed. Do not copy third-party proprietary methodologies verbatim, internal bank models, customer balances, reports, restricted vendor manuals or training material, or tools into this repository. No visibility setting or private fork is permission to store any of these. The current MIT license covers original repository content; it does not grant rights over third-party intellectual property, and it is reviewed before any external distribution.
+This project is **generic and independent**. Only synthetic or redistributable reference datasets and expressly permitted source material may be committed. Do not copy third-party proprietary methodologies verbatim, internal bank models, customer balances, reports, restricted vendor manuals or training material, or tools into this repository. No visibility setting or private fork is permission to store any of these. The Mozilla Public License 2.0 covers original repository content; it does not grant rights over third-party intellectual property, and it is reviewed before any external distribution.
 
 Contributor rules are in [Data, confidentiality and provenance](CONTRIBUTING.md#data-confidentiality-and-provenance); the distribution gate is in [Governance](docs/GOVERNANCE.md#licensing-and-distribution).
 
@@ -88,4 +88,4 @@ Contributor rules are in [Data, confidentiality and provenance](CONTRIBUTING.md#
 
 ## 📄 License
 
-[MIT](LICENSE)
+[Mozilla Public License 2.0](LICENSE) (MPL-2.0), copyright 2026 Daniele Penza.
