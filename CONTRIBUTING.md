@@ -73,7 +73,9 @@ requests follow [the PR template](.github/PULL_REQUEST_TEMPLATE.md).
 8. Review the complete diff, then open a pull request **against the release
    branch** with evidence and explicit limitations.
 9. Merge only after review, with the **Repository integrity** check green and
-   every review finding resolved.
+   every review finding resolved. The release branch accepts changes only
+   through pull requests; a merge commit keeps each commit as authored, and a
+   squash must carry a commit message that follows the rules below.
 
 Nothing is committed directly to the release branch or to `main`. Integration
 of the release branch into `main` happens only on the owner's request; see
