@@ -95,7 +95,7 @@ Use only the categories needed by a release.
 ## [Unreleased]
 
 > Not yet released. Development takes place on the active release branch,
-> `release/v0.1.0`; changes to `main` require an explicit owner instruction.
+> `release/v0.2.0`; changes to `main` require an explicit owner instruction.
 
 ### Added
 
@@ -125,10 +125,10 @@ Use only the categories needed by a release.
   (MPL-2.0) instead of MIT (#49). `LICENSE` holds the MPL-2.0 text and is the
   license notice for every file; contributions are accepted under MPL-2.0.
   Copies obtained before the change keep the MIT License.
-- The active release branch is now `release/v0.1.0`, opened from `main` after
-  the foundation was integrated (PR #13). Documentation, the PR template and
-  the `Bootstrap v0.1.0 tracking` workflow trigger point to it, and release
-  branches are named `release/vX.Y.Z` from now on.
+- The active release branch is now `release/v0.2.0`, opened from `main` when
+  milestone v0.1.0 closed (#55). Documentation and the PR template point to
+  it. `release/v0.1.0`, opened after the foundation was integrated (PR #13),
+  carried the foundation work; release branches are named `release/vX.Y.Z`.
 
 ### Security
 
@@ -261,4 +261,4 @@ Use only the categories needed by a release.
 
 ---
 
-[Unreleased]: https://github.com/danielep71/VBA-IRRBB-Toolkit/compare/main...release/v0.1.0
+[Unreleased]: https://github.com/danielep71/VBA-IRRBB-Toolkit/compare/main...release/v0.2.0
