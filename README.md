@@ -50,6 +50,7 @@ Planned cross-cutting functionality includes data validation, calibration, histo
 | Resource | Purpose |
 | --- | --- |
 | [Structure](docs/REPOSITORY_STRUCTURE.md) | Application profile, ownership and dependency boundaries |
+| [Milestone guides](docs/Milestones/README.md) | Detailed Italian guides to each milestone: purpose, deliverables, dependencies and completion evidence |
 | [Methodology roadmap](docs/methodology/README.md) | Model definitions, reference and calibration obligations |
 | [Validation plan](docs/methodology/VALIDATION_PLAN.md) | Backtesting, numerical evidence and model-risk controls |
 | [Installation](INSTALLATION.md) | Development prerequisites and local static checks |

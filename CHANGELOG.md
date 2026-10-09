@@ -143,6 +143,12 @@ Use only the categories needed by a release.
 
 ### Documentation
 
+- Detailed Italian milestone guides in `docs/Milestones/`, one per milestone
+  from v0.1.0 through v1.0.0, with a navigation index, purpose, deliverables,
+  dependencies, synthetic examples and completion evidence. Implementation
+  tracking gaps are explicit; the guides do not change model contracts or
+  assert that planned functions are delivered.
+
 - Root documents (`CHANGELOG.md`, `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`,
   `INSTALLATION.md`, `RELEASING.md`, `SECURITY.md`) expanded to the
   maintainer's documentation standard, with headers, badges and complete
