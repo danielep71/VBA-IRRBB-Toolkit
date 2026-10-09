@@ -94,11 +94,16 @@ Use only the categories needed by a release.
 
 ## [Unreleased]
 
-- Audit fixes (#25): share VBA comment/continuation parsing across gates, enforce
-  the exact workbook path and check XML references independent of encoding.
-- Automatically reconcile issue owner, milestone and one priority, including
-  closed issues; traffic alerts use an explicit configurable milestone.
-- Document Ruff/mypy as optional development targets rather than enforced CI.
+- Repository audit corrections (#25): shared VBA comment/continuation lexer,
+  exact workbook path and encoding-independent XML reference checks, stronger
+  account/market fixture validation, and reconciliation without premature rounding.
+- Automatic issue owner/milestone/priority reconciliation, including closed issues;
+  traffic alerts select an explicit configurable milestone. Ruff/mypy settings
+  are documented as optional development targets, not claimed CI gates.
+- Accepted host/data/model records now have direct evidence links; unresolved
+  model interpretation and reproducibility requirements are tracked in #26.
+
+
 
 - Core-boundary checks now reject `CreateObject` and `GetObject`, including
   variable or concatenated ProgIDs that could previously hide Excel access.
@@ -165,8 +170,36 @@ Use only the categories needed by a release.
   (#11).
 - The architecture, validation plan and feature issue form refer to a
   generic downstream ALM platform instead of a named vendor product (#11).
-- `docs/REPOSITORY_STRUCTURE.md` rewritten as the proposed architecture for
-  owner acceptance: profile rationale, the intended Excel workflow, layout,
+- Model contracts accepted (#9) in `docs/methodology/MODEL_CONTRACTS.md`:
+  rate pass-through (unit roots, Engle-Granger long run and cointegration,
+  symmetric and asymmetric ECM, constraints rejected not clipped), stable
+  amount (one-month survival share, balance-weighted fractional logit,
+  predictors known at the forecast date, convergence and separation
+  failures) and decay (log changes, prudential drift, minimum probable
+  amount, conserved profile, mean life), with segment granularity,
+  out-of-sample freeze, confidence bands, scenarios, and the regulatory
+  overlay kept separate from the fit. `SOURCES.md` registers the cited
+  sources: BCBS d368 (core-deposit categories and caps) and Delegated
+  Regulation (EU) 2024/856 (outlier-test scenarios and floor) verified,
+  EBA/GL/2022/14 not yet; `TEST_CASES.md` registers the numerical
+  reference cases with provenance rules and tolerances.
+- Data contract accepted (#4) in `docs/methodology/DATA_CONTRACT.md`: account
+  panel and market-rate field dictionaries with types, units and null policy;
+  segment codes `RET_TX`, `RET_NTX`, `WHS_NFC`; reconciliation; all-or-nothing
+  import with error codes `E01`–`E11` and warnings `W01`–`W06`; gaps,
+  openings, closures, migrations, outliers and look-ahead; CSV streaming for
+  panels beyond worksheet limits; and lineage. Synthetic fixtures with
+  hand-computed totals and warnings are checked by `tools/test_data_contract.py`.
+- Supported hosts decided (#3): Windows 64-bit Microsoft 365 or Excel 2016+
+  is the supported target, 32-bit is best effort (kept compiling, not
+  certified), Mac, web and Excel 2013 or earlier are not supported. Only the
+  four default VBA references are allowed, and the workbook has no runtime
+  dependency beyond Excel; Python or R may produce reference values offline.
+  `INSTALLATION.md` separates these commitments from test evidence, and
+  `docs/EXCEL_EVIDENCE.md` defines the clean-build, compile, smoke-run,
+  failure-path and cleanup stages, their outcomes and per-bitness rules.
+- `docs/REPOSITORY_STRUCTURE.md` rewritten as the architecture, accepted by
+  the owner: profile rationale, the intended Excel workflow, layout,
   dependency direction, public API boundary, canonical units at the facade,
   immutable versioned parameter sets and intentional non-goals (#2).
 
@@ -180,6 +213,10 @@ Use only the categories needed by a release.
 - Traffic alert issues are now created in the repository's single open
   milestone, so every issue carries a milestone; the run fails if there is
   no open milestone or more than one.
+- The data-contract reference check applies the cross-row history rule
+  (`E11`) before duplicate (`E05`) and currency-change (`E08`) rules and to
+  every affected row, as `DATA_CONTRACT.md` orders them; duplicates and
+  currency changes no longer hide inconsistent account dates.
 
 ### Known limitations
 

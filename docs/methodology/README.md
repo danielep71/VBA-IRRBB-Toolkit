@@ -6,7 +6,11 @@ This is a model-development roadmap, **not a validated specification**. Do not a
 
 Define segments, currencies, observation frequency, account identifiers, balance signs, rate units, missing-period handling, portfolio migrations, structural breaks, indexed/non-indexed products, winsorization and time alignment. Keep transformations deterministic and independently testable.
 
+The contract accepted in issue #4 is [`DATA_CONTRACT.md`](DATA_CONTRACT.md): field dictionary, segmentation, reconciliation, validation codes, dataset size, lineage and synthetic fixtures.
+
 ## Model families
+
+The specifications accepted in issue #9 are in [`MODEL_CONTRACTS.md`](MODEL_CONTRACTS.md), with the numerical reference cases registered in [`TEST_CASES.md`](TEST_CASES.md). The requirements below are what those contracts must satisfy.
 
 ### Rate / pass-through
 
@@ -22,7 +26,7 @@ Define the balance unit (aggregate vs per-account), logarithmic changes, structu
 
 ## Regulatory overlay
 
-Maintain an explicit reference register for the applicable EBA Guidelines, EU RTS and supervisory expectations before implementing any rule. Separate **internal measurement assumptions** from **standardized method assumptions**. Regulatory rule versions and sources must be attached to test evidence, not inferred from the econometric output.
+Maintain an explicit reference register for the applicable EBA Guidelines, EU RTS and supervisory expectations before implementing any rule: [`SOURCES.md`](SOURCES.md). `REG-1` and `REG-3` are verified for the provisions listed in its verification record; `REG-2` and the econometric sources are not, and anything resting on them stays provisional. Separate **internal measurement assumptions** from **standardized method assumptions**. Regulatory rule versions and sources must be attached to test evidence, not inferred from the econometric output.
 
 ## Reproducibility
 
