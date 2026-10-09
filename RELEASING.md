@@ -106,14 +106,12 @@ with the **Repository integrity** check green; direct pushes, including
 fast-forwards, are rejected by the branch rulesets.
 
 1. Confirm the release branch is green and has no open review findings.
-2. **Bring `main` in first if it has moved.** If `main` has commits the
-   release branch lacks, create an integration branch from the release tip,
-   merge `main` into it with a merge commit, and resolve any conflict so the
-   result keeps the release branch's content. Otherwise the release branch
-   itself can be the head.
-3. **Use an integration branch as the PR head, not `release/vX.Y.Z`.** The
-   repository deletes a PR's head branch after merging, which would remove the
-   release branch.
+2. **Always create an integration branch** from the release tip and use it as
+   the PR head, never `release/vX.Y.Z` itself: the repository deletes a PR's
+   head branch after merging, which would remove the release branch.
+3. **Bring `main` in if it has moved.** If `main` has commits the release
+   branch lacks, merge `main` into the integration branch with a merge commit
+   and resolve any conflict so the result keeps the release branch's content.
 4. Open the PR into `main`, wait for **Repository integrity** and the review
    findings, then merge it with a **merge commit**, not a squash, so both
    branches share history.

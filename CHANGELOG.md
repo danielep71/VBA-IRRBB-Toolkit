@@ -192,10 +192,11 @@ Use only the categories needed by a release.
   benchmarks accompany each model, and Stable-Decay composition is explicit.
 - Accepted host/data/model records now have direct evidence links; unresolved
   model interpretation and reproducibility requirements are tracked in #26.
-- `RELEASING.md` describes integration through pull requests only: bring a
-  moved `main` in on an integration branch, never use the release branch as
-  the PR head, merge into `main` with a merge commit, and bring the release
-  branch level with a second PR from `main`, also merged with a merge commit.
+- `RELEASING.md` describes integration through pull requests only: always
+  open it from an integration branch (never the release branch, which would be
+  deleted on merge), bring a moved `main` into it first, merge into `main`
+  with a merge commit, and bring the release branch level with a second PR
+  from `main`, also merged with a merge commit.
 
 ### Fixed
 
