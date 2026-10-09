@@ -101,13 +101,30 @@ rerun. Never compensate by editing an already-tested artifact.
 
 Done only when the owner asks. This is an integration, not a release.
 
+Both `main` and `release/**` accept changes **only through pull requests**
+with the **Repository integrity** check green; direct pushes, including
+fast-forwards, are rejected by the branch rulesets.
+
 1. Confirm the release branch is green and has no open review findings.
-2. Open a PR from the release branch into `main`.
-3. The owner reviews and merges it with a **merge commit**, not a squash.
-4. Bring the release branch back level with `main` with a merge commit, or, at
-   a milestone closeout, open the next `release/vX.Y.Z` branch from the merge
-   commit and point the docs at it.
-5. Verify both branches contain the merge commit and that CI passed on it.
+2. **Bring `main` in first if it has moved.** If `main` has commits the
+   release branch lacks, create an integration branch from the release tip,
+   merge `main` into it with a merge commit, and resolve any conflict so the
+   result keeps the release branch's content. Otherwise the release branch
+   itself can be the head.
+3. **Use an integration branch as the PR head, not `release/vX.Y.Z`.** The
+   repository deletes a PR's head branch after merging, which would remove the
+   release branch.
+4. Open the PR into `main`, wait for **Repository integrity** and the review
+   findings, then merge it with a **merge commit**, not a squash, so both
+   branches share history.
+5. **Bring the release branch level with `main`** with a second PR from `main`
+   into `release/vX.Y.Z`, merged with a **merge commit**. `main` then becomes an
+   ancestor of the release branch, and the next integration merges without
+   conflicts. At a milestone closeout, open the next `release/vX.Y.Z` branch
+   from the merge commit instead, and point the docs and
+   `ISSUE_MILESTONE_NUMBER` at its milestone.
+6. Verify that the release branch contains the `main` merge commit, that both
+   trees are identical, and that CI passed on both.
 
 Never rebase, amend, force-push or reset either branch.
 
@@ -220,7 +237,7 @@ it does not replace it.
 | 6 | Excel certification and reference cases pass | ☐ |
 | 7 | Artifacts built, tested and hashed (if any) | ☐ |
 | 8 | Release branch merged into `main` with a merge commit | ☐ |
-| 9 | Release branch level with `main` again | ☐ |
+| 9 | Release branch level with `main` again (PR from `main`, merge commit) | ☐ |
 | 10 | Annotated tag targets the certified `main` SHA | ☐ |
 | 11 | GitHub Release published and verified | ☐ |
 
