@@ -17,10 +17,14 @@ The models are specified in [`MODEL_CONTRACTS.md`](MODEL_CONTRACTS.md); the
 evidence protocol is in [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md).
 
 > [!NOTE]
-> At v0.1.0 the cases below are **registered, not built**, except the data
-> contract cases, which exist and are checked on every run of
-> `python tools/check.py`. A case moves to *built* when its fixture and expected
-> file are committed with their provenance.
+> The model cases below are **registered, not built**. The data contract cases
+> are *built*: their fixtures and expected files exist and are checked on every
+> run of `python tools/check.py`. Cases marked *Built (VBA)* have a VBA
+> implementation run by `TEST_Harness.RunTests` in Excel; their literal
+> expectations are checked without Excel by `tools/test_vba_harness.py`. No
+> Excel run is recorded yet. A case moves to *built* when its fixture and
+> expected file are committed with their provenance; the harness registry in
+> `tests/modules/TEST_Harness.bas` lists every ID here, in this order.
 
 <a id="provenance"></a>
 
@@ -57,6 +61,12 @@ statistical check, not a tolerance test.
 
 ## 📋 Register
 
+### Harness
+
+| ID | Checks | Reference | Tolerance | Status |
+| --- | --- | --- | --- | --- |
+| `HARN-OUT-01` | Case outcome rules (`NOT RUN`, `ERROR`, `FAIL` with no assertion, `PASS` only when every assertion passes) and the `abs`, `rel` and `exact` tolerance kinds | Rules on this page; expectations re-derived by [`test_vba_harness.py`](../../tools/test_vba_harness.py) | `exact` | Built (VBA) |
+
 ### Data contract
 
 | ID | Checks | Reference | Tolerance | Status |
@@ -65,6 +75,9 @@ statistical check, not a tolerance test.
 | `DATA-INVALID-01` | First error per line, `E02`–`E11` | Hand construction, [`accounts_invalid_findings.json`](../../tests/expected/data_contract/accounts_invalid_findings.json) | `exact` | Built |
 | `DATA-PIT-01` | Transition outcome per account month (observed, verified closure, gap, censored, end of sample), `W05` censoring, `close_date` visible at each origin | Hand assignment, [`availability_outcomes.json`](../../tests/expected/data_contract/availability_outcomes.json) | `exact` | Built |
 | `DATA-PIT-02` | Leakage: altering, adding or removing information learned after an origin leaves every predictor at that origin unchanged; a missing month end gives `E12` | Property test on both panels at every origin, with an unmasked negative control | `exact` | Built |
+| `DATA-PARSE-01` | ISO dates (`CORE_ParseIsoDate`): missing versus invalid, calendar and leap-year validity, years 1900–9999, no time part; month ends (`CORE_IsMonthEnd`) | [File format](DATA_CONTRACT.md#file-format); expectations re-derived from the Python reading in [`test_data_contract.py`](../../tools/test_data_contract.py) | `exact` | Built (VBA) |
+| `DATA-PARSE-02` | Balances (4 places) and rates (8 places, −0.05 to 0.25) (`CORE_ParseDecimal`, `CORE_ParseRate`): missing versus invalid, locale-like forms rejected | As `DATA-PARSE-01` | `rel 1e-15` balances; `exact` rates and codes | Built (VBA) |
+| `DATA-CODES-01` | Segment codes and the currency allowlist reject every other value, including case and spacing variants | As `DATA-PARSE-01` | `exact` | Built (VBA) |
 
 ### Rate pass-through
 

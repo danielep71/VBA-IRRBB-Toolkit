@@ -37,8 +37,11 @@ def parse_date(text: str) -> date | None:
     match = ISO_DATE.match(text)
     if not match:
         return None
+    year, month, day = map(int, match.groups())
+    if not 1900 <= year <= 9999:
+        return None
     try:
-        return date(*map(int, match.groups()))
+        return date(year, month, day)
     except ValueError:
         return None
 

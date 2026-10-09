@@ -55,8 +55,9 @@ Both datasets use the same plain, locale-independent CSV subset:
 - ASCII text; LF or CRLF line endings; no byte-order mark;
 - comma separator, no quoting, no embedded commas or line breaks;
 - the first line is the exact header below, fields in the listed order;
-- dates as `YYYY-MM-DD`; decimals with `.` and no thousands separator or
-  exponent;
+- dates as `YYYY-MM-DD` with a year from 1900 to 9999 (the Excel date system);
+  decimals with `.` and no thousands separator or exponent, at least one digit
+  before the `.` and at least one after it;
 - an empty field means *missing*. No sentinel values (`0`, `-999`, `N/A`).
 
 Parsing never uses Excel's locale-dependent conversions (`CDate`, `CDbl` on

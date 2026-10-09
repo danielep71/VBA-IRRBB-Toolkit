@@ -7,4 +7,4 @@ Source-first application profile, adapted from VBA-SACCR-Toolkit.
 - `workbook/`: host adapters and exported Excel document modules.
 - `classes/`, `forms/`: introduce only when needed.
 
-No production VBA is shipped in the repository foundation milestone. Layout, dependency direction and the parameter and units boundary are defined in [`docs/REPOSITORY_STRUCTURE.md`](../docs/REPOSITORY_STRUCTURE.md).
+`core/` holds the first modules: `CORE_Parse` (locale-independent dates, decimals and rates of the data contract) and `CORE_Codes` (segment codes and the currency allowlist). No model and no public facade exist yet. Layout, dependency direction and the parameter and units boundary are defined in [`docs/REPOSITORY_STRUCTURE.md`](../docs/REPOSITORY_STRUCTURE.md).
