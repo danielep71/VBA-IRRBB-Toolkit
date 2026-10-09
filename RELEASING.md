@@ -35,7 +35,7 @@ sequence**. Day-to-day contribution is owned by
 | Property | State |
 | --- | --- |
 | Released versions | None |
-| Active branch | `release/v0.1.0` |
+| Active branch | `release/v0.2.0` |
 | Active milestone | `v0.2.0 - Workbook, data and Excel tests` |
 | Closed milestones | `v0.1.0 - Repository foundation` (2026-10-09, no release) |
 | Version file | Not present; created when the first release is prepared ([versioning](#versioning)) |
