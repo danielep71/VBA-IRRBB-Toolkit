@@ -80,7 +80,7 @@ Header:
 | `customer_rate` | Decimal, up to 8 places | Decimal per annum | — | Rate paid on the account at month end; −0.05 to 0.25 |
 | `indexed` | `0` or `1` | — | ✅ | `1` = contractually indexed to a market rate |
 | `open_date` | ISO date | — | — | Not after `as_of_date` |
-| `close_date` | ISO date | — | — | Not before `open_date`; no row after it |
+| `close_date` | ISO date | — | — | Not before `open_date`; no row dated on or after it (the account has no month-end row in its closure month) |
 
 The key is (`as_of_date`, `account_id`). A missing `customer_rate` excludes
 that account-month from rate-model inputs only. Missing `open_date` means
@@ -97,8 +97,8 @@ configuration and provenance; it does not claim to maintain the full ISO registe
 Balances must convert to finite VBA Double values; overflow is `E04`. Aggregate
 overflow must also fail the future importer rather than produce an infinite result.
 Known non-empty opening/closure dates must be consistent throughout an account's
-history (`E11`); an omitted repeat does not erase a known date. A row after any
-known closure is `E10`, regardless of file ordering. These consistency checks do
+history (`E11`); an omitted repeat does not erase a known date. A row dated on or
+after any known closure is `E10`, regardless of file ordering. These consistency checks do
 not make future closure information eligible as a predictor.
 
 Header: `as_of_date,rate_id,currency,tenor_months,rate`
@@ -171,7 +171,7 @@ same file always gives the same findings in the same order.
 | `E07` | Invalid currency code | Each row |
 | `E09` | Negative balance | Each row |
 | `E11` | Inconsistent known history dates, `open_date` after `as_of_date`, or `close_date` before `open_date` | Each affected row |
-| `E10` | Row dated after the account's `close_date` | Each row |
+| `E10` | Row dated on or after the account's `close_date` | Each row |
 | `E05` | Duplicate (`as_of_date`, `account_id`) | Second and later occurrences |
 | `E08` | Account currency or market-series currency/tenor differs from its earlier rows | Each later row |
 | `E12` | **Missing extract**: a month end inside the data window has no account rows | Once per missing month end |
@@ -260,7 +260,7 @@ view cannot tell a closure known when it happened from one the source reported
 months later. The contract therefore **assumes a closure is known at the month
 end of the month in which it occurs**: a `close_date` $\le t$ is treated as known
 at $t$. A per-account predictor cannot expose it (an account with a row at $t$
-cannot already be closed, `E10`), but a fit or backtest at $t$ uses it to label
+cannot be closed on or before $t$, `E10`), but a fit or backtest at $t$ uses it to label
 earlier transitions as closures. A source that reports closures later than the
 month end of their occurrence breaks this assumption and **must not be loaded
 as-is**; supporting it needs an availability field and a reopened decision 6.

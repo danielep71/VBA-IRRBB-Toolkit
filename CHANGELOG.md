@@ -154,7 +154,8 @@ Use only the categories needed by a release.
   in the lineage); only a recorded closure is a
   cash-out, and an account that disappears without one is right-censored
   (`W05`, redefined); a month end with no rows inside the window rejects the
-  import (new `E12`). `DATA_CONTRACT.md` defines the outcome of every
+  import (new `E12`); `E10` now also rejects a row dated on its own `close_date`, so a
+  closure never sits on a month-end row. `DATA_CONTRACT.md` defines the outcome of every
   transition (observed, verified closure, gap, censored, end of sample) and its
   eligibility and lineage; `MODEL_CONTRACTS.md` updates the stable-model
   cash-out rule and the predictor timing. A hand-built fixture and leakage
