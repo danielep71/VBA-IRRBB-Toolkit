@@ -24,6 +24,11 @@ publish a release, tag a version, make the repository public, or certify models.
 
 ## Approved roadmap and deferred obligations
 
+Detailed explanations of each phase, its purpose, dependencies and completion
+criteria are in the [milestone guides](Milestones/README.md). These guides
+explain the approved scope; they do not certify delivery or replace the
+authoritative data/model contracts and issue evidence.
+
 On 2026-10-09 the owner approved this roadmap and the corresponding milestone
 moves. The scope decision is recorded in #12 and in the affected issue bodies.
 The previous requirement for an explicit deferral of #5/#6/#8 is satisfied by
