@@ -85,7 +85,7 @@ def read_accounts(path: Path, currencies=SUPPORTED_CURRENCIES) -> tuple[list[tup
     lines = path.read_text(encoding="ascii").splitlines()
     if not lines or lines[0].split(",") != ACCOUNT_FIELDS:
         return [], [{"line": 1, "code": "E01"}]
-    rows, errors, seen, currency = [], [], set(), {}
+    rows, errors = [], []
     for number, line in enumerate(lines[1:], 2):
         values = line.split(",")
         if len(values) != len(ACCOUNT_FIELDS):
@@ -93,33 +93,40 @@ def read_accounts(path: Path, currencies=SUPPORTED_CURRENCIES) -> tuple[list[tup
             continue
         row = dict(zip(ACCOUNT_FIELDS, values))
         code = row_error(row, currencies)
-        key = (row["as_of_date"], row["account_id"])
-        if code is None and key in seen:
-            code = "E05"
-        if code is None and currency.setdefault(row["account_id"], row["currency"]) != row["currency"]:
-            code = "E08"
         if code:
             errors.append({"line": number, "code": code})
         else:
-            seen.add(key)
             rows.append((number, row))
-    # Whole-history checks are independent of input order and blank repeated dates.
+    # Cross-row rules use every locally valid row, so a duplicate or a currency
+    # change still contributes its dates; they apply in the contract's order
+    # E11, E10, E05, E08, and are independent of input order for history dates.
     dates = {}
     for _, row in rows:
         history = dates.setdefault(row["account_id"], {"open_date": set(), "close_date": set()})
         for field in history:
             if row[field]:
                 history[field].add(row[field])
-    accepted = []
+    accepted, seen, currency = [], set(), {}
     for number, row in rows:
         history = dates[row["account_id"]]
         opened = min(history["open_date"], default="")
         closed = min(history["close_date"], default="")
+        key = (row["as_of_date"], row["account_id"])
+        first_currency = currency.setdefault(row["account_id"], row["currency"])
         if any(len(values) > 1 for values in history.values()) or (
                 opened and (opened > row["as_of_date"] or (closed and closed < opened))):
-            errors.append({"line": number, "code": "E11"})
+            code = "E11"
         elif closed and row["as_of_date"] > closed:
-            errors.append({"line": number, "code": "E10"})
+            code = "E10"
+        elif key in seen:
+            code = "E05"
+        elif first_currency != row["currency"]:
+            code = "E08"
+        else:
+            code = None
+        seen.add(key)
+        if code:
+            errors.append({"line": number, "code": code})
         else:
             accepted.append((number, row))
     return accepted, sorted(errors, key=lambda error: error["line"])
@@ -247,6 +254,25 @@ class DataContractFixtures(unittest.TestCase):
             path = Path(directory) / "accounts.csv"
             path.write_text("as_of_date,account_id\n2025-01-31,A001\n", encoding="ascii")
             self.assertEqual(read_accounts(path), ([], [{"line": 1, "code": "E01"}]))
+
+    def test_cross_row_dates_precede_duplicate_and_currency_rules(self) -> None:
+        import tempfile
+        header = ",".join(ACCOUNT_FIELDS)
+        cases = {
+            # Same account and month twice, with different open dates: both rows are E11.
+            "duplicate": ["2025-01-31,C001,RET_TX,EUR,10.00,,0,2020-01-01,",
+                          "2025-01-31,C001,RET_TX,EUR,10.00,,0,2021-01-01,"],
+            # Currency change with a different open date: both rows are E11, not E08.
+            "currency": ["2025-01-31,C002,RET_TX,EUR,10.00,,0,2020-01-01,",
+                         "2025-02-28,C002,RET_TX,USD,10.00,,0,2021-01-01,"],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            for name, lines in cases.items():
+                with self.subTest(case=name):
+                    path = Path(directory) / f"{name}.csv"
+                    path.write_text("\n".join([header, *lines]) + "\n", encoding="ascii")
+                    self.assertEqual(read_accounts(path),
+                                     ([], [{"line": 2, "code": "E11"}, {"line": 3, "code": "E11"}]))
 
     def test_market_rates_fixture_follows_the_contract(self) -> None:
         self.assertEqual(read_market_rates(FIXTURES / "market_rates.csv"), [])

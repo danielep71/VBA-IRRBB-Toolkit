@@ -213,6 +213,10 @@ Use only the categories needed by a release.
 - Traffic alert issues are now created in the repository's single open
   milestone, so every issue carries a milestone; the run fails if there is
   no open milestone or more than one.
+- The data-contract reference check applies the cross-row history rule
+  (`E11`) before duplicate (`E05`) and currency-change (`E08`) rules and to
+  every affected row, as `DATA_CONTRACT.md` orders them; duplicates and
+  currency changes no longer hide inconsistent account dates.
 
 ### Known limitations
 
