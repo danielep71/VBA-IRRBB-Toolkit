@@ -56,7 +56,7 @@ Passing static checks is **not** evidence of correct IRRBB calculations.
 | --- | --- |
 | Git | Cloning and all repository work |
 | Python 3.10 or later | `python tools/check.py`; standard library only, no packages |
-| Node.js 20 or later | Optional: local label-catalogue checks |
+| Node.js 20 or later | Optional: local label-catalog checks |
 | Microsoft Excel for Windows | **Future** VBA import, compile and model execution; see [supported hosts](#supported-hosts); not needed for static checks |
 
 <a id="supported-hosts"></a>
@@ -143,7 +143,7 @@ python tools/check.py --ci
 python tools/check.py --ci --base <base-sha>   # for a pull request's full range
 ```
 
-Optional label-catalogue checks:
+Optional label-catalog checks:
 
 ```sh
 node .github/scripts/labels-sync.mjs --policy .github/label-policy.json --self-test

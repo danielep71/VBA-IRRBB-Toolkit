@@ -2,12 +2,12 @@
 
 # 🏦 IRRBB Behavioral Models — Excel/VBA Toolkit
 
-### Interest Rate Risk in the Banking Book | behavioral modelling, calibration and independent testing
+### Interest Rate Risk in the Banking Book | behavioral modeling, calibration and independent testing
 
 [![Excel VBA](https://img.shields.io/badge/Excel_VBA-Windows-217346?style=for-the-badge&logo=microsoft-excel&logoColor=white)](INSTALLATION.md)
 [![Status](https://img.shields.io/badge/Status-Foundation%20only-6e7781?style=for-the-badge)](#status)
 [![Development](https://img.shields.io/badge/Development-release%2Fv0.1.0-6f42c1?style=for-the-badge)](https://github.com/danielep71/VBA-IRRBB-Toolkit/tree/release/v0.1.0)
-[![License](https://img.shields.io/badge/License-MIT-2ea44f?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/License-MPL--2.0-2ea44f?style=for-the-badge)](LICENSE)
 
 <br>
 
@@ -19,7 +19,7 @@
 
 ## ✨ Purpose
 
-**VBA-IRRBB-Toolkit** is an Excel/VBA **application project** intended to develop transparent, independently testable tools for behavioral assumptions in Interest Rate Risk in the Banking Book (IRRBB). It addresses the modelling of non-maturity deposits (NMDs) and, where applicable, demand-side balances, with an emphasis on reproducible calculations, model risk management and ALM parameter export.
+**VBA-IRRBB-Toolkit** is an Excel/VBA **application project** intended to develop transparent, independently testable tools for behavioral assumptions in Interest Rate Risk in the Banking Book (IRRBB). It addresses the modeling of non-maturity deposits (NMDs) and, where applicable, demand-side balances, with an emphasis on reproducible calculations, model risk management and ALM parameter export.
 
 The planned scope has three distinct model families:
 
@@ -50,6 +50,7 @@ Planned cross-cutting functionality includes data validation, calibration, histo
 | Resource | Purpose |
 | --- | --- |
 | [Structure](docs/REPOSITORY_STRUCTURE.md) | Application profile, ownership and dependency boundaries |
+| [Milestone guides](docs/Milestones/README.md) | Detailed guides to each milestone: purpose, deliverables, dependencies and completion evidence |
 | [Methodology roadmap](docs/methodology/README.md) | Model definitions, reference and calibration obligations |
 | [Validation plan](docs/methodology/VALIDATION_PLAN.md) | Backtesting, numerical evidence and model-risk controls |
 | [Installation](INSTALLATION.md) | Development prerequisites and local static checks |
@@ -58,7 +59,7 @@ Planned cross-cutting functionality includes data validation, calibration, histo
 | [VBA house style](docs/VBA_HOUSE_STYLE.md) | Module contracts, error handling and export discipline |
 | [Excel evidence](docs/EXCEL_EVIDENCE.md) | Real-host evidence, independent of static checks |
 | [Tooling](tools/README.md) | Repository checks and CI limits |
-| [Labels](docs/LABELS.md) | Issue-label catalogue and priority rules |
+| [Labels](docs/LABELS.md) | Issue-label catalog and priority rules |
 | [Releasing](RELEASING.md) | Integration into `main` and the release sequence |
 | [Security](SECURITY.md) | Vulnerability and information-handling policy |
 | [Code of conduct](CODE_OF_CONDUCT.md) | Participant behavior and conduct reporting |
@@ -77,7 +78,7 @@ Git and Python 3.10+ are needed for the static checks. A Windows 64-bit Excel ho
 
 ## 🔒 Data, confidentiality and provenance
 
-This project is **generic and independent**. Only synthetic or redistributable reference datasets and expressly permitted source material may be committed. Do not copy third-party proprietary methodologies verbatim, internal bank models, customer balances, reports, restricted vendor manuals or training material, or tools into this repository. No visibility setting or private fork is permission to store any of these. The current MIT license covers original repository content; it does not grant rights over third-party intellectual property, and it is reviewed before any external distribution.
+This project is **generic and independent**. Only synthetic or redistributable reference datasets and expressly permitted source material may be committed. Do not copy third-party proprietary methodologies verbatim, internal bank models, customer balances, reports, restricted vendor manuals or training material, or tools into this repository. No visibility setting or private fork is permission to store any of these. The Mozilla Public License 2.0 covers original repository content; it does not grant rights over third-party intellectual property, and it is reviewed before any external distribution.
 
 Contributor rules are in [Data, confidentiality and provenance](CONTRIBUTING.md#data-confidentiality-and-provenance); the distribution gate is in [Governance](docs/GOVERNANCE.md#licensing-and-distribution).
 
@@ -87,4 +88,4 @@ Contributor rules are in [Data, confidentiality and provenance](CONTRIBUTING.md#
 
 ## 📄 License
 
-[MIT](LICENSE)
+[Mozilla Public License 2.0](LICENSE) (MPL-2.0), copyright 2026 Daniele Penza.

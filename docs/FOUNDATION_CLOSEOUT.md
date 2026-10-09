@@ -24,6 +24,11 @@ publish a release, tag a version, make the repository public, or certify models.
 
 ## Approved roadmap and deferred obligations
 
+Detailed explanations of each phase, its purpose, dependencies and completion
+criteria are in the [milestone guides](Milestones/README.md). These guides
+explain the approved scope; they do not certify delivery or replace the
+authoritative data/model contracts and issue evidence.
+
 On 2026-10-09 the owner approved this roadmap and the corresponding milestone
 moves. The scope decision is recorded in #12 and in the affected issue bodies.
 The previous requirement for an explicit deferral of #5/#6/#8 is satisfied by
@@ -48,7 +53,7 @@ Rates, Stable or data transformations before their earlier prerequisites.
 Independent benchmarks and real-Excel tests accompany each model milestone;
 v0.9.0 consolidates qualification rather than starting validation.
 
-The initial v1.0.0 scope is the NMD behavioural-model application. A full
+The initial v1.0.0 scope is the NMD behavioral-model application. A full
 banking-book EVE/NII engine needs separate scope approval. No dates or release
 publication are implied by this roadmap. Public visibility is a separate owner
 decision, recorded in the distribution review #42; it does not authorize a

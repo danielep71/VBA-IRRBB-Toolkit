@@ -110,7 +110,7 @@ Use only the categories needed by a release.
   host-independent; covered by `tools/test_core_boundary.py` (#2).
 
 - Initial repository foundation for a source-first Excel/VBA IRRBB behavioral
-  modelling application.
+  modeling application.
 - Documentation of model scope, validation requirements, source boundaries and
   synthetic-data policy.
 - Portable static-checking tools and CI configuration adapted from the
@@ -121,6 +121,10 @@ Use only the categories needed by a release.
 
 ### Changed
 
+- The repository is now licensed under the Mozilla Public License 2.0
+  (MPL-2.0) instead of MIT (#49). `LICENSE` holds the MPL-2.0 text and is the
+  license notice for every file; contributions are accepted under MPL-2.0.
+  Copies obtained before the change keep the MIT License.
 - The active release branch is now `release/v0.1.0`, opened from `main` after
   the foundation was integrated (PR #13). Documentation, the PR template and
   the `Bootstrap v0.1.0 tracking` workflow trigger point to it, and release
@@ -142,6 +146,17 @@ Use only the categories needed by a release.
   push to the release branch.
 
 ### Documentation
+
+- Translate all milestone guides into US English and establish US English
+  as the repository language standard. Standardize surrounding documentation
+  while preserving glyphs, navigation, technical scope, and official source
+  titles.
+
+- Detailed milestone guides in `docs/Milestones/`, one per milestone
+  from v0.1.0 through v1.0.0, with a navigation index, purpose, deliverables,
+  dependencies, synthetic examples and completion evidence. Implementation
+  tracking gaps are explicit; the guides do not change model contracts or
+  assert that planned functions are delivered.
 
 - Root documents (`CHANGELOG.md`, `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`,
   `INSTALLATION.md`, `RELEASING.md`, `SECURITY.md`) expanded to the
