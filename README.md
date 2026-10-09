@@ -43,7 +43,7 @@ Planned cross-cutting functionality includes data validation, calibration, histo
 - Production calculations will live in `src/core/` without direct Excel object dependencies.
 - `src/modules/` will expose a documented public facade; `src/workbook/` will contain host glue only.
 - `tests/` will hold synthetic test cases and expected results; evidence from a real Excel run must be separately recorded.
-- No client data, confidential third-party material, vendor source code or customer-specific models are allowed in Git, even while the repository is private.
+- No client data, confidential third-party material, vendor source code or customer-specific models are allowed in Git; the repository and its history are public.
 
 ## 📁 Repository navigation
 
@@ -77,7 +77,7 @@ Git and Python 3.10+ are needed for the static checks. A Windows 64-bit Excel ho
 
 ## 🔒 Data, confidentiality and provenance
 
-This project is **generic and independent**. Only synthetic or redistributable reference datasets and expressly permitted source material may be committed. Do not copy third-party proprietary methodologies verbatim, internal bank models, customer balances, reports, restricted vendor manuals or training material, or tools into this repository. Private repository visibility is not permission to store any of these. The current MIT license covers original repository content; it does not grant rights over third-party intellectual property, and it is reviewed before any external distribution.
+This project is **generic and independent**. Only synthetic or redistributable reference datasets and expressly permitted source material may be committed. Do not copy third-party proprietary methodologies verbatim, internal bank models, customer balances, reports, restricted vendor manuals or training material, or tools into this repository. No visibility setting or private fork is permission to store any of these. The current MIT license covers original repository content; it does not grant rights over third-party intellectual property, and it is reviewed before any external distribution.
 
 Contributor rules are in [Data, confidentiality and provenance](CONTRIBUTING.md#data-confidentiality-and-provenance); the distribution gate is in [Governance](docs/GOVERNANCE.md#licensing-and-distribution).
 

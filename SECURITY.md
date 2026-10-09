@@ -61,8 +61,9 @@ insufficient.
 Do **not** disclose a suspected vulnerability in an issue, pull request, commit
 message, sample workbook, screenshot or release note.
 
-The repository is private, so GitHub private vulnerability reporting is not
-available. Report by email to **danielep71@gmail.com** with the subject
+Report through GitHub private vulnerability reporting: **Security → Report a
+vulnerability** on the repository. If that is unavailable to you, report by
+email to **danielep71@gmail.com** with the subject
 **Private security report — IRRBB Toolkit**.
 
 Include only the information needed to assess the issue:
@@ -187,8 +188,9 @@ Never commit, upload, log or attach:
   screenshots; or
 - exploit material beyond what is necessary to establish the issue.
 
-Test fixtures and examples are synthetic. Private repository visibility does
-not waive client confidentiality, GDPR or contractual restrictions. Excel files
+Test fixtures and examples are synthetic. The repository is public; no
+visibility setting, private fork or private branch waives client
+confidentiality, GDPR or contractual restrictions. Excel files
 can contain sensitive material outside visible cells, including document
 properties, names, hidden sheets, VBA, cached values, queries, links and
 connections.

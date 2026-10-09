@@ -99,8 +99,9 @@ Use only the categories needed by a release.
 
 ### Added
 
-- Daily repository traffic export with private history, main-only analytics
-  access, and traffic alerts, following the SA-CCR repository setup.
+- Daily repository traffic export with history on a separate branch,
+  main-only analytics access, and traffic alerts, following the SA-CCR
+  repository setup.
   Setup and verification are documented in `docs/TRAFFIC.md`.
 
 - `tools/check_source.py` rejects Excel object-model and UI identifiers
@@ -197,6 +198,12 @@ Use only the categories needed by a release.
   deleted on merge), bring a moved `main` into it first, merge into `main`
   with a merge commit, and bring the release branch level with a second PR
   from `main`, also merged with a merge commit.
+- Documentation prepared for public visibility (#42): `SECURITY.md` routes
+  reports through GitHub private vulnerability reporting, with email as the
+  fallback; `docs/TRAFFIC.md` states that the traffic branch is public and
+  holds aggregate counts only; README, `CONTRIBUTING.md`, `GOVERNANCE.md` and
+  the foundation closeout no longer assume a private repository, and public
+  visibility is recorded as an owner decision separate from any release.
 
 ### Fixed
 
